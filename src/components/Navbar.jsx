@@ -15,7 +15,8 @@ import {
   Construction,
   ShieldCheck,
   Droplets,
-  Paintbrush
+  Paintbrush,
+  FileText
 } from "lucide-react";
 import { navItems } from "../data/navigation";
 
@@ -28,7 +29,7 @@ const iconMap = {
   Paintbrush: Paintbrush,
 };
 
-export default function Navbar() {
+export default function Navbar({ onOpenOrderModal }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
@@ -418,6 +419,38 @@ export default function Navbar() {
             style={{ display: "flex", gap: "10px", alignItems: "center" }}
             className="desk-nav"
           >
+            {/* Phương thức 1: Đặt mua / Báo giá */}
+            <button
+              onClick={() => onOpenOrderModal && onOpenOrderModal(null)}
+              className="cta-pill-3d"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "9px 16px",
+                borderRadius: "10px",
+                background: "linear-gradient(135deg, rgba(230,0,18,0.2), rgba(0,85,204,0.2))",
+                color: "#ffeb3b",
+                cursor: "pointer",
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "13px",
+                fontWeight: 700,
+                transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+                border: "1.5px solid rgba(255,235,59,0.5)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "#ffeb3b";
+                e.currentTarget.style.color = "#000";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "linear-gradient(135deg, rgba(230,0,18,0.2), rgba(0,85,204,0.2))";
+                e.currentTarget.style.color = "#ffeb3b";
+              }}
+            >
+              <FileText size={14} />
+              <span>Báo Giá / Đặt Mua</span>
+            </button>
+
             <a
               href="https://zalo.me/0947707616"
               target="_blank"
@@ -443,6 +476,7 @@ export default function Navbar() {
               Zalo
             </a>
 
+            {/* Phương thức 2: Gọi hotline */}
             <a
               href="tel:0947707616"
               className="hotline-3d"

@@ -6,7 +6,8 @@ import {
   Mail,
   Phone,
   MessageCircle,
-  QrCode
+  QrCode,
+  FileText
 } from "lucide-react";
 
 const serviceLinks = [
@@ -20,7 +21,7 @@ const serviceLinks = [
 
 const navLinks = ["Trang Chủ", "Về Chúng Tôi", "Dự Án", "Sản Phẩm", "Blog", "Tuyển Dụng"];
 
-export default function Footer() {
+export default function Footer({ onOpenOrderModal }) {
   return (
     <footer
       id="about"
@@ -247,10 +248,55 @@ export default function Footer() {
               borderBottom: "1px solid rgba(255,255,255,0.07)",
             }}
           >
-            Liên Hệ Nhanh
+            Liên Hệ & Đặt Mua
           </h4>
 
-          {/* Hotline Box */}
+          {/* Cách 1: Đặt mua / Báo giá */}
+          <button
+            onClick={() => onOpenOrderModal && onOpenOrderModal(null)}
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "14px 20px",
+              background: "linear-gradient(135deg, #e60012, #ff2a2a)",
+              border: "none",
+              borderRadius: "12px",
+              color: "#fff",
+              cursor: "pointer",
+              marginBottom: "12px",
+              boxShadow: "0 4px 15px rgba(230,0,18,0.4)",
+              transition: "transform 0.2s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.02)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          >
+            <div
+              style={{
+                width: "36px",
+                height: "36px",
+                borderRadius: "8px",
+                background: "rgba(255,255,255,0.2)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              <FileText size={18} color="#fff" />
+            </div>
+            <div style={{ textAlign: "left" }}>
+              <div style={{ fontSize: "11px", opacity: 0.85, textTransform: "uppercase" }}>
+                Cách 1: Đặt Mua Trực Tuyến
+              </div>
+              <div style={{ fontSize: "14px", fontWeight: 800 }}>
+                Để Lại Thông Tin Báo Giá
+              </div>
+            </div>
+          </button>
+
+          {/* Hotline Box (Cách 2) */}
           <a
             href="tel:0947707616"
             style={{

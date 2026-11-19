@@ -44,13 +44,10 @@ export const servicesSubMenu = [
 ];
 
 export const navItems = [
-  { label: "Trang Chủ", href: "/#home" },
-  { label: "Giới Thiệu", href: "/#about" },
-  { label: "Dịch Vụ", href: "/#services", sub: servicesSubMenu },
+  { label: "Trang Chủ", href: "/" },
+  { label: "Thùng Sơn Bán Chạy", href: "/" },
+  { label: "Dịch Vụ Thi Công", href: "/#services", sub: servicesSubMenu },
   { label: "Dự Án", href: "/#portfolio" },
-  { label: "Đối Tác", href: "/#brands" },
-  { label: "Chứng Chỉ", href: "/#certificates" },
   { label: "Video", href: "/video" },
   { label: "Tin Tức", href: "/tin-tuc" },
-  { label: "Liên Hệ", href: "/#quote" },
 ];
