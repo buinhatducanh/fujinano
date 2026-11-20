@@ -21,7 +21,7 @@ export default function Home({ onOpenOrderModal }) {
   });
 
   return (
-    <div style={{ minHeight: "100vh", padding: "85px 0 50px", position: "relative", zIndex: 1 }}>
+    <div style={{ minHeight: "100vh", padding: "115px 0 50px", position: "relative", zIndex: 1 }}>
       <div style={{ maxWidth: "1320px", margin: "0 auto", padding: "0 20px" }}>
 
         {/* 1. THANH LỌC DANH MỤC THÙNG SƠN TINH GỌN (HORIZONTAL CATEGORY PILLS) */}

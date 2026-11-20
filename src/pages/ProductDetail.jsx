@@ -64,7 +64,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
     .slice(0, 4);
 
   return (
-    <div style={{ minHeight: "100vh", padding: "100px 0 60px", position: "relative", zIndex: 1 }}>
+    <div style={{ minHeight: "100vh", padding: "115px 0 60px", position: "relative", zIndex: 1 }}>
       <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 20px" }}>
         {/* 1. Breadcrumbs */}
         <div

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Logo from "./Logo";
 import {
   Globe,
@@ -11,15 +12,22 @@ import {
 } from "lucide-react";
 
 const serviceLinks = [
-  "Sơn Epoxy Nhà Xưởng",
-  "Sơn Nhà Xưởng & Mái Tôn",
-  "Sơn Giao Thông",
-  "Sơn Sân Thể Thao",
-  "Sơn Chống Cháy",
-  "Sơn Dân Dụng",
+  { label: "Sơn Epoxy Nhà Xưởng", href: "/#products" },
+  { label: "Sơn Chống Thấm PU", href: "/#products" },
+  { label: "Sơn Chống Cháy 120P", href: "/#products" },
+  { label: "Sơn Sân Tennis/Pickleball", href: "/#products" },
+  { label: "Sơn Kẻ Vạch Giao Thông", href: "/#products" },
+  { label: "Tăng Cứng Mài Sàn Bê Tông", href: "/#products" },
 ];
 
-const navLinks = ["Trang Chủ", "Về Chúng Tôi", "Dự Án", "Sản Phẩm", "Blog", "Tuyển Dụng"];
+const navLinks = [
+  { label: "Trang Chủ (Sản Phẩm)", href: "/" },
+  { label: "Về Chúng Tôi (Giới Thiệu)", href: "/ve-chung-toi" },
+  { label: "Dự Án Đã Nghiệm Thu", href: "/du-an" },
+  { label: "Tin Tức & Kỹ Thuật", href: "/tin-tuc" },
+  { label: "Video Thi Công Thực Tế", href: "/video" },
+  { label: "Liên Hệ & Bản Đồ Kho", href: "/lien-he" },
+];
 
 export default function Footer({ onOpenOrderModal }) {
   return (
@@ -119,9 +127,9 @@ export default function Footer({ onOpenOrderModal }) {
             }}
           >
             {serviceLinks.map((item) => (
-              <li key={item}>
-                <a
-                  href="#services"
+              <li key={item.label}>
+                <Link
+                  to={item.href}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -133,19 +141,19 @@ export default function Footer({ onOpenOrderModal }) {
                     fontWeight: 300,
                     transition: "color 0.2s",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#0077ff")}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#38bdf8")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.42)")}
                 >
                   <div
                     style={{
                       width: "12px",
                       height: "1px",
-                      background: "#e60012",
+                      background: "#dc2626",
                       flexShrink: 0,
                     }}
                   />
-                  {item}
-                </a>
+                  {item.label}
+                </Link>
               </li>
             ))}
           </ul>
@@ -166,7 +174,7 @@ export default function Footer({ onOpenOrderModal }) {
               borderBottom: "1px solid rgba(255,255,255,0.07)",
             }}
           >
-            Liên Kết
+            Trang Doanh Nghiệp
           </h4>
           <ul
             style={{
@@ -179,9 +187,9 @@ export default function Footer({ onOpenOrderModal }) {
             }}
           >
             {navLinks.map((item) => (
-              <li key={item}>
-                <a
-                  href="#"
+              <li key={item.label}>
+                <Link
+                  to={item.href}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -204,8 +212,8 @@ export default function Footer({ onOpenOrderModal }) {
                       flexShrink: 0,
                     }}
                   />
-                  {item}
-                </a>
+                  {item.label}
+                </Link>
               </li>
             ))}
           </ul>

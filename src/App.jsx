@@ -6,6 +6,9 @@ import ScrollToTop from "./components/ScrollToTop";
 import Home from "./pages/Home";
 import ProductDetail from "./pages/ProductDetail";
 import ProjectDetail from "./pages/ProjectDetail";
+import ProjectsList from "./pages/ProjectsList";
+import AboutUs from "./pages/AboutUs";
+import Contact from "./pages/Contact";
 import NewsList from "./pages/NewsList";
 import NewsDetail from "./pages/NewsDetail";
 import VideoList from "./pages/VideoList";
@@ -91,7 +94,11 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home onOpenOrderModal={handleOpenOrderModal} />} />
         <Route path="/san-pham/:slug" element={<ProductDetail onOpenOrderModal={handleOpenOrderModal} />} />
+        <Route path="/du-an" element={<ProjectsList onOpenOrderModal={handleOpenOrderModal} />} />
         <Route path="/du-an/:slug" element={<ProjectDetail />} />
+        <Route path="/ve-chung-toi" element={<AboutUs onOpenOrderModal={handleOpenOrderModal} />} />
+        <Route path="/gioi-thieu" element={<AboutUs onOpenOrderModal={handleOpenOrderModal} />} />
+        <Route path="/lien-he" element={<Contact onOpenOrderModal={handleOpenOrderModal} />} />
         <Route
           path="/video"
           element={
