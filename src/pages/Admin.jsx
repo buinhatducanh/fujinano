@@ -41,7 +41,10 @@ import {
   RefreshCw,
   CheckCircle2,
   Server,
-  Cpu
+  Cpu,
+  Video as VideoIcon,
+  Film,
+  Zap
 } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
 
@@ -53,6 +56,7 @@ export default function Admin() {
     siteSettings,
     policies,
     inquiries,
+    videos,
     updateProduct,
     addProduct,
     deleteProduct,
@@ -63,6 +67,9 @@ export default function Admin() {
     updatePolicies,
     updateInquiryStatus,
     deleteInquiry,
+    addVideo,
+    updateVideo,
+    deleteVideo,
     resetToDefaults,
     neonStatus,
     adminToken,
@@ -464,6 +471,136 @@ export default function Admin() {
     updatePolicies(policyForm);
     showToast("✓ Đã cập nhật chính sách bảo hành & đổi trả trên toàn hệ thống!");
   };
+
+  // =========================================================================
+  // 4b. STATE & LOGIC CHO QUẢN TRỊ VIDEO & YOUTUBE SHORTS
+  // =========================================================================
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
+  const [editingVideo, setEditingVideo] = useState(null);
+  const [videoSearch, setVideoSearch] = useState("");
+  const [videoTypeFilter, setVideoTypeFilter] = useState("all");
+  const [videoForm, setVideoForm] = useState({
+    title: "",
+    type: "horizontal",
+    youtubeUrl: "",
+    youtubeId: "",
+    thumbnail: "",
+    duration: "03:30",
+    category: "Sơn Sàn Epoxy",
+    views: "1.2K",
+    author: "Kỹ Sư Fuji Nano",
+    description: "",
+  });
+
+  const parseYoutubeUrl = (url) => {
+    if (!url) return { id: "", type: "horizontal" };
+    let id = "";
+    let type = "horizontal";
+
+    if (url.includes("/shorts/")) {
+      type = "short";
+      const match = url.match(/\/shorts\/([a-zA-Z0-9_-]+)/);
+      if (match) id = match[1];
+    } else if (url.includes("youtu.be/")) {
+      const match = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+      if (match) id = match[1];
+    } else if (url.includes("watch?v=")) {
+      const match = url.match(/v=([a-zA-Z0-9_-]+)/);
+      if (match) id = match[1];
+    } else if (url.includes("/embed/")) {
+      const match = url.match(/\/embed\/([a-zA-Z0-9_-]+)/);
+      if (match) id = match[1];
+    } else if (/^[a-zA-Z0-9_-]{11}$/.test(url.trim())) {
+      id = url.trim();
+    }
+
+    return { id, type };
+  };
+
+  const handleYoutubeUrlChange = (val) => {
+    const { id, type } = parseYoutubeUrl(val);
+    setVideoForm((prev) => ({
+      ...prev,
+      youtubeUrl: val,
+      youtubeId: id || prev.youtubeId,
+      type: type || prev.type,
+      thumbnail: id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : prev.thumbnail,
+    }));
+  };
+
+  const openNewVideoModal = () => {
+    setEditingVideo(null);
+    setVideoForm({
+      title: "",
+      type: "horizontal",
+      youtubeUrl: "",
+      youtubeId: "",
+      thumbnail: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80",
+      duration: "03:30",
+      category: "Sơn Sàn Epoxy",
+      views: "1.2K",
+      author: "Kỹ Sư Fuji Nano",
+      description: "",
+    });
+    setVideoModalOpen(true);
+  };
+
+  const openEditVideoModal = (vid) => {
+    setEditingVideo(vid);
+    setVideoForm({
+      title: vid.title || "",
+      type: vid.type || "horizontal",
+      youtubeUrl: vid.youtubeUrl || (vid.youtubeId ? `https://www.youtube.com/watch?v=${vid.youtubeId}` : ""),
+      youtubeId: vid.youtubeId || "",
+      thumbnail: vid.thumbnail || "",
+      duration: vid.duration || "03:30",
+      category: vid.category || "Sơn Sàn Epoxy",
+      views: vid.views || "1.2K",
+      author: vid.author || "Kỹ Sư Fuji Nano",
+      description: vid.description || "",
+    });
+    setVideoModalOpen(true);
+  };
+
+  const handleSaveVideo = (e) => {
+    e.preventDefault();
+    if (!videoForm.title.trim()) {
+      alert("Vui lòng nhập tiêu đề video!");
+      return;
+    }
+    const slug = videoForm.title
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[đĐ]/g, "d")
+      .replace(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-");
+
+    const vidPayload = {
+      ...videoForm,
+      id: editingVideo ? editingVideo.id : `vid-${Date.now()}`,
+      slug: editingVideo ? editingVideo.slug : slug,
+      date: editingVideo ? editingVideo.date : new Date().toLocaleDateString("vi-VN"),
+    };
+
+    if (editingVideo) {
+      updateVideo(editingVideo.id, vidPayload);
+      showToast("✓ Đã cập nhật video thành công!");
+    } else {
+      addVideo(vidPayload);
+      showToast("✓ Đã thêm video mới thành công!");
+    }
+    setVideoModalOpen(false);
+  };
+
+  const filteredAdminVideos = (videos || []).filter((v) => {
+    const matchType = videoTypeFilter === "all" || v.type === videoTypeFilter;
+    const matchSearch =
+      v.title.toLowerCase().includes(videoSearch.toLowerCase()) ||
+      (v.category && v.category.toLowerCase().includes(videoSearch.toLowerCase()));
+    return matchType && matchSearch;
+  });
 
   // =========================================================================
   // 5. THỐNG KÊ DASHBOARD
@@ -1066,6 +1203,13 @@ export default function Admin() {
               label: "Yêu Cầu Báo Giá",
               icon: PhoneCall,
               badge: pendingInquiriesCount > 0 ? `${pendingInquiriesCount} mới` : null,
+              badgeColor: "#ef4444",
+            },
+            {
+              id: "videos",
+              label: "Video & Shorts",
+              icon: VideoIcon,
+              badge: `${(videos || []).length} video`,
               badgeColor: "#ef4444",
             },
             {
@@ -3192,6 +3336,316 @@ export default function Admin() {
               </div>
             </div>
           )}
+
+          {/* =============================================================== */}
+          {/* TAB 8: QUẢN LÝ VIDEO THI CÔNG & YOUTUBE SHORTS                   */}
+          {/* =============================================================== */}
+          {activeTab === "videos" && (
+            <div>
+              {/* Header Tab */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  flexWrap: "wrap",
+                  gap: "16px",
+                  marginBottom: "24px",
+                }}
+              >
+                <div>
+                  <h1
+                    style={{
+                      fontSize: "22px",
+                      fontWeight: 800,
+                      margin: "0 0 6px",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                    }}
+                  >
+                    <VideoIcon size={24} color="#ef4444" />
+                    <span>QUẢN LÝ VIDEO THI CÔNG &amp; YOUTUBE SHORTS</span>
+                  </h1>
+                  <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0 }}>
+                    Hỗ trợ quản lý video ngang 16:9 và video ngắn YouTube Shorts 9:16. Dán link YouTube để tự động lấy ID và ảnh thu nhỏ.
+                  </p>
+                </div>
+
+                <button
+                  onClick={openNewVideoModal}
+                  style={{
+                    background: "linear-gradient(135deg, #ef4444, #dc2626)",
+                    color: "#ffffff",
+                    border: "none",
+                    borderRadius: "8px",
+                    padding: "10px 18px",
+                    fontWeight: 700,
+                    fontSize: "13.5px",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    boxShadow: "0 4px 14px rgba(239, 68, 68, 0.4)",
+                  }}
+                >
+                  <Plus size={16} />
+                  <span>Thêm Video / Shorts Mới</span>
+                </button>
+              </div>
+
+              {/* Filters & Search */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  flexWrap: "wrap",
+                  gap: "14px",
+                  marginBottom: "20px",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                  {[
+                    { id: "all", label: `Tất Cả (${(videos || []).length})` },
+                    { id: "horizontal", label: `Video Ngang 16:9 (${(videos || []).filter((v) => v.type === "horizontal").length})` },
+                    { id: "short", label: `YouTube Shorts 9:16 (${(videos || []).filter((v) => v.type === "short").length})` },
+                  ].map((btn) => (
+                    <button
+                      key={btn.id}
+                      onClick={() => setVideoTypeFilter(btn.id)}
+                      style={{
+                        padding: "7px 14px",
+                        borderRadius: "20px",
+                        fontSize: "12.5px",
+                        fontWeight: videoTypeFilter === btn.id ? 700 : 500,
+                        border: videoTypeFilter === btn.id ? "1px solid #38bdf8" : "1px solid rgba(255,255,255,0.1)",
+                        background: videoTypeFilter === btn.id ? "rgba(56, 189, 248, 0.15)" : "rgba(2, 12, 38, 0.6)",
+                        color: videoTypeFilter === btn.id ? "#38bdf8" : "#cbd5e1",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {btn.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    background: "rgba(2, 12, 38, 0.8)",
+                    border: "1px solid rgba(255, 255, 255, 0.15)",
+                    borderRadius: "8px",
+                    padding: "0 12px",
+                    width: "100%",
+                    maxWidth: "320px",
+                  }}
+                >
+                  <Search size={15} color="#64748b" style={{ flexShrink: 0 }} />
+                  <input
+                    type="text"
+                    placeholder="Tìm theo tiêu đề, danh mục..."
+                    value={videoSearch}
+                    onChange={(e) => setVideoSearch(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "9px 10px",
+                      background: "transparent",
+                      border: "none",
+                      outline: "none",
+                      color: "#ffffff",
+                      fontSize: "13px",
+                    }}
+                  />
+                  {videoSearch && (
+                    <button
+                      onClick={() => setVideoSearch("")}
+                      style={{ background: "transparent", border: "none", color: "#94a3b8", cursor: "pointer" }}
+                    >
+                      <X size={14} />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Videos Table */}
+              <div
+                style={{
+                  background: "rgba(3, 16, 48, 0.85)",
+                  border: "1px solid rgba(59, 130, 246, 0.25)",
+                  borderRadius: "12px",
+                  overflow: "hidden",
+                }}
+              >
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
+                  <thead>
+                    <tr style={{ background: "rgba(2, 12, 38, 0.95)", borderBottom: "1px solid rgba(255, 255, 255, 0.1)" }}>
+                      <th style={{ padding: "12px 16px", textAlign: "left", color: "#94a3b8", fontWeight: 700, width: "120px" }}>
+                        Ảnh / Loại
+                      </th>
+                      <th style={{ padding: "12px 16px", textAlign: "left", color: "#94a3b8", fontWeight: 700 }}>
+                        Tiêu Đề &amp; YouTube ID
+                      </th>
+                      <th style={{ padding: "12px 16px", textAlign: "left", color: "#94a3b8", fontWeight: 700, width: "160px" }}>
+                        Hạng Mục &amp; Thời Lượng
+                      </th>
+                      <th style={{ padding: "12px 16px", textAlign: "left", color: "#94a3b8", fontWeight: 700, width: "120px" }}>
+                        Lượt Xem
+                      </th>
+                      <th style={{ padding: "12px 16px", textAlign: "right", color: "#94a3b8", fontWeight: 700, width: "120px" }}>
+                        Thao Tác
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredAdminVideos.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} style={{ padding: "40px", textAlign: "center", color: "#94a3b8" }}>
+                          Không có video nào trong danh sách.
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredAdminVideos.map((vid) => {
+                        const isShort = vid.type === "short";
+                        return (
+                          <tr
+                            key={vid.id}
+                            style={{
+                              borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
+                              transition: "background 0.15s ease",
+                            }}
+                            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255, 255, 255, 0.03)")}
+                            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                          >
+                            <td style={{ padding: "12px 16px" }}>
+                              <div
+                                style={{
+                                  position: "relative",
+                                  width: isShort ? "56px" : "90px",
+                                  aspectRatio: isShort ? "9 / 16" : "16 / 9",
+                                  borderRadius: "6px",
+                                  overflow: "hidden",
+                                  background: "#01081a",
+                                }}
+                              >
+                                <img
+                                  src={vid.thumbnail}
+                                  alt={vid.title}
+                                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                />
+                                <div
+                                  style={{
+                                    position: "absolute",
+                                    bottom: "2px",
+                                    left: "2px",
+                                    fontSize: "9px",
+                                    fontWeight: 800,
+                                    padding: "1px 4px",
+                                    borderRadius: "3px",
+                                    background: isShort ? "#ef4444" : "#2563eb",
+                                    color: "#ffffff",
+                                  }}
+                                >
+                                  {isShort ? "SHORTS" : "16:9"}
+                                </div>
+                              </div>
+                            </td>
+
+                            <td style={{ padding: "12px 16px" }}>
+                              <div style={{ fontWeight: 700, color: "#ffffff", marginBottom: "4px", lineHeight: 1.35 }}>
+                                {vid.title}
+                              </div>
+                              <div style={{ fontSize: "11.5px", color: "#64748b", fontFamily: "monospace" }}>
+                                ID: {vid.youtubeId || "Chưa có"} | Slug: /video/{vid.slug}
+                              </div>
+                            </td>
+
+                            <td style={{ padding: "12px 16px" }}>
+                              <div style={{ color: "#38bdf8", fontWeight: 600, marginBottom: "3px" }}>
+                                {vid.category}
+                              </div>
+                              <div style={{ fontSize: "12px", color: "#94a3b8" }}>
+                                {vid.duration}
+                              </div>
+                            </td>
+
+                            <td style={{ padding: "12px 16px", color: "#cbd5e1", fontWeight: 600 }}>
+                              {vid.views}
+                            </td>
+
+                            <td style={{ padding: "12px 16px", textAlign: "right" }}>
+                              <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "6px" }}>
+                                <Link
+                                  to={`/video/${vid.slug}`}
+                                  target="_blank"
+                                  title="Xem trước trên website"
+                                  style={{
+                                    background: "rgba(59, 130, 246, 0.15)",
+                                    color: "#38bdf8",
+                                    border: "1px solid rgba(59, 130, 246, 0.3)",
+                                    borderRadius: "6px",
+                                    padding: "6px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    textDecoration: "none",
+                                  }}
+                                >
+                                  <ExternalLink size={14} />
+                                </Link>
+
+                                <button
+                                  onClick={() => openEditVideoModal(vid)}
+                                  title="Chỉnh sửa video"
+                                  style={{
+                                    background: "rgba(255, 255, 255, 0.08)",
+                                    color: "#cbd5e1",
+                                    border: "1px solid rgba(255, 255, 255, 0.15)",
+                                    borderRadius: "6px",
+                                    padding: "6px",
+                                    cursor: "pointer",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  <Edit size={14} />
+                                </button>
+
+                                <button
+                                  onClick={() => {
+                                    if (window.confirm(`Bạn có chắc muốn xóa video "${vid.title}"?`)) {
+                                      deleteVideo(vid.id);
+                                      showToast("✓ Đã xóa video thành công!");
+                                    }
+                                  }}
+                                  title="Xóa video"
+                                  style={{
+                                    background: "rgba(239, 68, 68, 0.15)",
+                                    color: "#f87171",
+                                    border: "1px solid rgba(239, 68, 68, 0.3)",
+                                    borderRadius: "6px",
+                                    padding: "6px",
+                                    cursor: "pointer",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  <Trash2 size={14} />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </main>
       </div>
 
@@ -3827,6 +4281,375 @@ export default function Admin() {
                 <Save size={16} />
                 <span>Lưu Thay Đổi Thùng Sơn</span>
               </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ===================================================================== */}
+      {/* MODAL 3: THÊM / CHỈNH SỬA VIDEO THI CÔNG & YOUTUBE SHORTS             */}
+      {/* ===================================================================== */}
+      {videoModalOpen && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.8)",
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+            backdropFilter: "blur(6px)",
+          }}
+        >
+          <div
+            style={{
+              background: "#031030",
+              border: "1px solid rgba(239, 68, 68, 0.4)",
+              borderRadius: "14px",
+              width: "100%",
+              maxWidth: "680px",
+              maxHeight: "92vh",
+              overflowY: "auto",
+              boxShadow: "0 20px 50px rgba(0,0,0,0.7)",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {/* Modal Header */}
+            <div
+              style={{
+                padding: "18px 24px",
+                borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                background: "rgba(2, 8, 22, 0.9)",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <VideoIcon size={20} color="#ef4444" />
+                <h3 style={{ fontSize: "16px", fontWeight: 800, margin: 0 }}>
+                  {editingVideo ? "CHỈNH SỬA VIDEO / SHORTS" : "THÊM VIDEO / SHORTS MỚI"}
+                </h3>
+              </div>
+              <button
+                onClick={() => setVideoModalOpen(false)}
+                style={{
+                  background: "rgba(255,255,255,0.1)",
+                  border: "none",
+                  borderRadius: "50%",
+                  width: "32px",
+                  height: "32px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#fff",
+                  cursor: "pointer",
+                }}
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* Modal Form */}
+            <form onSubmit={handleSaveVideo} style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "16px" }}>
+              {/* YouTube URL input with auto-parser */}
+              <div>
+                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, marginBottom: "6px", color: "#cbd5e1" }}>
+                  Đường Dẫn YouTube (URL) *
+                </label>
+                <input
+                  type="text"
+                  placeholder="Dán link YouTube (VD: https://www.youtube.com/watch?v=... hoặc https://www.youtube.com/shorts/...)"
+                  value={videoForm.youtubeUrl}
+                  onChange={(e) => handleYoutubeUrlChange(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "10px 12px",
+                    borderRadius: "6px",
+                    border: "1px solid rgba(255, 255, 255, 0.15)",
+                    background: "rgba(2, 14, 42, 0.9)",
+                    color: "#ffffff",
+                    fontSize: "13.5px",
+                  }}
+                />
+                <span style={{ fontSize: "11.5px", color: "#94a3b8", marginTop: "4px", display: "block" }}>
+                  Hệ thống tự động phát hiện định dạng Video Ngang (16:9) hoặc Shorts (9:16) và trích xuất YouTube ID.
+                </span>
+              </div>
+
+              {/* Type and YouTube ID */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
+                <div>
+                  <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, marginBottom: "6px", color: "#cbd5e1" }}>
+                    Định Dạng Video *
+                  </label>
+                  <select
+                    value={videoForm.type}
+                    onChange={(e) => setVideoForm({ ...videoForm, type: e.target.value })}
+                    style={{
+                      width: "100%",
+                      padding: "10px 12px",
+                      borderRadius: "6px",
+                      border: "1px solid rgba(255, 255, 255, 0.15)",
+                      background: "rgba(2, 14, 42, 0.9)",
+                      color: "#ffffff",
+                      fontSize: "13.5px",
+                    }}
+                  >
+                    <option value="horizontal">🎬 Video Ngang 16:9 (Quy trình, Dự án)</option>
+                    <option value="short">⚡ YouTube Shorts 9:16 (Video dọc, Mẹo nhanh)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, marginBottom: "6px", color: "#cbd5e1" }}>
+                    Mã YouTube ID *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="VD: V1bFr2KGq1g"
+                    value={videoForm.youtubeId}
+                    onChange={(e) =>
+                      setVideoForm({
+                        ...videoForm,
+                        youtubeId: e.target.value.trim(),
+                        thumbnail: `https://img.youtube.com/vi/${e.target.value.trim()}/hqdefault.jpg`,
+                      })
+                    }
+                    style={{
+                      width: "100%",
+                      padding: "10px 12px",
+                      borderRadius: "6px",
+                      border: "1px solid rgba(255, 255, 255, 0.15)",
+                      background: "rgba(2, 14, 42, 0.9)",
+                      color: "#38bdf8",
+                      fontFamily: "monospace",
+                      fontSize: "13.5px",
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Title */}
+              <div>
+                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, marginBottom: "6px", color: "#cbd5e1" }}>
+                  Tiêu Đề Video *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Nhập tiêu đề video thi công hoặc mẹo kỹ thuật..."
+                  value={videoForm.title}
+                  onChange={(e) => setVideoForm({ ...videoForm, title: e.target.value })}
+                  style={{
+                    width: "100%",
+                    padding: "10px 12px",
+                    borderRadius: "6px",
+                    border: "1px solid rgba(255, 255, 255, 0.15)",
+                    background: "rgba(2, 14, 42, 0.9)",
+                    color: "#ffffff",
+                    fontSize: "13.5px",
+                  }}
+                />
+              </div>
+
+              {/* Category, Duration, Views */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" }}>
+                <div>
+                  <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, marginBottom: "6px", color: "#cbd5e1" }}>
+                    Hạng Mục
+                  </label>
+                  <select
+                    value={videoForm.category}
+                    onChange={(e) => setVideoForm({ ...videoForm, category: e.target.value })}
+                    style={{
+                      width: "100%",
+                      padding: "9px 10px",
+                      borderRadius: "6px",
+                      border: "1px solid rgba(255, 255, 255, 0.15)",
+                      background: "rgba(2, 14, 42, 0.9)",
+                      color: "#ffffff",
+                      fontSize: "13px",
+                    }}
+                  >
+                    <option value="Sơn Sàn Epoxy">Sơn Sàn Epoxy</option>
+                    <option value="Chống Thấm PU">Chống Thấm PU</option>
+                    <option value="Sân Thể Thao">Sân Thể Thao</option>
+                    <option value="Sơn Chống Cháy">Sơn Chống Cháy</option>
+                    <option value="Sơn Kẻ Vạch">Sơn Kẻ Vạch</option>
+                    <option value="Thử Nghiệm Kỹ Thuật">Thử Nghiệm Kỹ Thuật</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, marginBottom: "6px", color: "#cbd5e1" }}>
+                    Thời Lượng (VD: 04:30)
+                  </label>
+                  <input
+                    type="text"
+                    value={videoForm.duration}
+                    onChange={(e) => setVideoForm({ ...videoForm, duration: e.target.value })}
+                    style={{
+                      width: "100%",
+                      padding: "9px 10px",
+                      borderRadius: "6px",
+                      border: "1px solid rgba(255, 255, 255, 0.15)",
+                      background: "rgba(2, 14, 42, 0.9)",
+                      color: "#ffffff",
+                      fontSize: "13px",
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, marginBottom: "6px", color: "#cbd5e1" }}>
+                    Lượt Xem Hiển Thị
+                  </label>
+                  <input
+                    type="text"
+                    value={videoForm.views}
+                    onChange={(e) => setVideoForm({ ...videoForm, views: e.target.value })}
+                    style={{
+                      width: "100%",
+                      padding: "9px 10px",
+                      borderRadius: "6px",
+                      border: "1px solid rgba(255, 255, 255, 0.15)",
+                      background: "rgba(2, 14, 42, 0.9)",
+                      color: "#ffffff",
+                      fontSize: "13px",
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Thumbnail URL & Author */}
+              <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: "14px" }}>
+                <div>
+                  <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, marginBottom: "6px", color: "#cbd5e1" }}>
+                    Ảnh Thu Nhỏ (Thumbnail URL)
+                  </label>
+                  <input
+                    type="text"
+                    value={videoForm.thumbnail}
+                    onChange={(e) => setVideoForm({ ...videoForm, thumbnail: e.target.value })}
+                    style={{
+                      width: "100%",
+                      padding: "9px 12px",
+                      borderRadius: "6px",
+                      border: "1px solid rgba(255, 255, 255, 0.15)",
+                      background: "rgba(2, 14, 42, 0.9)",
+                      color: "#ffffff",
+                      fontSize: "12.5px",
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, marginBottom: "6px", color: "#cbd5e1" }}>
+                    Tác Giả / Người Quay
+                  </label>
+                  <input
+                    type="text"
+                    value={videoForm.author}
+                    onChange={(e) => setVideoForm({ ...videoForm, author: e.target.value })}
+                    style={{
+                      width: "100%",
+                      padding: "9px 12px",
+                      borderRadius: "6px",
+                      border: "1px solid rgba(255, 255, 255, 0.15)",
+                      background: "rgba(2, 14, 42, 0.9)",
+                      color: "#ffffff",
+                      fontSize: "13px",
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Description */}
+              <div>
+                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, marginBottom: "6px", color: "#cbd5e1" }}>
+                  Mô Tả Kỹ Thuật Chi Tiết
+                </label>
+                <textarea
+                  rows={4}
+                  value={videoForm.description}
+                  onChange={(e) => setVideoForm({ ...videoForm, description: e.target.value })}
+                  placeholder="Mô tả các bước thi công, tiêu chuẩn kiểm nghiệm hoặc kết quả thử nghiệm đạt được..."
+                  style={{
+                    width: "100%",
+                    padding: "10px 12px",
+                    borderRadius: "6px",
+                    border: "1px solid rgba(255, 255, 255, 0.15)",
+                    background: "rgba(2, 14, 42, 0.9)",
+                    color: "#ffffff",
+                    fontSize: "13px",
+                    lineHeight: 1.6,
+                  }}
+                />
+              </div>
+
+              {/* Thumbnail Live Preview */}
+              {videoForm.thumbnail && (
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", background: "rgba(2, 10, 28, 0.6)", padding: "10px", borderRadius: "8px" }}>
+                  <img
+                    src={videoForm.thumbnail}
+                    alt="Preview"
+                    style={{
+                      width: videoForm.type === "short" ? "45px" : "80px",
+                      aspectRatio: videoForm.type === "short" ? "9 / 16" : "16 / 9",
+                      borderRadius: "4px",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <div style={{ fontSize: "12px", color: "#94a3b8" }}>
+                    <div>Preview ảnh thu nhỏ: <strong style={{ color: "#ffffff" }}>{videoForm.type === "short" ? "Shorts (9:16)" : "Ngang (16:9)"}</strong></div>
+                    <div>YouTube ID: <code style={{ color: "#38bdf8" }}>{videoForm.youtubeId || "chưa nhập"}</code></div>
+                  </div>
+                </div>
+              )}
+
+              {/* Submit Buttons */}
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px", marginTop: "10px" }}>
+                <button
+                  type="button"
+                  onClick={() => setVideoModalOpen(false)}
+                  style={{
+                    padding: "10px 18px",
+                    background: "rgba(255,255,255,0.08)",
+                    color: "#fff",
+                    border: "1px solid rgba(255,255,255,0.15)",
+                    borderRadius: "6px",
+                    fontSize: "13.5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Hủy Bỏ
+                </button>
+                <button
+                  type="submit"
+                  style={{
+                    padding: "10px 22px",
+                    background: "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)",
+                    color: "#ffffff",
+                    border: "none",
+                    borderRadius: "6px",
+                    fontSize: "13.5px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    boxShadow: "0 4px 14px rgba(239, 68, 68, 0.4)",
+                  }}
+                >
+                  <Save size={15} />
+                  <span>{editingVideo ? "Lưu Cập Nhật Video" : "Thêm Video Mới"}</span>
+                </button>
+              </div>
             </form>
           </div>
         </div>

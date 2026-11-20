@@ -25,6 +25,7 @@ export default function Navbar({ onOpenOrderModal }) {
     { label: "Trang Chủ", href: "/" },
     { label: "Sản Phẩm", href: "/#products" },
     { label: "Dự Án", href: "/du-an" },
+    { label: "Video", href: "/video" },
     { label: "Tin Tức", href: "/tin-tuc" },
     { label: "Về Chúng Tôi", href: "/ve-chung-toi" },
     { label: "Liên Hệ", href: "/lien-he" },

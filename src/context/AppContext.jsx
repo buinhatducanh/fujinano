@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { products as initialProducts, categories } from "../data/products";
 import { newsArticles as initialNews } from "../data/news";
+import { defaultVideos } from "../data/videos";
 
 const AppContext = createContext();
 
@@ -167,7 +168,17 @@ export function AppProvider({ children }) {
     }
   });
 
-  // 6. Trạng Thái Kết Nối Neon Cloud & Token Bảo Mật
+  // 6. Quản lý Video Thi Công & YouTube Shorts
+  const [videos, setVideos] = useState(() => {
+    try {
+      const saved = localStorage.getItem("fujinano_videos");
+      return saved ? JSON.parse(saved) : defaultVideos;
+    } catch {
+      return defaultVideos;
+    }
+  });
+
+  // 7. Trạng Thái Kết Nối Neon Cloud & Token Bảo Mật
   const [neonStatus, setNeonStatus] = useState(null);
   const [adminToken, setAdminToken] = useState(() => {
     return (
@@ -227,6 +238,10 @@ export function AppProvider({ children }) {
   useEffect(() => {
     localStorage.setItem("fujinano_inquiries", JSON.stringify(inquiries));
   }, [inquiries]);
+
+  useEffect(() => {
+    localStorage.setItem("fujinano_videos", JSON.stringify(videos));
+  }, [videos]);
 
   // Product Actions
   const updateProduct = (id, updatedFields) => {
@@ -316,6 +331,21 @@ export function AppProvider({ children }) {
     setInquiries((prev) => prev.filter((item) => item.id !== id));
   };
 
+  // Video Actions
+  const addVideo = (newVideo) => {
+    setVideos((prev) => [newVideo, ...prev]);
+  };
+
+  const updateVideo = (id, updatedFields) => {
+    setVideos((prev) =>
+      prev.map((v) => (v.id === id ? { ...v, ...updatedFields } : v))
+    );
+  };
+
+  const deleteVideo = (id) => {
+    setVideos((prev) => prev.filter((v) => v.id !== id));
+  };
+
   // Reset to Factory Defaults
   const resetToDefaults = () => {
     setProducts(initialProducts);
@@ -323,11 +353,13 @@ export function AppProvider({ children }) {
     setSiteSettings(defaultSiteSettings);
     setPolicies(defaultPolicies);
     setInquiries(defaultInquiries);
+    setVideos(defaultVideos);
     localStorage.removeItem("fujinano_products");
     localStorage.removeItem("fujinano_articles");
     localStorage.removeItem("fujinano_site_settings");
     localStorage.removeItem("fujinano_policies");
     localStorage.removeItem("fujinano_inquiries");
+    localStorage.removeItem("fujinano_videos");
   };
 
   return (
@@ -339,13 +371,11 @@ export function AppProvider({ children }) {
         siteSettings,
         policies,
         inquiries,
+        videos,
         neonStatus,
         adminToken,
         setAdminToken,
         fetchInquiriesFromDb,
-        siteSettings,
-        policies,
-        inquiries,
         updateProduct,
         addProduct,
         deleteProduct,
@@ -357,6 +387,9 @@ export function AppProvider({ children }) {
         addInquiry,
         updateInquiryStatus,
         deleteInquiry,
+        addVideo,
+        updateVideo,
+        deleteVideo,
         resetToDefaults,
       }}
     >
