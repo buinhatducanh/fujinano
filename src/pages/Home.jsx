@@ -227,68 +227,133 @@ export default function Home({ onOpenOrderModal }) {
           </div>
         </div>
 
-        {/* 2. BỘ LỌC DANH MỤC THÙNG SƠN (HORIZONTAL CATEGORY PILLS) */}
+        {/* 2. DANH MỤC THÙNG SƠN TRỰC QUAN (SHOPEE STYLE CATEGORY SHELF) */}
         <div
           style={{
             background: "rgba(8, 22, 54, 0.88)",
             backdropFilter: "blur(14px)",
-            borderRadius: "12px",
-            padding: "12px 16px",
+            borderRadius: "14px",
+            padding: "16px 20px",
             border: "1px solid rgba(255, 255, 255, 0.12)",
             marginBottom: "16px",
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            overflowX: "auto",
-            whiteSpace: "nowrap",
+            boxShadow: "0 4px 16px rgba(0, 0, 0, 0.25)",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#94a3b8", fontSize: "12.5px", fontWeight: 700, paddingRight: "8px", borderRight: "1px solid rgba(255,255,255,0.1)", flexShrink: 0 }}>
-            <Filter size={14} />
-            <span>DANH MỤC:</span>
-          </div>
-
-          <button
-            onClick={() => setActiveCategory("all")}
+          <div
             style={{
-              background: activeCategory === "all" ? "#dc2626" : "rgba(2, 10, 28, 0.6)",
-              color: "#ffffff",
-              border: activeCategory === "all" ? "1px solid #dc2626" : "1px solid rgba(255, 255, 255, 0.15)",
-              borderRadius: "8px",
-              padding: "7px 14px",
-              fontSize: "12.5px",
-              fontWeight: 700,
-              cursor: "pointer",
-              transition: "all 0.15s ease",
-              flexShrink: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: "14px",
             }}
           >
-            Tất Cả ({products.length})
-          </button>
-
-          {categories.map((cat) => {
-            const isSelected = activeCategory === cat.id;
-            return (
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ fontSize: "13.5px", fontWeight: 700, color: "#ffffff", letterSpacing: "0.5px" }}>
+                DANH MỤC THÙNG SƠN NỔI BẬT
+              </span>
+              <span style={{ fontSize: "11px", background: "rgba(59, 130, 246, 0.2)", color: "#38bdf8", padding: "2px 8px", borderRadius: "10px", fontWeight: 600 }}>
+                Chính Hãng Fuji Nano
+              </span>
+            </div>
+            {activeCategory !== "all" && (
               <button
-                key={cat.id}
-                onClick={() => setActiveCategory(isSelected ? "all" : cat.id)}
+                onClick={() => setActiveCategory("all")}
                 style={{
-                  background: isSelected ? "#dc2626" : "rgba(2, 10, 28, 0.6)",
-                  color: "#ffffff",
-                  border: isSelected ? "1px solid #dc2626" : "1px solid rgba(255, 255, 255, 0.15)",
-                  borderRadius: "8px",
-                  padding: "7px 14px",
-                  fontSize: "12.5px",
-                  fontWeight: isSelected ? 700 : 500,
+                  background: "transparent",
+                  border: "none",
+                  color: "#38bdf8",
+                  fontSize: "12px",
+                  fontWeight: 600,
                   cursor: "pointer",
-                  transition: "all 0.15s ease",
-                  flexShrink: 0,
+                  textDecoration: "underline",
                 }}
               >
-                {cat.name}
+                Xem tất cả ({products.length})
               </button>
-            );
-          })}
+            )}
+          </div>
+
+          {/* Category Visual Cards Grid */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(105px, 1fr))",
+              gap: "10px",
+            }}
+          >
+            {categories.map((cat) => {
+              const isSelected = activeCategory === cat.id;
+              return (
+                <div
+                  key={cat.id}
+                  onClick={() => setActiveCategory(isSelected ? "all" : cat.id)}
+                  style={{
+                    background: isSelected ? "rgba(59, 130, 246, 0.2)" : "rgba(2, 10, 28, 0.6)",
+                    border: isSelected ? "2px solid #38bdf8" : "1px solid rgba(255, 255, 255, 0.1)",
+                    borderRadius: "10px",
+                    padding: "10px 6px",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    cursor: "pointer",
+                    textAlign: "center",
+                    transition: "all 0.18s ease",
+                    transform: isSelected ? "translateY(-2px)" : "none",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isSelected) {
+                      e.currentTarget.style.borderColor = "rgba(59, 130, 246, 0.4)";
+                      e.currentTarget.style.transform = "translateY(-2px)";
+                      e.currentTarget.style.background = "rgba(2, 10, 28, 0.85)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isSelected) {
+                      e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.1)";
+                      e.currentTarget.style.transform = "none";
+                      e.currentTarget.style.background = "rgba(2, 10, 28, 0.6)";
+                    }
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "56px",
+                      height: "56px",
+                      borderRadius: "10px",
+                      background: "#ffffff",
+                      padding: "4px",
+                      marginBottom: "8px",
+                      overflow: "hidden",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.25)",
+                    }}
+                  >
+                    <img
+                      src={cat.img}
+                      alt={cat.name}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain",
+                      }}
+                    />
+                  </div>
+                  <span
+                    style={{
+                      fontSize: "12px",
+                      fontWeight: isSelected ? 700 : 600,
+                      color: isSelected ? "#38bdf8" : "#f1f5f9",
+                      lineHeight: 1.25,
+                    }}
+                  >
+                    {cat.name}
+                  </span>
+                  <span style={{ fontSize: "10.5px", color: "#94a3b8", marginTop: "2px" }}>
+                    {cat.count} SP
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* 3. THÔNG BÁO 2 CÁCH MUA HÀNG TIỆN LỢI */}

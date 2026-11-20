@@ -114,11 +114,12 @@ export default function ProductDetail({ onOpenOrderModal }) {
                 width: "100%",
                 paddingTop: "100%",
                 position: "relative",
-                background: "#030c22",
+                background: "#ffffff",
                 borderRadius: "10px",
                 overflow: "hidden",
-                border: "1px solid rgba(255, 255, 255, 0.15)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
                 marginBottom: "12px",
+                boxShadow: "0 4px 14px rgba(0,0,0,0.25)",
               }}
             >
               <img
@@ -130,7 +131,8 @@ export default function ProductDetail({ onOpenOrderModal }) {
                   left: 0,
                   width: "100%",
                   height: "100%",
-                  objectFit: "cover",
+                  objectFit: "contain",
+                  padding: "10px",
                 }}
               />
               <div
@@ -144,6 +146,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
                   fontWeight: 700,
                   padding: "3px 8px",
                   borderRadius: "4px",
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
                 }}
               >
                 CHÍNH HÃNG
@@ -162,15 +165,16 @@ export default function ProductDetail({ onOpenOrderModal }) {
                     height: "72px",
                     borderRadius: "6px",
                     overflow: "hidden",
-                    border: selectedImageIndex === idx ? "2px solid #38bdf8" : "1px solid rgba(255, 255, 255, 0.15)",
-                    background: "#030c22",
+                    border: selectedImageIndex === idx ? "2px solid #38bdf8" : "1px solid rgba(255, 255, 255, 0.2)",
+                    background: "#ffffff",
                     cursor: "pointer",
                     flexShrink: 0,
-                    opacity: selectedImageIndex === idx ? 1 : 0.6,
+                    opacity: selectedImageIndex === idx ? 1 : 0.7,
                     transition: "all 0.15s ease",
+                    padding: "3px",
                   }}
                 >
-                  <img src={img} alt={`thumb-${idx}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  <img src={img} alt={`thumb-${idx}`} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
                 </div>
               ))}
             </div>

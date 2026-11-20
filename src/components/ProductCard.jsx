@@ -37,7 +37,7 @@ export default function ProductCard({ product, onOpenOrder }) {
         style={{ textDecoration: "none", color: "inherit", display: "block" }}
       >
         {/* Product Image Wrapper */}
-        <div style={{ position: "relative", width: "100%", paddingTop: "100%", background: "#030c22", overflow: "hidden" }}>
+        <div style={{ position: "relative", width: "100%", paddingTop: "100%", background: "#ffffff", overflow: "hidden" }}>
           <img
             src={product.images?.[0] || "/images/slider/epoxy_floor.png"}
             alt={product.name}
@@ -48,7 +48,8 @@ export default function ProductCard({ product, onOpenOrder }) {
               left: 0,
               width: "100%",
               height: "100%",
-              objectFit: "cover",
+              objectFit: "contain",
+              padding: "6px",
               transition: "transform 0.35s ease",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}

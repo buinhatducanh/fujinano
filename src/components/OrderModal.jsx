@@ -169,9 +169,11 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
                 style={{
                   width: "64px",
                   height: "64px",
-                  objectFit: "cover",
+                  objectFit: "contain",
+                  background: "#ffffff",
+                  padding: "4px",
                   borderRadius: "6px",
-                  border: "1px solid rgba(255, 255, 255, 0.15)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
                   flexShrink: 0,
                 }}
               />

@@ -4,56 +4,56 @@ export const categories = [
     id: "epoxy",
     name: "Sơn Epoxy Sàn",
     icon: "Layers",
-    img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=200&h=200&fit=crop&auto=format",
+    img: "/images/products/fn-epoxy-18l.jpg",
     count: 24,
   },
   {
     id: "chong-tham",
     name: "Sơn Chống Thấm",
     icon: "Droplets",
-    img: "https://images.unsplash.com/photo-1504307651254-35680f356f12?w=200&h=200&fit=crop&auto=format",
+    img: "/images/products/fn-waterproof-18l.jpg",
     count: 18,
   },
   {
     id: "chong-chay",
     name: "Sơn Chống Cháy",
     icon: "ShieldAlert",
-    img: "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=200&h=200&fit=crop&auto=format",
+    img: "/images/products/fn-fireproof-20kg.jpg",
     count: 12,
   },
   {
     id: "the-thao",
     name: "Sân Thể Thao",
     icon: "Award",
-    img: "https://images.unsplash.com/photo-1557520689-69e71457024c?w=200&h=200&fit=crop&auto=format",
+    img: "/images/products/fn-sports-18l.jpg",
     count: 15,
   },
   {
     id: "giao-thong",
     name: "Sơn Giao Thông",
     icon: "Construction",
-    img: "https://images.unsplash.com/photo-1628012209120-d9db7abf7eab?w=200&h=200&fit=crop&auto=format",
+    img: "/images/products/fn-traffic-20kg.jpg",
     count: 9,
   },
   {
     id: "son-lot",
     name: "Sơn Lót Kháng Kiềm",
     icon: "Paintbrush",
-    img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200&h=200&fit=crop&auto=format",
+    img: "/images/products/fn-primer-18l.jpg",
     count: 16,
   },
   {
     id: "chong-ri",
     name: "Sơn Chống Rỉ Kim Loại",
     icon: "ShieldCheck",
-    img: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=200&h=200&fit=crop&auto=format",
+    img: "/images/products/fn-rustproof-18l.jpg",
     count: 11,
   },
   {
     id: "dung-cu",
-    name: "Dụng Cụ Thi Công",
+    name: "Tăng Cứng Bê Tông",
     icon: "Wrench",
-    img: "https://images.unsplash.com/photo-1581092335397-9583eb92d232?w=200&h=200&fit=crop&auto=format",
+    img: "/images/products/fn-hardener-20l.jpg",
     count: 30,
   },
 ];
@@ -79,10 +79,10 @@ export const products = [
     flashSale: true,
     location: "TP. Cần Thơ",
     images: [
+      "/images/products/fn-epoxy-18l.jpg",
       "/images/slider/epoxy_floor.png",
-      "https://images.unsplash.com/photo-1772209415876-76ea6cbc2f0c?w=800&h=800&fit=crop&auto=format",
-      "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=800&h=800&fit=crop&auto=format",
-      "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=800&h=800&fit=crop&auto=format"
+      "/assets/iso_9001.png",
+      "/assets/kcc_auth.png"
     ],
     volumes: [
       { name: "Lon 5 Lít", price: 620000, originalPrice: 790000 },
@@ -168,9 +168,9 @@ export const products = [
     flashSale: true,
     location: "TP. Cần Thơ",
     images: [
-      "https://images.unsplash.com/photo-1504307651254-35680f356f12?w=800&h=800&fit=crop&auto=format",
+      "/images/products/fn-waterproof-18l.jpg",
       "/images/slider/sports_court.png",
-      "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&h=800&fit=crop&auto=format"
+      "/assets/iso_9001.png"
     ],
     volumes: [
       { name: "Lon 5 Kg", price: 590000, originalPrice: 750000 },
@@ -226,8 +226,10 @@ export const products = [
     flashSale: false,
     location: "TP. Cần Thơ",
     images: [
+      "/images/products/fn-fireproof-20kg.jpg",
       "/images/slider/fireproof_steel.png",
-      "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=800&h=800&fit=crop&auto=format"
+      "/assets/fire_safety.png",
+      "/assets/iso_9001.png"
     ],
     volumes: [
       { name: "Thùng 20 Kg", price: 2450000, originalPrice: 3100000 },
@@ -270,8 +272,9 @@ export const products = [
     flashSale: true,
     location: "TP. Cần Thơ",
     images: [
+      "/images/products/fn-sports-18l.jpg",
       "/images/slider/sports_court.png",
-      "https://images.unsplash.com/photo-1557520689-69e71457024c?w=800&h=800&fit=crop&auto=format"
+      "/assets/iso_9001.png"
     ],
     volumes: [
       { name: "Lon 5 Lít", price: 540000, originalPrice: 680000 },
@@ -315,8 +318,9 @@ export const products = [
     flashSale: true,
     location: "TP. Cần Thơ",
     images: [
+      "/images/products/fn-rustproof-18l.jpg",
       "/images/slider/epoxy_floor.png",
-      "https://images.unsplash.com/photo-1772209415876-76ea6cbc2f0c?w=800&h=800&fit=crop&auto=format"
+      "/assets/kcc_auth.png"
     ],
     volumes: [
       { name: "Lon 5 Lít", price: 450000, originalPrice: 580000 },
@@ -359,8 +363,9 @@ export const products = [
     flashSale: false,
     location: "TP. Cần Thơ",
     images: [
-      "https://images.unsplash.com/photo-1628012209120-d9db7abf7eab?w=800&h=800&fit=crop&auto=format",
-      "/images/slider/polished_concrete.png"
+      "/images/products/fn-traffic-20kg.jpg",
+      "/images/slider/polished_concrete.png",
+      "/assets/iso_9001.png"
     ],
     volumes: [
       { name: "Bao 25 Kg", price: 680000, originalPrice: 850000 },
@@ -400,8 +405,9 @@ export const products = [
     flashSale: false,
     location: "TP. Cần Thơ",
     images: [
-      "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&h=800&fit=crop&auto=format",
-      "/images/slider/epoxy_floor.png"
+      "/images/products/fn-primer-18l.jpg",
+      "/images/slider/epoxy_floor.png",
+      "/assets/iso_9001.png"
     ],
     volumes: [
       { name: "Lon 5 Lít", price: 420000, originalPrice: 520000 },
@@ -440,8 +446,9 @@ export const products = [
     flashSale: true,
     location: "TP. Cần Thơ",
     images: [
+      "/images/products/fn-hardener-20l.jpg",
       "/images/slider/polished_concrete.png",
-      "https://images.unsplash.com/photo-1581092335397-9583eb92d232?w=800&h=800&fit=crop&auto=format"
+      "/assets/iso_9001.png"
     ],
     volumes: [
       { name: "Can 20 Lít", price: 1450000, originalPrice: 1850000 },
