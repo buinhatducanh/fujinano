@@ -186,7 +186,7 @@ export default function VideoDetail() {
                     }}
                   >
                     <Zap size={11} fill="#fff" />
-                    <span>SHORTS 9:16</span>
+                    <span>VIDEO NGẮN</span>
                   </span>
                 ) : (
                   <span
@@ -204,7 +204,7 @@ export default function VideoDetail() {
                     }}
                   >
                     <Film size={11} />
-                    <span>16:9 Widescreen</span>
+                    <span>VIDEO DỰ ÁN</span>
                   </span>
                 )}
 
@@ -558,7 +558,7 @@ export default function VideoDetail() {
                                 borderRadius: "4px",
                               }}
                             >
-                              16:9
+                              VIDEO
                             </span>
                           )}
                           <span style={{ fontSize: "11px", color: "#64748b" }}>{rel.duration}</span>

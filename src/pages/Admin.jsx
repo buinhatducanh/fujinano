@@ -3368,7 +3368,7 @@ export default function Admin() {
                     <span>QUẢN LÝ VIDEO THI CÔNG &amp; YOUTUBE SHORTS</span>
                   </h1>
                   <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0 }}>
-                    Hỗ trợ quản lý video ngang 16:9 và video ngắn YouTube Shorts 9:16. Dán link YouTube để tự động lấy ID và ảnh thu nhỏ.
+                    Hỗ trợ quản lý video dự án thi công và video ngắn (Shorts). Dán link YouTube để tự động lấy ID và ảnh thu nhỏ.
                   </p>
                 </div>
 
@@ -3408,8 +3408,8 @@ export default function Admin() {
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
                   {[
                     { id: "all", label: `Tất Cả (${(videos || []).length})` },
-                    { id: "horizontal", label: `Video Ngang 16:9 (${(videos || []).filter((v) => v.type === "horizontal").length})` },
-                    { id: "short", label: `YouTube Shorts 9:16 (${(videos || []).filter((v) => v.type === "short").length})` },
+                    { id: "horizontal", label: `Video Dự Án (${(videos || []).filter((v) => v.type === "horizontal").length})` },
+                    { id: "short", label: `Video Ngắn Shorts (${(videos || []).filter((v) => v.type === "short").length})` },
                   ].map((btn) => (
                     <button
                       key={btn.id}
@@ -3547,7 +3547,7 @@ export default function Admin() {
                                     color: "#ffffff",
                                   }}
                                 >
-                                  {isShort ? "SHORTS" : "16:9"}
+                                  {isShort ? "SHORTS" : "VIDEO"}
                                 </div>
                               </div>
                             </td>
@@ -4376,7 +4376,7 @@ export default function Admin() {
                   }}
                 />
                 <span style={{ fontSize: "11.5px", color: "#94a3b8", marginTop: "4px", display: "block" }}>
-                  Hệ thống tự động phát hiện định dạng Video Ngang (16:9) hoặc Shorts (9:16) và trích xuất YouTube ID.
+                  Hệ thống tự động phát hiện Video Dự Án hoặc Video Ngắn (Shorts) và trích xuất YouTube ID.
                 </span>
               </div>
 
@@ -4399,8 +4399,8 @@ export default function Admin() {
                       fontSize: "13.5px",
                     }}
                   >
-                    <option value="horizontal">🎬 Video Ngang 16:9 (Quy trình, Dự án)</option>
-                    <option value="short">⚡ YouTube Shorts 9:16 (Video dọc, Mẹo nhanh)</option>
+                    <option value="horizontal">🎬 Video Dự Án (Quy trình, Công trình toàn cảnh)</option>
+                    <option value="short">⚡ Video Ngắn Shorts (Thử nghiệm nhanh dưới 60s)</option>
                   </select>
                 </div>
 
@@ -4606,7 +4606,7 @@ export default function Admin() {
                     }}
                   />
                   <div style={{ fontSize: "12px", color: "#94a3b8" }}>
-                    <div>Preview ảnh thu nhỏ: <strong style={{ color: "#ffffff" }}>{videoForm.type === "short" ? "Shorts (9:16)" : "Ngang (16:9)"}</strong></div>
+                    <div>Preview ảnh thu nhỏ: <strong style={{ color: "#ffffff" }}>{videoForm.type === "short" ? "Video Ngắn (Shorts)" : "Video Dự Án"}</strong></div>
                     <div>YouTube ID: <code style={{ color: "#38bdf8" }}>{videoForm.youtubeId || "chưa nhập"}</code></div>
                   </div>
                 </div>

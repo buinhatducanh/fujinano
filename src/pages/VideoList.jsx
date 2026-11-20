@@ -220,8 +220,8 @@ export default function VideoList() {
           <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
             {[
               { id: "all", label: "Tất Cả", count: counts.total, icon: <Layers size={13} /> },
-              { id: "short", label: "⚡ Shorts (9:16)", count: counts.shorts, icon: <Zap size={13} /> },
-              { id: "horizontal", label: "🎬 Video (16:9)", count: counts.horizontal, icon: <Film size={13} /> },
+              { id: "short", label: "⚡ Video Ngắn", count: counts.shorts, icon: <Zap size={13} /> },
+              { id: "horizontal", label: "🎬 Video Dự Án", count: counts.horizontal, icon: <Film size={13} /> },
             ].map((tab) => {
               const isActive = typeFilter === tab.id;
               return (
@@ -389,10 +389,10 @@ export default function VideoList() {
                           letterSpacing: "-0.2px",
                         }}
                       >
-                        ⚡ YouTube Shorts Kỹ Thuật
+                        ⚡ Video Ngắn Kỹ Thuật
                       </h2>
                       <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#94a3b8" }}>
-                        Clip thực tế dưới 60s: thử nghiệm độ bám, mẹo pha sơn &amp; test va đập
+                        Video kỹ thuật thực tế: thử nghiệm độ bám, mẹo pha sơn &amp; test va đập
                       </p>
                     </div>
                   </div>
@@ -412,7 +412,7 @@ export default function VideoList() {
                         gap: "4px",
                       }}
                     >
-                      <span>Xem tất cả Shorts</span>
+                      <span>Xem tất cả Video Ngắn</span>
                       <ArrowRight size={13} />
                     </button>
                   )}
@@ -634,7 +634,7 @@ export default function VideoList() {
                         🎬 Video Quy Trình &amp; Dự Án Thực Tế
                       </h2>
                       <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#94a3b8" }}>
-                        Video toàn cảnh 16:9 hướng dẫn thi công tiêu chuẩn kỹ thuật &amp; nghiệm thu công trình
+                        Video hướng dẫn chi tiết quy trình thi công tiêu chuẩn kỹ thuật &amp; nghiệm thu công trình
                       </p>
                     </div>
                   </div>
@@ -649,7 +649,7 @@ export default function VideoList() {
                       border: "1px solid rgba(255, 255, 255, 0.08)",
                     }}
                   >
-                    {horizontalList.length} Video 16:9
+                    {horizontalList.length} Video Dự Án
                   </span>
                 </div>
 
@@ -971,7 +971,7 @@ export default function VideoList() {
                     flexShrink: 0,
                   }}
                 >
-                  {activeVideo.type === "short" ? "SHORTS" : "16:9"}
+                  {activeVideo.type === "short" ? "VIDEO NGẮN" : "VIDEO DỰ ÁN"}
                 </span>
                 <span
                   style={{
