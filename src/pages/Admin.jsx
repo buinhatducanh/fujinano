@@ -29,7 +29,11 @@ import {
   Filter,
   Check,
   Globe,
-  Tag
+  Tag,
+  Lock,
+  User,
+  LogOut,
+  EyeOff
 } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
 
@@ -54,6 +58,45 @@ export default function Admin() {
     resetToDefaults,
     neonStatus,
   } = useAppContext();
+
+  // =========================================================================
+  // 0. AUTHENTICATION (BẢO MẬT ĐĂNG NHẬP ADMIN)
+  // =========================================================================
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return (
+      sessionStorage.getItem("fujinano_admin_auth") === "true" ||
+      localStorage.getItem("fujinano_admin_auth") === "true"
+    );
+  });
+  const [loginUsername, setLoginUsername] = useState("admin");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState("");
+  const [rememberMe, setRememberMe] = useState(true);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (loginUsername.trim() === "admin" && loginPassword === "fujnano@123") {
+      setIsAuthenticated(true);
+      setLoginError("");
+      if (rememberMe) {
+        localStorage.setItem("fujinano_admin_auth", "true");
+      } else {
+        sessionStorage.setItem("fujinano_admin_auth", "true");
+      }
+      showToast("✓ Đăng nhập quản trị thành công!");
+    } else {
+      setLoginError("Tên đăng nhập hoặc mật khẩu không chính xác!");
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    sessionStorage.removeItem("fujinano_admin_auth");
+    localStorage.removeItem("fujinano_admin_auth");
+    setLoginPassword("");
+    showToast("Đã đăng xuất khỏi hệ thống quản trị!");
+  };
 
   const [activeTab, setActiveTab] = useState("dashboard"); // dashboard | articles | products | settings | policies | inquiries
   const [toastMessage, setToastMessage] = useState("");
@@ -334,6 +377,254 @@ export default function Admin() {
     return matchCat && matchSearch;
   });
 
+  // =========================================================================
+  // GIAO DIỆN ĐĂNG NHẬP BẢO MẬT ADMIN
+  // =========================================================================
+  if (!isAuthenticated) {
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          background: "radial-gradient(circle at 50% 25%, #08215e 0%, #001237 55%, #00081d 100%)",
+          color: "#ffffff",
+          fontFamily: "'DM Sans', sans-serif",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "24px",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/* Toast Notification */}
+        {toastMessage && (
+          <div
+            style={{
+              position: "fixed",
+              top: "20px",
+              right: "24px",
+              zIndex: 99999,
+              background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+              color: "#ffffff",
+              padding: "12px 22px",
+              borderRadius: "8px",
+              fontWeight: 700,
+              fontSize: "14px",
+              boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            <CheckCircle size={18} />
+            <span>{toastMessage}</span>
+          </div>
+        )}
+
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "440px",
+            background: "rgba(3, 16, 48, 0.95)",
+            border: "1px solid rgba(59, 130, 246, 0.3)",
+            borderRadius: "16px",
+            padding: "36px 32px",
+            boxShadow: "0 25px 60px rgba(0, 0, 0, 0.6)",
+            backdropFilter: "blur(16px)",
+          }}
+        >
+          {/* Logo Header */}
+          <div style={{ textAlign: "center", marginBottom: "28px" }}>
+            <div
+              style={{
+                width: "56px",
+                height: "56px",
+                borderRadius: "14px",
+                background: "linear-gradient(135deg, #2563eb, #38bdf8)",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 900,
+                color: "#fff",
+                fontSize: "24px",
+                boxShadow: "0 8px 20px rgba(37, 99, 235, 0.4)",
+                marginBottom: "14px",
+              }}
+            >
+              FN
+            </div>
+            <h2 style={{ fontSize: "20px", fontWeight: 800, margin: "0 0 6px", letterSpacing: "0.5px" }}>
+              ĐĂNG NHẬP HỆ THỐNG
+            </h2>
+            <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0 }}>
+              Cổng Quản Trị B2B &amp; Bài Viết Chuẩn SEO FUJINANO
+            </p>
+          </div>
+
+          {/* Form Đăng Nhập */}
+          <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+            {loginError && (
+              <div
+                style={{
+                  background: "rgba(239, 68, 68, 0.15)",
+                  border: "1px solid rgba(239, 68, 68, 0.4)",
+                  color: "#fca5a5",
+                  padding: "10px 14px",
+                  borderRadius: "8px",
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                <AlertTriangle size={16} color="#f87171" style={{ flexShrink: 0 }} />
+                <span>{loginError}</span>
+              </div>
+            )}
+
+            <div>
+              <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, marginBottom: "6px", color: "#cbd5e1" }}>
+                Tài Khoản (Username)
+              </label>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  background: "rgba(2, 12, 38, 0.9)",
+                  border: "1px solid rgba(255, 255, 255, 0.15)",
+                  borderRadius: "8px",
+                  padding: "0 12px",
+                }}
+              >
+                <User size={16} color="#64748b" style={{ flexShrink: 0 }} />
+                <input
+                  type="text"
+                  required
+                  placeholder="admin"
+                  value={loginUsername}
+                  onChange={(e) => {
+                    setLoginUsername(e.target.value);
+                    setLoginError("");
+                  }}
+                  style={{
+                    width: "100%",
+                    padding: "11px 10px",
+                    background: "transparent",
+                    border: "none",
+                    outline: "none",
+                    color: "#ffffff",
+                    fontSize: "14px",
+                  }}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, marginBottom: "6px", color: "#cbd5e1" }}>
+                Mật Khẩu (Password)
+              </label>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  background: "rgba(2, 12, 38, 0.9)",
+                  border: "1px solid rgba(255, 255, 255, 0.15)",
+                  borderRadius: "8px",
+                  padding: "0 12px",
+                }}
+              >
+                <Lock size={16} color="#64748b" style={{ flexShrink: 0 }} />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  placeholder="Nhập mật khẩu quản trị..."
+                  value={loginPassword}
+                  onChange={(e) => {
+                    setLoginPassword(e.target.value);
+                    setLoginError("");
+                  }}
+                  style={{
+                    width: "100%",
+                    padding: "11px 10px",
+                    background: "transparent",
+                    border: "none",
+                    outline: "none",
+                    color: "#ffffff",
+                    fontSize: "14px",
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{ background: "transparent", border: "none", color: "#94a3b8", cursor: "pointer", padding: "4px" }}
+                  title={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "12.5px", color: "#94a3b8" }}>
+              <label style={{ display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }}>
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  style={{ accentColor: "#2563eb" }}
+                />
+                <span>Ghi nhớ đăng nhập</span>
+              </label>
+              <span style={{ color: "#64748b" }}>Cấp quản trị viên</span>
+            </div>
+
+            <button
+              type="submit"
+              style={{
+                background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
+                color: "#ffffff",
+                border: "none",
+                borderRadius: "8px",
+                padding: "12px",
+                fontSize: "14px",
+                fontWeight: 800,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
+                boxShadow: "0 6px 18px rgba(37, 99, 235, 0.4)",
+                marginTop: "6px",
+                transition: "transform 0.15s ease",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-1px)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+            >
+              <Lock size={15} />
+              <span>ĐĂNG NHẬP QUẢN TRỊ</span>
+            </button>
+
+            <div style={{ textAlign: "center", marginTop: "10px" }}>
+              <Link
+                to="/"
+                style={{
+                  fontSize: "12.5px",
+                  color: "#38bdf8",
+                  textDecoration: "none",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
+                }}
+              >
+                <span>← Quay về Trang Chủ Website</span>
+              </Link>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
@@ -484,6 +775,55 @@ export default function Admin() {
             <span>Xem Website</span>
             <ExternalLink size={12} />
           </Link>
+
+          {/* User profile & Logout */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              paddingLeft: "10px",
+              borderLeft: "1px solid rgba(255, 255, 255, 0.15)",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                background: "rgba(255, 255, 255, 0.08)",
+                padding: "6px 12px",
+                borderRadius: "20px",
+                fontSize: "12px",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+              }}
+            >
+              <User size={13} color="#38bdf8" />
+              <span style={{ fontWeight: 700, color: "#ffffff" }}>admin</span>
+            </div>
+
+            <button
+              onClick={handleLogout}
+              style={{
+                background: "rgba(239, 68, 68, 0.15)",
+                color: "#f87171",
+                border: "1px solid rgba(239, 68, 68, 0.3)",
+                borderRadius: "6px",
+                padding: "6px 12px",
+                fontSize: "12px",
+                fontWeight: 700,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+                transition: "background 0.15s ease",
+              }}
+              title="Đăng xuất khỏi hệ thống"
+            >
+              <LogOut size={13} />
+              <span>Đăng Xuất</span>
+            </button>
+          </div>
         </div>
       </header>
 
