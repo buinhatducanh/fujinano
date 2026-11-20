@@ -4,20 +4,15 @@ import {
   Video as VideoIcon,
   Play,
   Search,
-  Sparkles,
   Clock,
   Eye,
-  Filter,
-  Layers,
   ChevronRight,
-  ExternalLink,
   X,
   Phone,
   Flame,
   Film,
   Zap,
-  CheckCircle2,
-  Share2
+  ExternalLink
 } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
 
@@ -33,7 +28,7 @@ export default function VideoList() {
   const [activeVideo, setActiveVideo] = useState(null);
 
   useEffect(() => {
-    document.title = "Thư Viện Video Thi Công & YouTube Shorts | FUJINANO";
+    document.title = "Video Thi Công & YouTube Shorts | FUJINANO";
     window.scrollTo(0, 0);
   }, []);
 
@@ -48,7 +43,7 @@ export default function VideoList() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Filtered categories from dataset
+  // Filtered categories
   const categories = useMemo(() => {
     const set = new Set();
     videos.forEach((v) => {
@@ -68,15 +63,12 @@ export default function VideoList() {
   // Filtered Video List
   const filteredVideos = useMemo(() => {
     return videos.filter((v) => {
-      const matchType =
-        typeFilter === "all" ? true : v.type === typeFilter;
-      const matchCat =
-        selectedCategory === "all" ? true : v.category === selectedCategory;
+      const matchType = typeFilter === "all" ? true : v.type === typeFilter;
+      const matchCat = selectedCategory === "all" ? true : v.category === selectedCategory;
       const matchSearch =
         searchQuery.trim() === ""
           ? true
           : v.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            v.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
             v.category?.toLowerCase().includes(searchQuery.toLowerCase());
       return matchType && matchCat && matchSearch;
     });
@@ -86,179 +78,15 @@ export default function VideoList() {
     <div
       style={{
         minHeight: "100vh",
-        paddingTop: "10px",
-        paddingBottom: "80px",
+        paddingTop: "12px",
+        paddingBottom: "60px",
         fontFamily: "'DM Sans', sans-serif",
         color: "#ffffff",
       }}
     >
-      <div style={{ maxWidth: "1340px", margin: "0 auto", padding: "0 24px" }}>
+      <div style={{ maxWidth: "1320px", margin: "0 auto", padding: "0 20px" }}>
         {/* ================================================================= */}
-        {/* 1. BREADCRUMB                                                     */}
-        {/* ================================================================= */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            fontSize: "13px",
-            color: "#94a3b8",
-            marginBottom: "20px",
-          }}
-        >
-          <Link to="/" style={{ color: "#cbd5e1", textDecoration: "none" }}>
-            Trang Chủ
-          </Link>
-          <ChevronRight size={13} color="#64748b" />
-          <span style={{ color: "#38bdf8", fontWeight: 600 }}>Thư Viện Video</span>
-        </div>
-
-        {/* ================================================================= */}
-        {/* 2. HERO HEADER                                                    */}
-        {/* ================================================================= */}
-        <div
-          style={{
-            background: "linear-gradient(135deg, rgba(8, 28, 77, 0.9) 0%, rgba(3, 14, 46, 0.95) 100%)",
-            border: "1px solid rgba(59, 130, 246, 0.25)",
-            borderRadius: "20px",
-            padding: "36px 32px",
-            marginBottom: "36px",
-            boxShadow: "0 16px 40px rgba(0, 0, 0, 0.4)",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          {/* Subtle Decorative Glow */}
-          <div
-            style={{
-              position: "absolute",
-              top: "-80px",
-              right: "-80px",
-              width: "280px",
-              height: "280px",
-              borderRadius: "50%",
-              background: "radial-gradient(circle, rgba(239, 68, 68, 0.2) 0%, rgba(239, 68, 68, 0) 70%)",
-              pointerEvents: "none",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              bottom: "-60px",
-              left: "-60px",
-              width: "240px",
-              height: "240px",
-              borderRadius: "50%",
-              background: "radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, rgba(56, 189, 248, 0) 70%)",
-              pointerEvents: "none",
-            }}
-          />
-
-          <div style={{ position: "relative", zIndex: 1, maxWidth: "860px" }}>
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                background: "rgba(239, 68, 68, 0.15)",
-                border: "1px solid rgba(239, 68, 68, 0.35)",
-                color: "#f87171",
-                padding: "6px 14px",
-                borderRadius: "20px",
-                fontSize: "12px",
-                fontWeight: 700,
-                letterSpacing: "0.5px",
-                marginBottom: "14px",
-                textTransform: "uppercase",
-              }}
-            >
-              <VideoIcon size={14} />
-              <span>YOUTUBE VIDEO &amp; SHORTS THỰC TẾ</span>
-            </div>
-
-            <h1
-              style={{
-                fontSize: "clamp(26px, 3.2vw, 38px)",
-                fontWeight: 900,
-                color: "#ffffff",
-                lineHeight: 1.25,
-                margin: "0 0 14px",
-                fontFamily: "'Be Vietnam Pro', sans-serif",
-              }}
-            >
-              THƯ VIỆN VIDEO THI CÔNG &amp; MẸO KỸ THUẬT NANO
-            </h1>
-
-            <p
-              style={{
-                fontSize: "14.5px",
-                color: "#cbd5e1",
-                lineHeight: 1.7,
-                margin: "0 0 24px",
-              }}
-            >
-              Tổng hợp video quay cận cảnh các công trình thực tế (16:9 Widescreen) và chuỗi video ngắn YouTube Shorts (9:16 Vertical) — hướng dẫn kỹ thuật mài sàn, quy trình sơn tự san phẳng, kiểm tra ngâm nước chống thấm và các thử nghiệm độ bền va đập từ kỹ sư FUJINANO.
-            </p>
-
-            {/* Quick Stat Badges */}
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px" }}>
-              <div
-                style={{
-                  background: "rgba(2, 10, 28, 0.7)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
-                  padding: "8px 16px",
-                  borderRadius: "10px",
-                  fontSize: "13px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                }}
-              >
-                <Film size={15} color="#38bdf8" />
-                <span>
-                  <strong>{counts.horizontal}</strong> Video Ngang 16:9
-                </span>
-              </div>
-
-              <div
-                style={{
-                  background: "rgba(2, 10, 28, 0.7)",
-                  border: "1px solid rgba(239, 68, 68, 0.25)",
-                  padding: "8px 16px",
-                  borderRadius: "10px",
-                  fontSize: "13px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                }}
-              >
-                <Zap size={15} color="#f87171" />
-                <span>
-                  <strong>{counts.shorts}</strong> YouTube Shorts 9:16
-                </span>
-              </div>
-
-              <div
-                style={{
-                  background: "rgba(2, 10, 28, 0.7)",
-                  border: "1px solid rgba(16, 185, 129, 0.25)",
-                  padding: "8px 16px",
-                  borderRadius: "10px",
-                  fontSize: "13px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                }}
-              >
-                <CheckCircle2 size={15} color="#34d399" />
-                <span>100% Video Công Trình Thực Tế</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ================================================================= */}
-        {/* 3. TABS (TẤT CẢ / VIDEO NGANG / SHORTS) & SEARCH BAR              */}
+        {/* 1. COMPACT HEADER & BREADCRUMB (GỌN GÀNG, KHÔNG TEXT RƯỜM RÀ)   */}
         {/* ================================================================= */}
         <div
           style={{
@@ -266,61 +94,138 @@ export default function VideoList() {
             alignItems: "center",
             justifyContent: "space-between",
             flexWrap: "wrap",
-            gap: "16px",
-            marginBottom: "20px",
+            gap: "14px",
+            marginBottom: "18px",
           }}
         >
-          {/* Primary View Mode Tabs */}
+          <div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                fontSize: "12.5px",
+                color: "#94a3b8",
+                marginBottom: "6px",
+              }}
+            >
+              <Link to="/" style={{ color: "#94a3b8", textDecoration: "none" }}>
+                Trang Chủ
+              </Link>
+              <ChevronRight size={12} color="#64748b" />
+              <span style={{ color: "#38bdf8", fontWeight: 600 }}>Video</span>
+            </div>
+
+            <h1
+              style={{
+                fontSize: "clamp(22px, 2.4vw, 28px)",
+                fontWeight: 800,
+                color: "#ffffff",
+                margin: 0,
+                fontFamily: "'Be Vietnam Pro', sans-serif",
+                letterSpacing: "-0.3px",
+              }}
+            >
+              Video Thi Công &amp; Shorts Kỹ Thuật
+            </h1>
+          </div>
+
+          {/* Search Box Gọn Gàng */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               background: "rgba(2, 12, 38, 0.9)",
-              padding: "5px",
-              borderRadius: "12px",
-              border: "1px solid rgba(255, 255, 255, 0.12)",
-              gap: "4px",
+              border: "1px solid rgba(255, 255, 255, 0.14)",
+              borderRadius: "8px",
+              padding: "0 12px",
+              width: "100%",
+              maxWidth: "300px",
             }}
           >
+            <Search size={14} color="#64748b" style={{ flexShrink: 0 }} />
+            <input
+              type="text"
+              placeholder="Tìm video, chủ đề..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "8px 10px",
+                background: "transparent",
+                border: "none",
+                outline: "none",
+                color: "#ffffff",
+                fontSize: "13px",
+              }}
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                style={{ background: "transparent", border: "none", color: "#94a3b8", cursor: "pointer", padding: "2px" }}
+              >
+                <X size={13} />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* ================================================================= */}
+        {/* 2. COMPACT TOOLBAR: TABS & CATEGORY CHIPS (TRÊN 1 DÒNG GỌN GÀNG)  */}
+        {/* ================================================================= */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "12px",
+            background: "rgba(2, 10, 30, 0.7)",
+            border: "1px solid rgba(255, 255, 255, 0.08)",
+            borderRadius: "12px",
+            padding: "8px 12px",
+            marginBottom: "22px",
+          }}
+        >
+          {/* Segmented View Mode Tabs */}
+          <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
             {[
-              { id: "all", label: "Tất Cả", icon: Layers, count: counts.total },
-              { id: "horizontal", label: "Video Ngang 16:9", icon: Film, count: counts.horizontal },
-              { id: "short", label: "YouTube Shorts 9:16", icon: Zap, count: counts.shorts },
+              { id: "all", label: "Tất Cả", count: counts.total },
+              { id: "horizontal", label: "🎬 Video 16:9", count: counts.horizontal },
+              { id: "short", label: "⚡ Shorts 9:16", count: counts.shorts },
             ].map((tab) => {
-              const Icon = tab.icon;
               const isActive = typeFilter === tab.id;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setTypeFilter(tab.id)}
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "7px",
-                    padding: "9px 16px",
-                    borderRadius: "8px",
+                    padding: "6px 12px",
+                    borderRadius: "6px",
                     border: "none",
                     background: isActive
                       ? tab.id === "short"
-                        ? "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)"
-                        : "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)"
+                        ? "#dc2626"
+                        : "#2563eb"
                       : "transparent",
                     color: isActive ? "#ffffff" : "#94a3b8",
                     fontWeight: isActive ? 700 : 500,
-                    fontSize: "13.5px",
+                    fontSize: "12.5px",
                     cursor: "pointer",
-                    transition: "all 0.2s ease",
+                    transition: "all 0.15s ease",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
                   }}
                 >
-                  <Icon size={15} />
                   <span>{tab.label}</span>
                   <span
                     style={{
-                      fontSize: "11px",
-                      padding: "2px 6px",
-                      borderRadius: "10px",
-                      background: isActive ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.06)",
-                      color: isActive ? "#ffffff" : "#64748b",
+                      fontSize: "10.5px",
+                      opacity: isActive ? 1 : 0.6,
+                      background: "rgba(0,0,0,0.25)",
+                      padding: "1px 5px",
+                      borderRadius: "8px",
                     }}
                   >
                     {tab.count}
@@ -330,112 +235,63 @@ export default function VideoList() {
             })}
           </div>
 
-          {/* Search Box */}
+          {/* Category Chips Scrollable */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              background: "rgba(2, 12, 38, 0.9)",
-              border: "1px solid rgba(255, 255, 255, 0.15)",
-              borderRadius: "10px",
-              padding: "0 14px",
-              width: "100%",
-              maxWidth: "360px",
+              gap: "6px",
+              overflowX: "auto",
+              scrollbarWidth: "none",
+              maxWidth: "100%",
             }}
           >
-            <Search size={16} color="#64748b" style={{ flexShrink: 0 }} />
-            <input
-              type="text"
-              placeholder="Tìm video, chủ đề, mẹo kỹ thuật..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "11px 12px",
-                background: "transparent",
-                border: "none",
-                outline: "none",
-                color: "#ffffff",
-                fontSize: "13.5px",
-              }}
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                style={{ background: "transparent", border: "none", color: "#94a3b8", cursor: "pointer" }}
-              >
-                <X size={15} />
-              </button>
-            )}
+            {categories.map((cat) => {
+              const isSelected = selectedCategory === cat;
+              const label = cat === "all" ? "Tất Cả Hạng Mục" : cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  style={{
+                    whiteSpace: "nowrap",
+                    padding: "5px 11px",
+                    borderRadius: "16px",
+                    fontSize: "12px",
+                    fontWeight: isSelected ? 700 : 500,
+                    border: isSelected
+                      ? "1px solid #38bdf8"
+                      : "1px solid rgba(255, 255, 255, 0.08)",
+                    background: isSelected
+                      ? "rgba(56, 189, 248, 0.15)"
+                      : "transparent",
+                    color: isSelected ? "#38bdf8" : "#94a3b8",
+                    cursor: "pointer",
+                    transition: "all 0.15s ease",
+                  }}
+                >
+                  {label}
+                </button>
+              );
+            })}
           </div>
         </div>
 
         {/* ================================================================= */}
-        {/* 4. CATEGORY PILLS FILTER                                          */}
-        {/* ================================================================= */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            overflowX: "auto",
-            paddingBottom: "12px",
-            marginBottom: "28px",
-            scrollbarWidth: "none",
-          }}
-        >
-          <span style={{ fontSize: "12px", color: "#64748b", fontWeight: 700, textTransform: "uppercase", marginRight: "4px" }}>
-            Chủ đề:
-          </span>
-          {categories.map((cat) => {
-            const isSelected = selectedCategory === cat;
-            const label = cat === "all" ? "Tất Cả Hạng Mục" : cat;
-            return (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                style={{
-                  whiteSpace: "nowrap",
-                  padding: "6px 14px",
-                  borderRadius: "20px",
-                  fontSize: "12.5px",
-                  fontWeight: isSelected ? 700 : 500,
-                  border: isSelected
-                    ? "1px solid #38bdf8"
-                    : "1px solid rgba(255, 255, 255, 0.1)",
-                  background: isSelected
-                    ? "rgba(56, 189, 248, 0.15)"
-                    : "rgba(2, 12, 38, 0.6)",
-                  color: isSelected ? "#38bdf8" : "#cbd5e1",
-                  cursor: "pointer",
-                  transition: "all 0.15s ease",
-                }}
-              >
-                {label}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* ================================================================= */}
-        {/* 5. VIDEO GRID (HỖ TRỢ CẢ VIDEO NGANG 16:9 VÀ SHORTS 9:16)        */}
+        {/* 3. VIDEO GRID (THIẾT KẾ GỌN GÀNG, ĐẬM CHẤT THỊ GIÁC)             */}
         {/* ================================================================= */}
         {filteredVideos.length === 0 ? (
           <div
             style={{
-              padding: "70px 20px",
+              padding: "50px 20px",
               textAlign: "center",
-              background: "rgba(2, 12, 38, 0.6)",
-              borderRadius: "16px",
-              border: "1px dashed rgba(255, 255, 255, 0.15)",
+              background: "rgba(2, 12, 38, 0.4)",
+              borderRadius: "12px",
+              border: "1px dashed rgba(255, 255, 255, 0.12)",
             }}
           >
-            <VideoIcon size={44} color="#64748b" style={{ margin: "0 auto 14px" }} />
-            <h3 style={{ fontSize: "17px", fontWeight: 700, color: "#ffffff", marginBottom: "6px" }}>
-              Không tìm thấy video phù hợp
-            </h3>
-            <p style={{ fontSize: "13.5px", color: "#94a3b8", marginBottom: "18px" }}>
-              Hãy thử tìm kiếm với từ khóa khác hoặc bỏ chọn bộ lọc hiện tại.
+            <p style={{ fontSize: "14px", color: "#94a3b8", margin: "0 0 12px" }}>
+              Không tìm thấy video nào phù hợp bộ lọc.
             </p>
             <button
               onClick={() => {
@@ -447,14 +303,14 @@ export default function VideoList() {
                 background: "#2563eb",
                 color: "#ffffff",
                 border: "none",
-                padding: "8px 18px",
-                borderRadius: "8px",
-                fontSize: "13px",
+                padding: "6px 14px",
+                borderRadius: "6px",
+                fontSize: "12.5px",
                 fontWeight: 600,
                 cursor: "pointer",
               }}
             >
-              Xem tất cả video
+              Hiển thị tất cả video
             </button>
           </div>
         ) : (
@@ -463,16 +319,16 @@ export default function VideoList() {
               display: "grid",
               gridTemplateColumns:
                 typeFilter === "short"
-                  ? "repeat(auto-fill, minmax(240px, 1fr))"
-                  : "repeat(auto-fill, minmax(340px, 1fr))",
-              gap: "24px",
+                  ? "repeat(auto-fill, minmax(200px, 1fr))"
+                  : "repeat(auto-fill, minmax(290px, 1fr))",
+              gap: "18px",
             }}
           >
             {filteredVideos.map((vid) => {
               const isShort = vid.type === "short";
 
               // -------------------------------------------------------------
-              // RENDERING YOUTUBE SHORTS (9:16 VERTICAL CARD)
+              // 3A. YOUTUBE SHORTS (9:16 DỌC GỌN GÀNG)
               // -------------------------------------------------------------
               if (isShort) {
                 return (
@@ -481,30 +337,30 @@ export default function VideoList() {
                     onClick={() => setActiveVideo(vid)}
                     style={{
                       position: "relative",
-                      borderRadius: "18px",
+                      borderRadius: "14px",
                       overflow: "hidden",
-                      background: "linear-gradient(180deg, #071536 0%, #020b1f 100%)",
-                      border: "1px solid rgba(239, 68, 68, 0.3)",
-                      boxShadow: "0 10px 30px rgba(0, 0, 0, 0.4)",
+                      background: "#01091d",
+                      border: "1px solid rgba(239, 68, 68, 0.25)",
+                      boxShadow: "0 8px 24px rgba(0, 0, 0, 0.4)",
                       cursor: "pointer",
                       aspectRatio: "9 / 16",
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "space-between",
-                      transition: "transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease",
+                      transition: "transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease",
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "translateY(-6px) scale(1.02)";
+                      e.currentTarget.style.transform = "translateY(-4px)";
                       e.currentTarget.style.borderColor = "#ef4444";
-                      e.currentTarget.style.boxShadow = "0 18px 45px rgba(239, 68, 68, 0.35)";
+                      e.currentTarget.style.boxShadow = "0 12px 30px rgba(239, 68, 68, 0.35)";
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "translateY(0) scale(1)";
-                      e.currentTarget.style.borderColor = "rgba(239, 68, 68, 0.3)";
-                      e.currentTarget.style.boxShadow = "0 10px 30px rgba(0, 0, 0, 0.4)";
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.borderColor = "rgba(239, 68, 68, 0.25)";
+                      e.currentTarget.style.boxShadow = "0 8px 24px rgba(0, 0, 0, 0.4)";
                     }}
                   >
-                    {/* Background Thumbnail with dark gradient overlay */}
+                    {/* Background Thumbnail */}
                     <div
                       style={{
                         position: "absolute",
@@ -513,7 +369,6 @@ export default function VideoList() {
                         backgroundPosition: "center",
                         backgroundSize: "cover",
                         filter: "brightness(0.85)",
-                        transition: "transform 0.5s ease",
                       }}
                     />
                     <div
@@ -521,54 +376,50 @@ export default function VideoList() {
                         position: "absolute",
                         inset: 0,
                         background:
-                          "linear-gradient(to top, rgba(0, 6, 20, 0.96) 0%, rgba(0, 6, 20, 0.3) 50%, rgba(0, 6, 20, 0.6) 100%)",
+                          "linear-gradient(to top, rgba(0, 5, 18, 0.95) 0%, rgba(0, 5, 18, 0.1) 45%, rgba(0, 5, 18, 0.5) 100%)",
                       }}
                     />
 
-                    {/* Top Header: YouTube Shorts Red Badge & Duration */}
+                    {/* Top Tag & Duration */}
                     <div
                       style={{
                         position: "relative",
                         zIndex: 2,
-                        padding: "16px",
+                        padding: "12px",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "space-between",
                       }}
                     >
-                      <div
+                      <span
                         style={{
+                          background: "#dc2626",
+                          color: "#ffffff",
+                          fontSize: "10px",
+                          fontWeight: 800,
+                          padding: "2px 7px",
+                          borderRadius: "10px",
                           display: "inline-flex",
                           alignItems: "center",
-                          gap: "5px",
-                          background: "linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)",
-                          color: "#ffffff",
-                          fontSize: "11px",
-                          fontWeight: 800,
-                          padding: "4px 9px",
-                          borderRadius: "14px",
-                          boxShadow: "0 4px 12px rgba(239, 68, 68, 0.5)",
+                          gap: "3px",
                           letterSpacing: "0.5px",
                         }}
                       >
-                        <Zap size={12} fill="#ffffff" />
-                        <span>SHORTS</span>
-                      </div>
+                        <Zap size={10} fill="#ffffff" /> SHORTS
+                      </span>
 
-                      <div
+                      <span
                         style={{
-                          background: "rgba(0, 0, 0, 0.6)",
-                          backdropFilter: "blur(4px)",
+                          background: "rgba(0, 0, 0, 0.65)",
                           color: "#ffffff",
-                          fontSize: "11.5px",
+                          fontSize: "10.5px",
                           fontWeight: 700,
-                          padding: "3px 8px",
-                          borderRadius: "6px",
-                          border: "1px solid rgba(255, 255, 255, 0.15)",
+                          padding: "2px 6px",
+                          borderRadius: "4px",
                         }}
                       >
                         {vid.duration}
-                      </div>
+                      </span>
                     </div>
 
                     {/* Center Floating Play Button */}
@@ -579,98 +430,82 @@ export default function VideoList() {
                         left: "50%",
                         transform: "translate(-50%, -50%)",
                         zIndex: 2,
-                        width: "56px",
-                        height: "56px",
+                        width: "46px",
+                        height: "46px",
                         borderRadius: "50%",
-                        background: "rgba(239, 68, 68, 0.95)",
+                        background: "rgba(220, 38, 38, 0.9)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        boxShadow: "0 0 25px rgba(239, 68, 68, 0.7)",
-                        border: "2px solid #ffffff",
-                        transition: "transform 0.2s ease",
+                        boxShadow: "0 0 20px rgba(220, 38, 38, 0.6)",
                       }}
                     >
-                      <Play size={22} color="#ffffff" fill="#ffffff" style={{ marginLeft: "3px" }} />
+                      <Play size={18} color="#ffffff" fill="#ffffff" style={{ marginLeft: "2px" }} />
                     </div>
 
-                    {/* Bottom Metadata & Title */}
-                    <div style={{ position: "relative", zIndex: 2, padding: "18px 16px" }}>
+                    {/* Bottom Title & Views */}
+                    <div style={{ position: "relative", zIndex: 2, padding: "14px 12px" }}>
                       <div
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-                          fontSize: "11.5px",
+                          fontSize: "10.5px",
                           color: "#f87171",
                           fontWeight: 700,
-                          marginBottom: "6px",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "4px",
+                          marginBottom: "4px",
                         }}
                       >
-                        <Flame size={14} />
-                        <span>{vid.views} lượt xem</span>
+                        <Flame size={12} />
+                        <span>{vid.views}</span>
+                        <span style={{ color: "rgba(255,255,255,0.4)" }}>• {vid.category}</span>
                       </div>
 
                       <h3
                         style={{
-                          fontSize: "14.5px",
+                          fontSize: "13px",
                           fontWeight: 700,
                           color: "#ffffff",
-                          lineHeight: 1.4,
-                          margin: "0 0 8px",
+                          lineHeight: 1.35,
+                          margin: 0,
                           display: "-webkit-box",
-                          WebkitLineClamp: 3,
+                          WebkitLineClamp: 2,
                           WebkitBoxOrient: "vertical",
                           overflow: "hidden",
                         }}
                       >
                         {vid.title}
                       </h3>
-
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          fontSize: "11.5px",
-                          color: "#94a3b8",
-                          borderTop: "1px solid rgba(255, 255, 255, 0.1)",
-                          paddingTop: "8px",
-                        }}
-                      >
-                        <span>{vid.category}</span>
-                        <span style={{ color: "#38bdf8", fontWeight: 600 }}>Xem ngay ▶</span>
-                      </div>
                     </div>
                   </div>
                 );
               }
 
               // -------------------------------------------------------------
-              // RENDERING YOUTUBE VIDEO NGANG (16:9 LANDSCAPE CARD)
+              // 3B. YOUTUBE VIDEO NGANG (16:9 CARD GỌN GÀNG, TINH TẾ)
               // -------------------------------------------------------------
               return (
                 <div
                   key={vid.id}
                   style={{
-                    background: "rgba(3, 16, 48, 0.8)",
-                    border: "1px solid rgba(59, 130, 246, 0.22)",
-                    borderRadius: "16px",
+                    background: "rgba(3, 16, 48, 0.75)",
+                    border: "1px solid rgba(59, 130, 246, 0.18)",
+                    borderRadius: "12px",
                     overflow: "hidden",
                     display: "flex",
                     flexDirection: "column",
-                    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.35)",
-                    transition: "transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease",
+                    boxShadow: "0 8px 20px rgba(0, 0, 0, 0.3)",
+                    transition: "transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-5px)";
+                    e.currentTarget.style.transform = "translateY(-4px)";
                     e.currentTarget.style.borderColor = "#38bdf8";
-                    e.currentTarget.style.boxShadow = "0 18px 40px rgba(56, 189, 248, 0.25)";
+                    e.currentTarget.style.boxShadow = "0 12px 28px rgba(56, 189, 248, 0.2)";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.borderColor = "rgba(59, 130, 246, 0.22)";
-                    e.currentTarget.style.boxShadow = "0 10px 25px rgba(0, 0, 0, 0.35)";
+                    e.currentTarget.style.borderColor = "rgba(59, 130, 246, 0.18)";
+                    e.currentTarget.style.boxShadow = "0 8px 20px rgba(0, 0, 0, 0.3)";
                   }}
                 >
                   {/* Thumbnail 16:9 */}
@@ -692,117 +527,94 @@ export default function VideoList() {
                         width: "100%",
                         height: "100%",
                         objectFit: "cover",
-                        transition: "transform 0.4s ease",
+                        transition: "transform 0.3s ease",
                       }}
-                      onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+                      onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.04)")}
                       onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
                     />
                     <div
                       style={{
                         position: "absolute",
                         inset: 0,
-                        background: "linear-gradient(to top, rgba(0, 10, 30, 0.8) 0%, rgba(0,0,0,0.1) 60%)",
+                        background: "linear-gradient(to top, rgba(0, 8, 25, 0.7) 0%, rgba(0,0,0,0) 60%)",
                       }}
                     />
 
-                    {/* Category & Type Badge */}
+                    {/* Category pill */}
                     <div
                       style={{
                         position: "absolute",
-                        top: "12px",
-                        left: "12px",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "6px",
+                        top: "10px",
+                        left: "10px",
+                        background: "rgba(37, 99, 235, 0.85)",
+                        color: "#ffffff",
+                        fontSize: "10.5px",
+                        fontWeight: 700,
+                        padding: "2px 7px",
+                        borderRadius: "4px",
+                        backdropFilter: "blur(4px)",
                       }}
                     >
-                      <span
-                        style={{
-                          background: "rgba(37, 99, 235, 0.85)",
-                          color: "#ffffff",
-                          fontSize: "11px",
-                          fontWeight: 700,
-                          padding: "3px 8px",
-                          borderRadius: "4px",
-                          backdropFilter: "blur(4px)",
-                        }}
-                      >
-                        {vid.category}
-                      </span>
-                      <span
-                        style={{
-                          background: "rgba(0, 0, 0, 0.6)",
-                          color: "#38bdf8",
-                          fontSize: "10px",
-                          fontWeight: 700,
-                          padding: "3px 6px",
-                          borderRadius: "4px",
-                          border: "1px solid rgba(56, 189, 248, 0.3)",
-                        }}
-                      >
-                        16:9 Widescreen
-                      </span>
+                      {vid.category}
                     </div>
 
-                    {/* Duration Badge */}
+                    {/* Duration badge */}
                     <div
                       style={{
                         position: "absolute",
-                        bottom: "10px",
-                        right: "12px",
+                        bottom: "8px",
+                        right: "10px",
                         background: "rgba(0, 0, 0, 0.75)",
                         color: "#ffffff",
-                        fontSize: "11.5px",
+                        fontSize: "11px",
                         fontWeight: 700,
-                        padding: "3px 7px",
-                        borderRadius: "5px",
+                        padding: "2px 6px",
+                        borderRadius: "4px",
                         display: "flex",
                         alignItems: "center",
-                        gap: "4px",
+                        gap: "3px",
                       }}
                     >
-                      <Clock size={12} />
+                      <Clock size={11} />
                       <span>{vid.duration}</span>
                     </div>
 
-                    {/* Centered Play Button */}
+                    {/* Play Button */}
                     <div
                       style={{
                         position: "absolute",
                         top: "50%",
                         left: "50%",
                         transform: "translate(-50%, -50%)",
-                        width: "52px",
-                        height: "52px",
+                        width: "44px",
+                        height: "44px",
                         borderRadius: "50%",
                         background: "rgba(220, 38, 38, 0.9)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        boxShadow: "0 0 20px rgba(220, 38, 38, 0.6)",
-                        border: "2px solid #ffffff",
-                        transition: "transform 0.2s ease",
+                        boxShadow: "0 0 16px rgba(220, 38, 38, 0.6)",
                       }}
                     >
-                      <Play size={20} color="#ffffff" fill="#ffffff" style={{ marginLeft: "3px" }} />
+                      <Play size={18} color="#ffffff" fill="#ffffff" style={{ marginLeft: "2px" }} />
                     </div>
                   </div>
 
-                  {/* Body Content */}
-                  <div style={{ padding: "18px 20px", display: "flex", flexDirection: "column", flex: 1 }}>
+                  {/* Body Info Gọn Gàng */}
+                  <div style={{ padding: "14px 16px", display: "flex", flexDirection: "column", flex: 1 }}>
                     <div
                       style={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "space-between",
-                        fontSize: "12px",
+                        fontSize: "11.5px",
                         color: "#94a3b8",
-                        marginBottom: "8px",
+                        marginBottom: "6px",
                       }}
                     >
-                      <span style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                        <Eye size={13} color="#38bdf8" />
-                        <span>{vid.views} lượt xem</span>
+                      <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                        <Eye size={12} color="#38bdf8" />
+                        <span>{vid.views}</span>
                       </span>
                       <span>{vid.date}</span>
                     </div>
@@ -810,16 +622,17 @@ export default function VideoList() {
                     <h3
                       onClick={() => setActiveVideo(vid)}
                       style={{
-                        fontSize: "16px",
+                        fontSize: "14.5px",
                         fontWeight: 700,
                         color: "#ffffff",
-                        lineHeight: 1.45,
-                        margin: "0 0 10px",
+                        lineHeight: 1.4,
+                        margin: "0 0 12px",
                         cursor: "pointer",
                         display: "-webkit-box",
                         WebkitLineClamp: 2,
                         WebkitBoxOrient: "vertical",
                         overflow: "hidden",
+                        flex: 1,
                         transition: "color 0.15s ease",
                       }}
                       onMouseEnter={(e) => (e.currentTarget.style.color = "#38bdf8")}
@@ -828,67 +641,48 @@ export default function VideoList() {
                       {vid.title}
                     </h3>
 
-                    <p
-                      style={{
-                        fontSize: "13px",
-                        color: "#94a3b8",
-                        lineHeight: 1.6,
-                        margin: "0 0 16px",
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                        flex: 1,
-                      }}
-                    >
-                      {vid.description}
-                    </p>
-
-                    {/* Actions */}
+                    {/* Quick action footer */}
                     <div
                       style={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "space-between",
                         borderTop: "1px solid rgba(255, 255, 255, 0.08)",
-                        paddingTop: "12px",
+                        paddingTop: "10px",
                         marginTop: "auto",
+                        fontSize: "12px",
                       }}
                     >
                       <button
                         onClick={() => setActiveVideo(vid)}
                         style={{
-                          background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
-                          color: "#ffffff",
+                          background: "transparent",
+                          color: "#38bdf8",
                           border: "none",
-                          padding: "7px 14px",
-                          borderRadius: "6px",
-                          fontSize: "12.5px",
                           fontWeight: 700,
                           cursor: "pointer",
                           display: "inline-flex",
                           alignItems: "center",
-                          gap: "6px",
+                          gap: "5px",
+                          padding: 0,
                         }}
                       >
-                        <Play size={13} fill="#ffffff" />
-                        <span>Xem Trực Tiếp</span>
+                        <Play size={12} fill="#38bdf8" />
+                        <span>Phát Video</span>
                       </button>
 
                       <Link
                         to={`/video/${vid.slug}`}
                         style={{
-                          fontSize: "12.5px",
-                          color: "#38bdf8",
+                          color: "#94a3b8",
                           textDecoration: "none",
-                          fontWeight: 600,
                           display: "inline-flex",
                           alignItems: "center",
-                          gap: "4px",
+                          gap: "3px",
                         }}
                       >
-                        <span>Trang Chi Tiết</span>
-                        <ChevronRight size={14} />
+                        <span>Chi tiết</span>
+                        <ChevronRight size={13} />
                       </Link>
                     </div>
                   </div>
@@ -900,7 +694,7 @@ export default function VideoList() {
       </div>
 
       {/* ===================================================================== */}
-      {/* 6. MODAL VIDEO PLAYER (PHÁT YOUTUBE 16:9 HOẶC SHORTS 9:16)            */}
+      {/* 4. MODAL VIDEO PLAYER (PHÁT YOUTUBE 16:9 HOẶC SHORTS 9:16 GỌN GÀNG)    */}
       {/* ===================================================================== */}
       {activeVideo && (
         <div
@@ -908,9 +702,9 @@ export default function VideoList() {
             position: "fixed",
             inset: 0,
             zIndex: 99999,
-            background: "rgba(0, 8, 25, 0.85)",
-            backdropFilter: "blur(10px)",
-            WebkitBackdropFilter: "blur(10px)",
+            background: "rgba(0, 8, 25, 0.88)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -923,59 +717,44 @@ export default function VideoList() {
             style={{
               position: "relative",
               width: "100%",
-              maxWidth: activeVideo.type === "short" ? "420px" : "900px",
+              maxWidth: activeVideo.type === "short" ? "380px" : "840px",
               background: "#020f2e",
-              border: `1px solid ${activeVideo.type === "short" ? "rgba(239, 68, 68, 0.5)" : "rgba(59, 130, 246, 0.4)"}`,
-              borderRadius: "18px",
+              border: `1px solid ${activeVideo.type === "short" ? "rgba(239, 68, 68, 0.4)" : "rgba(59, 130, 246, 0.3)"}`,
+              borderRadius: "14px",
               overflow: "hidden",
-              boxShadow: "0 25px 70px rgba(0, 0, 0, 0.7)",
+              boxShadow: "0 20px 60px rgba(0, 0, 0, 0.7)",
               display: "flex",
               flexDirection: "column",
-              animation: "fadeIn 0.25s ease",
             }}
           >
             {/* Modal Header */}
             <div
               style={{
-                padding: "14px 20px",
+                padding: "12px 16px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                background: "rgba(2, 8, 22, 0.9)",
-                borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                background: "rgba(2, 8, 22, 0.95)",
+                borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: 0 }}>
-                {activeVideo.type === "short" ? (
-                  <span
-                    style={{
-                      background: "linear-gradient(135deg, #ef4444, #dc2626)",
-                      color: "#fff",
-                      fontSize: "11px",
-                      fontWeight: 800,
-                      padding: "2px 7px",
-                      borderRadius: "10px",
-                    }}
-                  >
-                    SHORTS 9:16
-                  </span>
-                ) : (
-                  <span
-                    style={{
-                      background: "rgba(37, 99, 235, 0.3)",
-                      color: "#38bdf8",
-                      fontSize: "11px",
-                      fontWeight: 700,
-                      padding: "2px 7px",
-                      borderRadius: "10px",
-                    }}
-                  >
-                    16:9 Widescreen
-                  </span>
-                )}
                 <span
                   style={{
-                    fontSize: "13.5px",
+                    background: activeVideo.type === "short" ? "#dc2626" : "rgba(37, 99, 235, 0.3)",
+                    color: activeVideo.type === "short" ? "#fff" : "#38bdf8",
+                    fontSize: "10.5px",
+                    fontWeight: 800,
+                    padding: "2px 7px",
+                    borderRadius: "6px",
+                    flexShrink: 0,
+                  }}
+                >
+                  {activeVideo.type === "short" ? "SHORTS" : "16:9"}
+                </span>
+                <span
+                  style={{
+                    fontSize: "13px",
                     fontWeight: 700,
                     color: "#ffffff",
                     whiteSpace: "nowrap",
@@ -993,29 +772,29 @@ export default function VideoList() {
                   background: "rgba(255, 255, 255, 0.1)",
                   border: "none",
                   borderRadius: "50%",
-                  width: "32px",
-                  height: "32px",
+                  width: "28px",
+                  height: "28px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   color: "#ffffff",
                   cursor: "pointer",
                   flexShrink: 0,
-                  marginLeft: "12px",
+                  marginLeft: "10px",
                 }}
               >
-                <X size={17} />
+                <X size={15} />
               </button>
             </div>
 
-            {/* Embedded Iframe Container */}
+            {/* Embedded Video */}
             <div
               style={{
                 position: "relative",
                 width: "100%",
                 background: "#000",
                 aspectRatio: activeVideo.type === "short" ? "9 / 16" : "16 / 9",
-                maxHeight: activeVideo.type === "short" ? "68vh" : "60vh",
+                maxHeight: activeVideo.type === "short" ? "65vh" : "55vh",
               }}
             >
               <iframe
@@ -1033,65 +812,40 @@ export default function VideoList() {
               />
             </div>
 
-            {/* Modal Footer & Description */}
-            <div style={{ padding: "18px 20px", background: "rgba(2, 10, 28, 0.95)" }}>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  fontSize: "12.5px",
-                  color: "#94a3b8",
-                  marginBottom: "10px",
-                  flexWrap: "wrap",
-                  gap: "10px",
-                }}
-              >
-                <span>Hạng mục: <strong style={{ color: "#38bdf8" }}>{activeVideo.category}</strong></span>
-                <span>Lượt xem: <strong style={{ color: "#f87171" }}>{activeVideo.views}</strong></span>
-                <span>Tác giả: <strong>{activeVideo.author}</strong></span>
+            {/* Compact Modal Footer */}
+            <div
+              style={{
+                padding: "12px 16px",
+                background: "rgba(2, 10, 28, 0.98)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+                gap: "10px",
+              }}
+            >
+              <div style={{ fontSize: "12px", color: "#94a3b8" }}>
+                <span>{activeVideo.category}</span> • <span>{activeVideo.views} lượt xem</span>
               </div>
 
-              <p
-                style={{
-                  fontSize: "13px",
-                  color: "#cbd5e1",
-                  lineHeight: 1.6,
-                  margin: "0 0 16px",
-                  maxHeight: "80px",
-                  overflowY: "auto",
-                }}
-              >
-                {activeVideo.description}
-              </p>
-
-              {/* Action Buttons */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  gap: "12px",
-                  flexWrap: "wrap",
-                }}
-              >
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <a
                   href={`tel:${siteSettings?.hotlineRaw || "0947707616"}`}
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: "7px",
-                    padding: "9px 18px",
-                    background: "linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)",
+                    gap: "5px",
+                    padding: "7px 12px",
+                    background: "#dc2626",
                     color: "#ffffff",
-                    borderRadius: "8px",
+                    borderRadius: "6px",
                     fontWeight: 700,
-                    fontSize: "13px",
+                    fontSize: "12px",
                     textDecoration: "none",
                   }}
                 >
-                  <Phone size={14} />
-                  <span>Tư Vấn Sơn: {siteSettings?.hotline || "0947.707.616"}</span>
+                  <Phone size={13} />
+                  <span>Hotline: {siteSettings?.hotline || "0947.707.616"}</span>
                 </a>
 
                 <Link
@@ -1100,19 +854,18 @@ export default function VideoList() {
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: "6px",
-                    padding: "9px 16px",
-                    background: "rgba(255, 255, 255, 0.1)",
-                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                    gap: "4px",
+                    padding: "7px 12px",
+                    background: "rgba(255, 255, 255, 0.08)",
                     color: "#ffffff",
-                    borderRadius: "8px",
+                    borderRadius: "6px",
                     fontWeight: 600,
-                    fontSize: "13px",
+                    fontSize: "12px",
                     textDecoration: "none",
                   }}
                 >
-                  <span>Xem Chi Tiết Quy Trình</span>
-                  <ExternalLink size={13} />
+                  <span>Xem chi tiết</span>
+                  <ExternalLink size={12} />
                 </Link>
               </div>
             </div>

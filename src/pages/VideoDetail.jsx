@@ -102,36 +102,35 @@ export default function VideoDetail() {
   return (
     <div
       style={{
-        paddingTop: "90px",
-        paddingBottom: "80px",
+        paddingTop: "85px",
+        paddingBottom: "60px",
         minHeight: "100vh",
         fontFamily: "'DM Sans', sans-serif",
         color: "#ffffff",
       }}
     >
-      <div style={{ maxWidth: "1260px", margin: "0 auto", padding: "0 24px" }}>
+      <div style={{ maxWidth: "1240px", margin: "0 auto", padding: "0 20px" }}>
         {/* Navigation Breadcrumb */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            flexWrap: "wrap",
             gap: "8px",
-            fontSize: "13px",
+            fontSize: "12.5px",
             color: "#94a3b8",
-            marginBottom: "24px",
+            marginBottom: "16px",
           }}
         >
-          <Link to="/" style={{ color: "#cbd5e1", textDecoration: "none" }}>
+          <Link to="/" style={{ color: "#94a3b8", textDecoration: "none" }}>
             Trang Chủ
           </Link>
-          <span>/</span>
-          <Link to="/video" style={{ color: "#cbd5e1", textDecoration: "none" }}>
-            Thư Viện Video
+          <ChevronRight size={12} color="#64748b" />
+          <Link to="/video" style={{ color: "#94a3b8", textDecoration: "none" }}>
+            Video
           </Link>
-          <span>/</span>
+          <ChevronRight size={12} color="#64748b" />
           <span style={{ color: "#38bdf8", fontWeight: 600 }}>
-            {isShort ? "YouTube Shorts" : "Video Thi Công"}
+            {isShort ? "Shorts" : "Chi Tiết"}
           </span>
         </div>
 
@@ -141,31 +140,28 @@ export default function VideoDetail() {
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: "8px",
-            background: "rgba(255, 255, 255, 0.08)",
-            border: "1px solid rgba(255, 255, 255, 0.15)",
+            gap: "6px",
+            background: "rgba(255, 255, 255, 0.06)",
+            border: "1px solid rgba(255, 255, 255, 0.12)",
             color: "#cbd5e1",
-            padding: "7px 14px",
+            padding: "6px 12px",
             borderRadius: "6px",
-            fontSize: "13px",
+            fontSize: "12.5px",
             fontWeight: 600,
             cursor: "pointer",
-            marginBottom: "20px",
-            transition: "background 0.15s ease",
+            marginBottom: "16px",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255, 255, 255, 0.15)")}
-          onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255, 255, 255, 0.08)")}
         >
-          <ArrowLeft size={15} />
-          <span>Quay Lại Danh Sách Video</span>
+          <ArrowLeft size={14} />
+          <span>Danh Sách Video</span>
         </button>
 
         {/* Two-Column Layout */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: isShort ? "1fr 340px" : "1fr 360px",
-            gap: "40px",
+            gridTemplateColumns: isShort ? "1fr 320px" : "1fr 340px",
+            gap: "32px",
             alignItems: "start",
           }}
           className="grid-mobile-1"
@@ -173,42 +169,42 @@ export default function VideoDetail() {
           {/* Main Column: Video Player & Description */}
           <div>
             {/* Header Title & Badges */}
-            <div style={{ marginBottom: "18px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
+            <div style={{ marginBottom: "14px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
                 {isShort ? (
                   <span
                     style={{
-                      background: "linear-gradient(135deg, #ef4444, #dc2626)",
+                      background: "#dc2626",
                       color: "#fff",
-                      fontSize: "11px",
+                      fontSize: "10.5px",
                       fontWeight: 800,
-                      padding: "3px 10px",
-                      borderRadius: "14px",
+                      padding: "2px 8px",
+                      borderRadius: "6px",
                       display: "inline-flex",
                       alignItems: "center",
-                      gap: "4px",
+                      gap: "3px",
                     }}
                   >
-                    <Zap size={12} fill="#fff" />
-                    <span>YOUTUBE SHORTS 9:16</span>
+                    <Zap size={11} fill="#fff" />
+                    <span>SHORTS 9:16</span>
                   </span>
                 ) : (
                   <span
                     style={{
                       background: "rgba(37, 99, 235, 0.25)",
                       color: "#38bdf8",
-                      border: "1px solid rgba(56, 189, 248, 0.4)",
-                      fontSize: "11px",
+                      border: "1px solid rgba(56, 189, 248, 0.35)",
+                      fontSize: "10.5px",
                       fontWeight: 700,
-                      padding: "3px 10px",
-                      borderRadius: "14px",
+                      padding: "2px 8px",
+                      borderRadius: "6px",
                       display: "inline-flex",
                       alignItems: "center",
-                      gap: "4px",
+                      gap: "3px",
                     }}
                   >
-                    <Film size={12} />
-                    <span>VIDEO NGANG 16:9</span>
+                    <Film size={11} />
+                    <span>16:9 Widescreen</span>
                   </span>
                 )}
 
@@ -216,56 +212,31 @@ export default function VideoDetail() {
                   style={{
                     background: "rgba(255, 255, 255, 0.08)",
                     color: "#cbd5e1",
-                    fontSize: "11.5px",
+                    fontSize: "11px",
                     fontWeight: 600,
-                    padding: "3px 10px",
-                    borderRadius: "14px",
+                    padding: "2px 8px",
+                    borderRadius: "6px",
                   }}
                 >
                   {video.category}
+                </span>
+
+                <span style={{ fontSize: "12px", color: "#94a3b8" }}>
+                  {video.views} lượt xem
                 </span>
               </div>
 
               <h1
                 style={{
-                  fontSize: "clamp(20px, 2.5vw, 28px)",
+                  fontSize: "clamp(18px, 2.2vw, 24px)",
                   fontWeight: 800,
                   lineHeight: 1.35,
-                  margin: "0 0 12px",
+                  margin: "0 0 8px",
                   fontFamily: "'Be Vietnam Pro', sans-serif",
                 }}
               >
                 {video.title}
               </h1>
-
-              {/* Meta stats */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                  gap: "18px",
-                  fontSize: "12.5px",
-                  color: "#94a3b8",
-                }}
-              >
-                <span style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                  <Eye size={14} color="#38bdf8" />
-                  <span>{video.views} lượt xem</span>
-                </span>
-                <span style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                  <Clock size={14} />
-                  <span>Thời lượng: {video.duration}</span>
-                </span>
-                <span style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                  <Calendar size={14} />
-                  <span>Ngày đăng: {video.date}</span>
-                </span>
-                <span style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                  <User size={14} />
-                  <span>Tác giả: {video.author}</span>
-                </span>
-              </div>
             </div>
 
             {/* Embedded Video Player Container */}
@@ -273,16 +244,14 @@ export default function VideoDetail() {
               style={{
                 position: "relative",
                 width: "100%",
-                maxWidth: isShort ? "440px" : "100%",
-                margin: isShort ? "0 auto 28px" : "0 0 28px",
+                maxWidth: isShort ? "380px" : "100%",
+                margin: isShort ? "0 auto 20px" : "0 0 20px",
                 aspectRatio: isShort ? "9 / 16" : "16 / 9",
                 background: "#010a1f",
-                borderRadius: "18px",
+                borderRadius: "14px",
                 overflow: "hidden",
-                border: `1px solid ${isShort ? "rgba(239, 68, 68, 0.4)" : "rgba(59, 130, 246, 0.35)"}`,
-                boxShadow: isShort
-                  ? "0 20px 50px rgba(239, 68, 68, 0.25)"
-                  : "0 20px 50px rgba(0, 0, 0, 0.5)",
+                border: `1px solid ${isShort ? "rgba(239, 68, 68, 0.35)" : "rgba(59, 130, 246, 0.25)"}`,
+                boxShadow: "0 14px 40px rgba(0, 0, 0, 0.5)",
               }}
             >
               <iframe
@@ -307,33 +276,33 @@ export default function VideoDetail() {
                 alignItems: "center",
                 justifyContent: "space-between",
                 flexWrap: "wrap",
-                gap: "12px",
-                padding: "14px 18px",
-                background: "rgba(3, 16, 48, 0.6)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                borderRadius: "12px",
-                marginBottom: "28px",
+                gap: "10px",
+                padding: "10px 14px",
+                background: "rgba(3, 16, 48, 0.5)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                borderRadius: "10px",
+                marginBottom: "20px",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <button
                   onClick={handleCopyLink}
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: "6px",
-                    background: copied ? "rgba(16, 185, 129, 0.2)" : "rgba(255, 255, 255, 0.1)",
+                    gap: "5px",
+                    background: copied ? "rgba(16, 185, 129, 0.2)" : "rgba(255, 255, 255, 0.08)",
                     color: copied ? "#34d399" : "#ffffff",
-                    border: `1px solid ${copied ? "rgba(16, 185, 129, 0.4)" : "rgba(255, 255, 255, 0.15)"}`,
-                    padding: "7px 14px",
+                    border: `1px solid ${copied ? "rgba(16, 185, 129, 0.4)" : "rgba(255, 255, 255, 0.12)"}`,
+                    padding: "6px 12px",
                     borderRadius: "6px",
-                    fontSize: "12.5px",
+                    fontSize: "12px",
                     fontWeight: 600,
                     cursor: "pointer",
                   }}
                 >
-                  <Share2 size={13} />
-                  <span>{copied ? "✓ Đã sao chép link" : "Chia sẻ video"}</span>
+                  <Share2 size={12} />
+                  <span>{copied ? "✓ Đã sao chép" : "Chia sẻ"}</span>
                 </button>
 
                 <a
@@ -343,57 +312,61 @@ export default function VideoDetail() {
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: "6px",
-                    background: "rgba(239, 68, 68, 0.15)",
+                    gap: "5px",
+                    background: "rgba(239, 68, 68, 0.12)",
                     color: "#f87171",
-                    border: "1px solid rgba(239, 68, 68, 0.3)",
-                    padding: "7px 14px",
+                    border: "1px solid rgba(239, 68, 68, 0.25)",
+                    padding: "6px 12px",
                     borderRadius: "6px",
-                    fontSize: "12.5px",
+                    fontSize: "12px",
                     fontWeight: 600,
                     textDecoration: "none",
                   }}
                 >
-                  <span>Xem trên YouTube</span>
-                  <ExternalLink size={12} />
+                  <span>Mở YouTube</span>
+                  <ExternalLink size={11} />
                 </a>
               </div>
 
-              <div style={{ fontSize: "12px", color: "#64748b" }}>
-                Nguồn: Kênh Kỹ Thuật FUJINANO Official
+              <div style={{ fontSize: "11.5px", color: "#64748b" }}>
+                Kênh Kỹ Thuật FUJINANO
               </div>
+            </div>
+
+            {/* Video Detailed Description */}
+            <div
+              style={{
+                background: "rgba(3, 16, 48, 0.5)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                borderRadius: "12px",
+                padding: "18px",
+                marginBottom: "20px",
+              }}
+            >
+              <h3 style={{ fontSize: "14.5px", fontWeight: 700, color: "#ffffff", margin: "0 0 8px" }}>
+                Nội Dung Kỹ Thuật
+              </h3>
+              <p style={{ fontSize: "13.5px", color: "#cbd5e1", lineHeight: 1.7, margin: 0 }}>
+                {video.description}
+              </p>
             </div>
 
             {/* Video Technical Highlights */}
             {video.highlights && video.highlights.length > 0 && (
               <div
                 style={{
-                  background: "rgba(3, 16, 48, 0.8)",
-                  border: "1px solid rgba(59, 130, 246, 0.25)",
-                  borderRadius: "14px",
-                  padding: "22px 24px",
-                  marginBottom: "28px",
+                  background: "rgba(3, 16, 48, 0.7)",
+                  border: "1px solid rgba(59, 130, 246, 0.2)",
+                  borderRadius: "12px",
+                  padding: "16px 18px",
+                  marginBottom: "24px",
                 }}
               >
-                <h3
-                  style={{
-                    fontSize: "16px",
-                    fontWeight: 700,
-                    color: "#ffffff",
-                    margin: "0 0 14px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                  }}
-                >
-                  <CheckCircle2 size={18} color="#34d399" />
-                  <span>Đặc Điểm &amp; Tiêu Chuẩn Kỹ Thuật Đạt Được</span>
-                </h3>
                 <div
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                    gap: "10px",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                    gap: "8px",
                   }}
                 >
                   {video.highlights.map((item, idx) => (
@@ -401,17 +374,13 @@ export default function VideoDetail() {
                       key={idx}
                       style={{
                         display: "flex",
-                        alignItems: "flex-start",
-                        gap: "8px",
-                        fontSize: "13px",
+                        alignItems: "center",
+                        gap: "6px",
+                        fontSize: "12.5px",
                         color: "#cbd5e1",
-                        background: "rgba(2, 10, 28, 0.5)",
-                        padding: "8px 12px",
-                        borderRadius: "8px",
-                        border: "1px solid rgba(255, 255, 255, 0.06)",
                       }}
                     >
-                      <span style={{ color: "#38bdf8", fontWeight: 700 }}>•</span>
+                      <CheckCircle2 size={13} color="#34d399" style={{ flexShrink: 0 }} />
                       <span>{item}</span>
                     </div>
                   ))}
@@ -419,44 +388,26 @@ export default function VideoDetail() {
               </div>
             )}
 
-            {/* Video Detailed Description */}
+            {/* Compact CTA Box */}
             <div
               style={{
-                background: "rgba(3, 16, 48, 0.6)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                borderRadius: "14px",
-                padding: "24px",
-                marginBottom: "32px",
-              }}
-            >
-              <h3 style={{ fontSize: "16px", fontWeight: 700, color: "#ffffff", margin: "0 0 12px" }}>
-                Mô Tả Chi Tiết Quy Trình Thi Công
-              </h3>
-              <p style={{ fontSize: "14px", color: "#cbd5e1", lineHeight: 1.8, margin: 0 }}>
-                {video.description}
-              </p>
-            </div>
-
-            {/* CTA Box */}
-            <div
-              style={{
-                background: "linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(220, 38, 38, 0.15) 100%)",
-                border: "1px solid rgba(59, 130, 246, 0.35)",
-                borderRadius: "16px",
-                padding: "28px",
+                background: "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(220, 38, 38, 0.12) 100%)",
+                border: "1px solid rgba(59, 130, 246, 0.25)",
+                borderRadius: "12px",
+                padding: "16px 20px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
                 flexWrap: "wrap",
-                gap: "20px",
+                gap: "14px",
               }}
             >
               <div>
-                <h4 style={{ fontSize: "17px", fontWeight: 800, margin: "0 0 6px" }}>
-                  Bạn cần khảo sát mặt bằng &amp; tư vấn giải pháp tương tự?
+                <h4 style={{ fontSize: "14.5px", fontWeight: 700, margin: "0 0 3px" }}>
+                  Tư vấn khảo sát &amp; giải pháp tương tự
                 </h4>
-                <p style={{ fontSize: "13px", color: "#cbd5e1", margin: 0 }}>
-                  Kỹ sư FUJINANO hỗ trợ tư vấn định mức sơn và lên phương án thi công tối ưu chi phí hoàn toàn miễn phí.
+                <p style={{ fontSize: "12.5px", color: "#94a3b8", margin: 0 }}>
+                  Kỹ sư FUJINANO hỗ trợ lên định mức sơn và tư vấn miễn phí.
                 </p>
               </div>
 
@@ -465,20 +416,18 @@ export default function VideoDetail() {
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: "8px",
-                  padding: "11px 22px",
-                  background: "linear-gradient(135deg, #dc2626, #b91c1c)",
+                  gap: "6px",
+                  padding: "8px 16px",
+                  background: "#dc2626",
                   color: "#ffffff",
-                  borderRadius: "8px",
+                  borderRadius: "6px",
                   fontWeight: 700,
-                  fontSize: "13.5px",
+                  fontSize: "12.5px",
                   textDecoration: "none",
-                  boxShadow: "0 6px 18px rgba(220, 38, 38, 0.4)",
-                  flexShrink: 0,
                 }}
               >
-                <Phone size={15} />
-                <span>Gọi Hotline: {siteSettings?.hotline || "0947.707.616"}</span>
+                <Phone size={13} />
+                <span>Hotline: {siteSettings?.hotline || "0947.707.616"}</span>
               </a>
             </div>
           </div>
