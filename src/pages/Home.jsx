@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
-import { Search, Phone, FileText, ShieldCheck, Truck, RotateCcw, Headphones, CheckCircle2, ArrowRight, X, Star } from "lucide-react";
+import { Search, Phone, FileText, ShieldCheck, Truck, RotateCcw, Headphones, ArrowRight, X } from "lucide-react";
 import { categories, products } from "../data/products";
 import { projects } from "../data/projects";
 import ProductCard from "../components/ProductCard";
@@ -11,14 +11,6 @@ export default function Home({ onOpenOrderModal }) {
   const [searchInput, setSearchInput] = useState(queryParam);
   const [activeCategory, setActiveCategory] = useState("all");
 
-  const quickKeywords = [
-    "Sơn Epoxy 18L",
-    "Chống Thấm PU",
-    "Sơn Chống Cháy 120P",
-    "Sơn Sân Tennis",
-    "Sơn Lót Kháng Kiềm",
-  ];
-
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchInput.trim()) {
@@ -26,11 +18,6 @@ export default function Home({ onOpenOrderModal }) {
     } else {
       setSearchParams({});
     }
-  };
-
-  const handleKeywordClick = (kw) => {
-    setSearchInput(kw);
-    setSearchParams({ q: kw });
   };
 
   // Lọc sản phẩm
@@ -52,59 +39,42 @@ export default function Home({ onOpenOrderModal }) {
       <div style={{ maxWidth: "1340px", margin: "0 auto", padding: "0 20px" }}>
         
         {/* ======================================================== */}
-        {/* 1. HERO BANNER THANH LỊCH (BRAND STORE STYLE)             */}
+        {/* 1. HERO BANNER GỌN GÀNG                                  */}
         {/* ======================================================== */}
         <div
           style={{
-            background: "linear-gradient(135deg, rgba(8, 26, 68, 0.92) 0%, rgba(2, 14, 42, 0.96) 100%)",
-            border: "1px solid rgba(59, 130, 246, 0.25)",
-            borderRadius: "16px",
-            padding: "36px 32px",
-            marginBottom: "32px",
-            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.4)",
+            background: "linear-gradient(135deg, rgba(8, 26, 68, 0.9) 0%, rgba(2, 14, 42, 0.95) 100%)",
+            border: "1px solid rgba(59, 130, 246, 0.2)",
+            borderRadius: "14px",
+            padding: "28px 30px",
+            marginBottom: "28px",
+            boxShadow: "0 8px 24px rgba(0, 0, 0, 0.35)",
             display: "grid",
-            gridTemplateColumns: "1.25fr 0.95fr",
-            gap: "36px",
+            gridTemplateColumns: "1.3fr 0.9fr",
+            gap: "28px",
             alignItems: "center",
           }}
           className="grid-2"
         >
-          {/* Cột Trái: Tiêu đề, mô tả và ô tìm kiếm */}
+          {/* Cột Trái */}
           <div>
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                background: "rgba(59, 130, 246, 0.15)",
-                border: "1px solid rgba(59, 130, 246, 0.35)",
-                borderRadius: "20px",
-                padding: "4px 12px",
-                marginBottom: "16px",
-              }}
-            >
-              <span style={{ fontSize: "11.5px", color: "#38bdf8", fontWeight: 700, letterSpacing: "0.5px" }}>
-                CÔNG NGHỆ NANO NHẬT BẢN • CHUẨN ISO 9001:2015
-              </span>
-            </div>
-
             <h1
               style={{
-                fontSize: "28px",
+                fontSize: "26px",
                 fontWeight: 800,
                 color: "#ffffff",
                 lineHeight: 1.3,
-                marginBottom: "12px",
+                marginBottom: "8px",
               }}
             >
-              TỔNG KHO PHÂN PHỐI SƠN CÔNG NGHIỆP FUJINANO
+              Sơn Công Nghiệp FUJINANO
             </h1>
 
-            <p style={{ fontSize: "14px", color: "#cbd5e1", lineHeight: 1.6, marginBottom: "20px" }}>
-              Cung ứng trực tiếp các dòng thùng sơn chất lượng cao: <strong>Sơn sàn Epoxy</strong>, <strong>Chống thấm Polyurethane</strong>, <strong>Sơn chống cháy PCCC</strong>, <strong>Sân tennis</strong>. Giá sỉ tận gốc nhà máy, giao nhanh tận chân công trình.
+            <p style={{ fontSize: "14px", color: "#cbd5e1", lineHeight: 1.5, marginBottom: "18px" }}>
+              Sơn sàn Epoxy, Chống thấm PU, Sơn chống cháy kết cấu thép &amp; Sân thể thao. Giá sỉ tận nhà máy.
             </p>
 
-            {/* Ô tìm kiếm thông minh Shopee */}
+            {/* Ô tìm kiếm */}
             <form
               onSubmit={handleSearchSubmit}
               style={{
@@ -113,8 +83,8 @@ export default function Home({ onOpenOrderModal }) {
                 background: "#ffffff",
                 borderRadius: "8px",
                 padding: "3px 4px 3px 12px",
-                boxShadow: "0 2px 10px rgba(0,0,0,0.25)",
-                marginBottom: "12px",
+                boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
+                maxWidth: "480px",
               }}
             >
               <Search size={16} color="#64748b" style={{ flexShrink: 0 }} />
@@ -122,7 +92,7 @@ export default function Home({ onOpenOrderModal }) {
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Nhập loại sơn cần tìm (Ví dụ: Epoxy tự phẳng, Chống thấm 18L...)"
+                placeholder="Tìm loại sơn cần mua..."
                 style={{
                   flex: 1,
                   border: "none",
@@ -163,61 +133,28 @@ export default function Home({ onOpenOrderModal }) {
                 Tìm Kiếm
               </button>
             </form>
-
-            {/* Gợi ý từ khóa tìm nhanh */}
-            <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap", marginBottom: "16px" }}>
-              <span style={{ fontSize: "12px", color: "#94a3b8", fontWeight: 600 }}>Gợi ý:</span>
-              {quickKeywords.map((kw) => (
-                <button
-                  key={kw}
-                  onClick={() => handleKeywordClick(kw)}
-                  style={{
-                    background: queryParam === kw ? "rgba(59, 130, 246, 0.3)" : "rgba(255, 255, 255, 0.08)",
-                    color: queryParam === kw ? "#38bdf8" : "#cbd5e1",
-                    border: "1px solid rgba(255, 255, 255, 0.12)",
-                    borderRadius: "14px",
-                    padding: "3px 10px",
-                    fontSize: "11.5px",
-                    cursor: "pointer",
-                  }}
-                >
-                  {kw}
-                </button>
-              ))}
-            </div>
-
-            {/* Cam kết 2 dòng */}
-            <div style={{ display: "flex", gap: "16px", fontSize: "12px", color: "#38bdf8", fontWeight: 600 }}>
-              <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                <CheckCircle2 size={13} color="#22c55e" /> CO/CQ &amp; Hóa đơn VAT
-              </span>
-              <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                <CheckCircle2 size={13} color="#22c55e" /> Đo độ ẩm &amp; khảo sát miễn phí
-              </span>
-            </div>
           </div>
 
-          {/* Cột Phải: Thùng sơn nổi bật tiêu biểu */}
+          {/* Cột Phải: Thùng sơn nổi bật */}
           <div
             style={{
-              background: "rgba(2, 10, 28, 0.65)",
-              border: "1px solid rgba(255, 255, 255, 0.12)",
+              background: "rgba(2, 10, 28, 0.6)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
               borderRadius: "12px",
-              padding: "20px",
+              padding: "16px",
               display: "flex",
-              gap: "20px",
+              gap: "16px",
               alignItems: "center",
             }}
           >
             <div
               style={{
-                width: "150px",
-                height: "150px",
+                width: "110px",
+                height: "110px",
                 background: "#ffffff",
-                borderRadius: "10px",
-                padding: "8px",
+                borderRadius: "8px",
+                padding: "6px",
                 flexShrink: 0,
-                boxShadow: "0 4px 14px rgba(0,0,0,0.3)",
               }}
             >
               <img
@@ -227,26 +164,14 @@ export default function Home({ onOpenOrderModal }) {
               />
             </div>
             <div>
-              <span
-                style={{
-                  background: "#dc2626",
-                  color: "#ffffff",
-                  fontSize: "10.5px",
-                  fontWeight: 700,
-                  padding: "3px 8px",
-                  borderRadius: "4px",
-                }}
-              >
-                BÁN CHẠY NHẤT 2026
-              </span>
-              <h4 style={{ fontSize: "15px", fontWeight: 700, color: "#ffffff", margin: "8px 0 4px", lineHeight: 1.35 }}>
+              <h4 style={{ fontSize: "14.5px", fontWeight: 700, color: "#ffffff", margin: "0 0 6px", lineHeight: 1.35 }}>
                 {featuredProduct.shortName}
               </h4>
-              <div style={{ display: "flex", alignItems: "baseline", gap: "8px", marginBottom: "8px" }}>
-                <span style={{ fontSize: "18px", fontWeight: 800, color: "#f87171" }}>
+              <div style={{ display: "flex", alignItems: "baseline", gap: "8px", marginBottom: "10px" }}>
+                <span style={{ fontSize: "17px", fontWeight: 800, color: "#f87171" }}>
                   ₫{featuredProduct.price.toLocaleString("vi-VN")}
                 </span>
-                <span style={{ fontSize: "12px", color: "#94a3b8", textDecoration: "line-through" }}>
+                <span style={{ fontSize: "11.5px", color: "#94a3b8", textDecoration: "line-through" }}>
                   ₫{featuredProduct.originalPrice.toLocaleString("vi-VN")}
                 </span>
               </div>
@@ -264,7 +189,7 @@ export default function Home({ onOpenOrderModal }) {
                     textDecoration: "none",
                   }}
                 >
-                  Xem Chi Tiết
+                  Chi Tiết
                 </Link>
                 <button
                   onClick={() => onOpenOrderModal && onOpenOrderModal(featuredProduct)}
@@ -273,13 +198,13 @@ export default function Home({ onOpenOrderModal }) {
                     color: "#ffffff",
                     border: "none",
                     borderRadius: "6px",
-                    padding: "6px 12px",
+                    padding: "6px 14px",
                     fontSize: "12px",
                     fontWeight: 700,
                     cursor: "pointer",
                   }}
                 >
-                  Đặt Mua Ngay
+                  Đặt Mua
                 </button>
               </div>
             </div>
@@ -287,43 +212,25 @@ export default function Home({ onOpenOrderModal }) {
         </div>
 
         {/* ======================================================== */}
-        {/* 2. KHU VỰC SẢN PHẨM THÙNG SƠN (TRỌNG TÂM E-COMMERCE)      */}
+        {/* 2. KHU VỰC SẢN PHẨM THÙNG SƠN                             */}
         {/* ======================================================== */}
-        <div id="products" style={{ marginBottom: "48px" }}>
-          {/* Header Khu Vực Sản Phẩm */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: "16px",
-              flexWrap: "wrap",
-              gap: "10px",
-            }}
-          >
-            <div>
-              <h2 style={{ fontSize: "20px", fontWeight: 800, color: "#ffffff", letterSpacing: "0.3px", margin: 0 }}>
-                DANH MỤC THÙNG SƠN CÔNG NGHIỆP FUJINANO
-              </h2>
-              <p style={{ fontSize: "12.5px", color: "#94a3b8", margin: "3px 0 0" }}>
-                Sơn chính hãng nhà máy — Có đầy đủ thùng 18L, lon 5L, phuy 200L cho nhà thầu
-              </p>
-            </div>
-
-            <div style={{ fontSize: "12.5px", color: "#38bdf8", fontWeight: 600 }}>
-              Hiển thị {filteredProducts.length} sản phẩm
-            </div>
+        <div id="products" style={{ marginBottom: "40px" }}>
+          {/* Header Sản phẩm */}
+          <div style={{ marginBottom: "14px" }}>
+            <h2 style={{ fontSize: "19px", fontWeight: 800, color: "#ffffff", margin: 0 }}>
+              Sản Phẩm Thùng Sơn
+            </h2>
           </div>
 
-          {/* Thanh lọc danh mục (Horizontal Category Pills) */}
+          {/* Thanh lọc danh mục (Pills) */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               gap: "8px",
               overflowX: "auto",
-              paddingBottom: "12px",
-              marginBottom: "20px",
+              paddingBottom: "10px",
+              marginBottom: "18px",
               whiteSpace: "nowrap",
             }}
           >
@@ -337,7 +244,7 @@ export default function Home({ onOpenOrderModal }) {
                 color: "#ffffff",
                 border: activeCategory === "all" && !queryParam ? "1px solid #dc2626" : "1px solid rgba(255, 255, 255, 0.14)",
                 borderRadius: "20px",
-                padding: "7px 18px",
+                padding: "6px 16px",
                 fontSize: "13px",
                 fontWeight: 700,
                 cursor: "pointer",
@@ -362,7 +269,7 @@ export default function Home({ onOpenOrderModal }) {
                     color: isSelected ? "#ffffff" : "#cbd5e1",
                     border: isSelected ? "1px solid #dc2626" : "1px solid rgba(255, 255, 255, 0.14)",
                     borderRadius: "20px",
-                    padding: "7px 18px",
+                    padding: "6px 16px",
                     fontSize: "13px",
                     fontWeight: isSelected ? 700 : 500,
                     cursor: "pointer",
@@ -370,7 +277,7 @@ export default function Home({ onOpenOrderModal }) {
                     flexShrink: 0,
                   }}
                 >
-                  {cat.name} ({cat.count})
+                  {cat.name}
                 </button>
               );
             })}
@@ -386,14 +293,14 @@ export default function Home({ onOpenOrderModal }) {
                 background: "rgba(8, 22, 54, 0.85)",
                 border: "1px solid rgba(59, 130, 246, 0.3)",
                 borderRadius: "8px",
-                padding: "10px 16px",
-                marginBottom: "20px",
-                fontSize: "13.5px",
+                padding: "8px 14px",
+                marginBottom: "16px",
+                fontSize: "13px",
                 color: "#94a3b8",
               }}
             >
               <div>
-                Kết quả tìm kiếm cho: <strong style={{ color: "#ffffff" }}>"{queryParam}"</strong> ({filteredProducts.length} thùng sơn)
+                Kết quả cho: <strong style={{ color: "#ffffff" }}>"{queryParam}"</strong> ({filteredProducts.length} sản phẩm)
               </div>
               <button
                 onClick={() => setSearchParams({})}
@@ -402,31 +309,31 @@ export default function Home({ onOpenOrderModal }) {
                   border: "none",
                   color: "#38bdf8",
                   cursor: "pointer",
-                  fontSize: "12.5px",
+                  fontSize: "12px",
                   fontWeight: 600,
                   display: "flex",
                   alignItems: "center",
                   gap: "4px",
                 }}
               >
-                <X size={14} /> Xóa tìm kiếm
+                <X size={13} /> Xóa tìm kiếm
               </button>
             </div>
           )}
 
-          {/* Lưới 8 Thùng Sơn Shopee */}
+          {/* Lưới 8 Thùng Sơn */}
           {filteredProducts.length === 0 ? (
             <div
               style={{
                 background: "rgba(8, 22, 54, 0.88)",
                 borderRadius: "12px",
-                padding: "60px 20px",
+                padding: "50px 20px",
                 textAlign: "center",
                 border: "1px solid rgba(255, 255, 255, 0.12)",
               }}
             >
-              <p style={{ fontSize: "15px", color: "#94a3b8", marginBottom: "16px" }}>
-                Không tìm thấy thùng sơn nào phù hợp với từ khóa "{queryParam}".
+              <p style={{ fontSize: "14px", color: "#94a3b8", marginBottom: "14px" }}>
+                Không tìm thấy sản phẩm phù hợp với "{queryParam}".
               </p>
               <button
                 onClick={() => {
@@ -437,14 +344,14 @@ export default function Home({ onOpenOrderModal }) {
                   background: "#dc2626",
                   color: "#fff",
                   border: "none",
-                  padding: "9px 22px",
-                  borderRadius: "8px",
-                  fontSize: "13.5px",
+                  padding: "8px 18px",
+                  borderRadius: "6px",
+                  fontSize: "13px",
                   fontWeight: 700,
                   cursor: "pointer",
                 }}
               >
-                Xem tất cả thùng sơn
+                Xem tất cả
               </button>
             </div>
           ) : (
@@ -463,103 +370,83 @@ export default function Home({ onOpenOrderModal }) {
         </div>
 
         {/* ======================================================== */}
-        {/* 3. KHỐI CHỨNG CHỈ & TIÊU CHUẨN (ISO 9001, PCCC, JOTUN, KCC) */}
+        {/* 3. CHỨNG NHẬN & ĐỐI TÁC                                   */}
         {/* ======================================================== */}
         <div
           style={{
             background: "rgba(8, 22, 54, 0.85)",
-            border: "1px solid rgba(255, 255, 255, 0.12)",
-            borderRadius: "14px",
-            padding: "28px 24px",
-            marginBottom: "48px",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            borderRadius: "12px",
+            padding: "20px 24px",
+            marginBottom: "36px",
           }}
         >
-          <div style={{ textAlign: "center", marginBottom: "20px" }}>
-            <h3 style={{ fontSize: "18px", fontWeight: 700, color: "#ffffff", margin: "0 0 4px" }}>
-              TIÊU CHUẨN CHẤT LƯỢNG &amp; CHỨNG NHẬN ỦY QUYỀN
+          <div style={{ textAlign: "center", marginBottom: "14px" }}>
+            <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#ffffff", margin: 0 }}>
+              CHỨNG NHẬN &amp; ĐỐI TÁC
             </h3>
-            <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0 }}>
-              Sản phẩm đạt chứng nhận kiểm định chất lượng nghiêm ngặt trước khi xuất xưởng
-            </p>
           </div>
 
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-              gap: "20px",
+              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+              gap: "14px",
               alignItems: "center",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "12px", background: "rgba(2, 10, 28, 0.5)", padding: "12px", borderRadius: "8px" }}>
-              <img src="/assets/iso_9001.png" alt="ISO 9001" style={{ height: "48px", width: "auto", objectFit: "contain" }} />
-              <div>
-                <div style={{ fontSize: "12.5px", fontWeight: 700, color: "#ffffff" }}>ISO 9001:2015</div>
-                <div style={{ fontSize: "11px", color: "#94a3b8" }}>Quản lý chất lượng quốc tế</div>
-              </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", background: "rgba(2, 10, 28, 0.5)", padding: "10px 14px", borderRadius: "8px" }}>
+              <img src="/assets/iso_9001.png" alt="ISO 9001" style={{ height: "40px", width: "auto", objectFit: "contain" }} />
+              <span style={{ fontSize: "13px", fontWeight: 700, color: "#ffffff" }}>ISO 9001:2015</span>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "12px", background: "rgba(2, 10, 28, 0.5)", padding: "12px", borderRadius: "8px" }}>
-              <img src="/assets/fire_safety.png" alt="PCCC" style={{ height: "48px", width: "auto", objectFit: "contain" }} />
-              <div>
-                <div style={{ fontSize: "12.5px", fontWeight: 700, color: "#ffffff" }}>CỤC CẢNH SÁT PCCC</div>
-                <div style={{ fontSize: "11px", color: "#94a3b8" }}>Kiểm định chống cháy 120P</div>
-              </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", background: "rgba(2, 10, 28, 0.5)", padding: "10px 14px", borderRadius: "8px" }}>
+              <img src="/assets/fire_safety.png" alt="PCCC" style={{ height: "40px", width: "auto", objectFit: "contain" }} />
+              <span style={{ fontSize: "13px", fontWeight: 700, color: "#ffffff" }}>Kiểm Định PCCC</span>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "12px", background: "rgba(2, 10, 28, 0.5)", padding: "12px", borderRadius: "8px" }}>
-              <img src="/assets/kcc_auth.png" alt="KCC" style={{ height: "48px", width: "auto", objectFit: "contain" }} />
-              <div>
-                <div style={{ fontSize: "12.5px", fontWeight: 700, color: "#ffffff" }}>KCC KOREA</div>
-                <div style={{ fontSize: "11px", color: "#94a3b8" }}>Chứng nhận phân phối chính thức</div>
-              </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", background: "rgba(2, 10, 28, 0.5)", padding: "10px 14px", borderRadius: "8px" }}>
+              <img src="/assets/kcc_auth.png" alt="KCC" style={{ height: "40px", width: "auto", objectFit: "contain" }} />
+              <span style={{ fontSize: "13px", fontWeight: 700, color: "#ffffff" }}>KCC KOREA</span>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "12px", background: "rgba(2, 10, 28, 0.5)", padding: "12px", borderRadius: "8px" }}>
-              <img src="/assets/jotun_auth.png" alt="Jotun" style={{ height: "48px", width: "auto", objectFit: "contain" }} />
-              <div>
-                <div style={{ fontSize: "12.5px", fontWeight: 700, color: "#ffffff" }}>JOTUN PAINTS</div>
-                <div style={{ fontSize: "11px", color: "#94a3b8" }}>Đối tác phân phối công nghiệp</div>
-              </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", background: "rgba(2, 10, 28, 0.5)", padding: "10px 14px", borderRadius: "8px" }}>
+              <img src="/assets/jotun_auth.png" alt="Jotun" style={{ height: "40px", width: "auto", objectFit: "contain" }} />
+              <span style={{ fontSize: "13px", fontWeight: 700, color: "#ffffff" }}>JOTUN PAINTS</span>
             </div>
           </div>
         </div>
 
         {/* ======================================================== */}
-        {/* 4. KHỐI DỰ ÁN THỰC TẾ TIÊU BIỂU (SOCIAL PROOF)            */}
+        {/* 4. DỰ ÁN TIÊU BIỂU                                        */}
         {/* ======================================================== */}
-        <div style={{ marginBottom: "48px" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
-            <div>
-              <h3 style={{ fontSize: "20px", fontWeight: 800, color: "#ffffff", margin: "0 0 4px" }}>
-                CÔNG TRÌNH THỰC TẾ ĐÃ NGHIỆM THU
-              </h3>
-              <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0 }}>
-                Hơn 850+ nhà máy, xưởng chế biến và sân thể thao trên toàn quốc tin dùng sơn FUJINANO
-              </p>
-            </div>
+        <div style={{ marginBottom: "36px" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
+            <h3 style={{ fontSize: "17px", fontWeight: 700, color: "#ffffff", margin: 0 }}>
+              Dự Án Tiêu Biểu
+            </h3>
             <Link
               to="/du-an"
               style={{
                 color: "#38bdf8",
-                fontSize: "13px",
-                fontWeight: 700,
+                fontSize: "12.5px",
+                fontWeight: 600,
                 textDecoration: "none",
                 display: "flex",
                 alignItems: "center",
                 gap: "4px",
               }}
             >
-              <span>Xem Tất Cả Dự Án</span>
-              <ArrowRight size={14} />
+              <span>Xem Tất Cả</span>
+              <ArrowRight size={13} />
             </Link>
           </div>
 
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-              gap: "20px",
+              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+              gap: "16px",
             }}
           >
             {featuredProjects.map((p) => (
@@ -569,28 +456,28 @@ export default function Home({ onOpenOrderModal }) {
                 style={{
                   background: "rgba(8, 22, 54, 0.88)",
                   border: "1px solid rgba(255, 255, 255, 0.12)",
-                  borderRadius: "12px",
+                  borderRadius: "10px",
                   overflow: "hidden",
                   textDecoration: "none",
                   color: "inherit",
                   display: "block",
                   transition: "transform 0.2s ease",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-4px)")}
+                onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-3px)")}
                 onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
               >
-                <div style={{ height: "180px", width: "100%", background: "#030c22", overflow: "hidden" }}>
+                <div style={{ height: "160px", width: "100%", background: "#030c22", overflow: "hidden" }}>
                   <img src={p.img} alt={p.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
-                <div style={{ padding: "16px" }}>
-                  <div style={{ fontSize: "11.5px", color: "#38bdf8", fontWeight: 700, marginBottom: "4px" }}>
+                <div style={{ padding: "14px" }}>
+                  <div style={{ fontSize: "11px", color: "#38bdf8", fontWeight: 600, marginBottom: "2px" }}>
                     {p.client}
                   </div>
-                  <h4 style={{ fontSize: "15px", fontWeight: 700, color: "#ffffff", margin: "0 0 6px" }}>
+                  <h4 style={{ fontSize: "14px", fontWeight: 700, color: "#ffffff", margin: "0 0 4px" }}>
                     {p.title}
                   </h4>
                   <div style={{ fontSize: "12px", color: "#94a3b8" }}>
-                    Hệ sơn: <strong style={{ color: "#cbd5e1" }}>{p.service}</strong> {p.area ? `• Diện tích: ${p.area}` : ""}
+                    {p.service} {p.area ? `• ${p.area}` : ""}
                   </div>
                 </div>
               </Link>
@@ -599,57 +486,34 @@ export default function Home({ onOpenOrderModal }) {
         </div>
 
         {/* ======================================================== */}
-        {/* 5. DẢI CAM KẾT CHẤT LƯỢNG (4 TIÊU CHÍ)                     */}
+        {/* 5. CAM KẾT CHẤT LƯỢNG (GỌN GÀNG)                         */}
         {/* ======================================================== */}
         <div
           style={{
-            background: "rgba(8, 22, 54, 0.88)",
-            borderRadius: "12px",
-            padding: "20px 24px",
-            border: "1px solid rgba(255, 255, 255, 0.12)",
+            background: "rgba(8, 22, 54, 0.85)",
+            borderRadius: "10px",
+            padding: "16px 20px",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-            gap: "20px",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+            gap: "16px",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "rgba(16, 185, 129, 0.15)", display: "flex", alignItems: "center", justifyContent: "center", color: "#34d399", flexShrink: 0 }}>
-              <ShieldCheck size={20} />
-            </div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: "13px", color: "#ffffff" }}>100% Sơn Chính Hãng</div>
-              <div style={{ fontSize: "11.5px", color: "#94a3b8" }}>Đầy đủ chứng chỉ CO/CQ, xuất hóa đơn VAT</div>
-            </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <ShieldCheck size={20} color="#34d399" />
+            <span style={{ fontWeight: 600, fontSize: "13px", color: "#ffffff" }}>100% Chính Hãng (CO/CQ)</span>
           </div>
-
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "rgba(14, 165, 233, 0.15)", display: "flex", alignItems: "center", justifyContent: "center", color: "#38bdf8", flexShrink: 0 }}>
-              <Truck size={20} />
-            </div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: "13px", color: "#ffffff" }}>Giao Tận Chân Công Trình</div>
-              <div style={{ fontSize: "11.5px", color: "#94a3b8" }}>Đội xe giao nhanh Cần Thơ, TP.HCM &amp; gửi chành xe</div>
-            </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <Truck size={20} color="#38bdf8" />
+            <span style={{ fontWeight: 600, fontSize: "13px", color: "#ffffff" }}>Giao Tận Chân Công Trình</span>
           </div>
-
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "rgba(245, 158, 11, 0.15)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fbbf24", flexShrink: 0 }}>
-              <RotateCcw size={20} />
-            </div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: "13px", color: "#ffffff" }}>Đổi Trả Trong 7 Ngày</div>
-              <div style={{ fontSize: "11.5px", color: "#94a3b8" }}>Hỗ trợ đổi trả nếu phát sinh lỗi bao bì hoặc sai màu</div>
-            </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <RotateCcw size={20} color="#fbbf24" />
+            <span style={{ fontWeight: 600, fontSize: "13px", color: "#ffffff" }}>Đổi Trả Trong 7 Ngày</span>
           </div>
-
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "rgba(239, 68, 68, 0.15)", display: "flex", alignItems: "center", justifyContent: "center", color: "#f87171", flexShrink: 0 }}>
-              <Headphones size={20} />
-            </div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: "13px", color: "#ffffff" }}>Kỹ Sư Tư Vấn 24/7</div>
-              <div style={{ fontSize: "11.5px", color: "#94a3b8" }}>Hỗ trợ tính định mức m² &amp; khảo sát miễn phí</div>
-            </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <Headphones size={20} color="#f87171" />
+            <span style={{ fontWeight: 600, fontSize: "13px", color: "#ffffff" }}>Kỹ Sư Tư Vấn 24/7</span>
           </div>
         </div>
       </div>
@@ -673,12 +537,12 @@ export default function Home({ onOpenOrderModal }) {
             color: "#ffffff",
             border: "none",
             borderRadius: "30px",
-            padding: "11px 18px",
+            padding: "10px 18px",
             fontWeight: 700,
             fontSize: "13px",
             display: "flex",
             alignItems: "center",
-            gap: "7px",
+            gap: "6px",
             cursor: "pointer",
             boxShadow: "0 4px 14px rgba(0, 0, 0, 0.4)",
             transition: "transform 0.15s ease",
@@ -686,7 +550,7 @@ export default function Home({ onOpenOrderModal }) {
           onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.04)")}
           onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
         >
-          <FileText size={16} />
+          <FileText size={15} />
           <span>Báo Giá Nhanh</span>
         </button>
 
@@ -697,12 +561,12 @@ export default function Home({ onOpenOrderModal }) {
             color: "#ffffff",
             border: "1px solid rgba(255, 255, 255, 0.25)",
             borderRadius: "30px",
-            padding: "11px 18px",
+            padding: "10px 18px",
             fontWeight: 700,
             fontSize: "13px",
             display: "flex",
             alignItems: "center",
-            gap: "7px",
+            gap: "6px",
             textDecoration: "none",
             boxShadow: "0 4px 14px rgba(0, 0, 0, 0.4)",
             transition: "transform 0.15s ease",
@@ -710,7 +574,7 @@ export default function Home({ onOpenOrderModal }) {
           onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.04)")}
           onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
         >
-          <Phone size={16} color="#22c55e" />
+          <Phone size={15} color="#22c55e" />
           <span>0947.707.616</span>
         </a>
       </div>

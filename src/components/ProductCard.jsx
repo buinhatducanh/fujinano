@@ -56,30 +56,6 @@ export default function ProductCard({ product, onOpenOrder }) {
             onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
           />
 
-          {/* Genuine / Mall Badge */}
-          {product.isMall && (
-            <div
-              style={{
-                position: "absolute",
-                top: "8px",
-                left: "8px",
-                background: "#dc2626",
-                color: "#ffffff",
-                fontSize: "10px",
-                fontWeight: 700,
-                padding: "2px 7px",
-                borderRadius: "4px",
-                display: "flex",
-                alignItems: "center",
-                gap: "3px",
-                zIndex: 2,
-                letterSpacing: "0.3px",
-              }}
-            >
-              CHÍNH HÃNG
-            </div>
-          )}
-
           {/* Discount Tag */}
           {product.discount > 0 && (
             <div
@@ -87,11 +63,11 @@ export default function ProductCard({ product, onOpenOrder }) {
                 position: "absolute",
                 top: "8px",
                 right: "8px",
-                background: "#fef08a",
-                color: "#854d0e",
+                background: "#dc2626",
+                color: "#ffffff",
                 padding: "2px 6px",
                 fontSize: "11px",
-                fontWeight: 800,
+                fontWeight: 700,
                 borderRadius: "4px",
                 zIndex: 2,
               }}
@@ -99,41 +75,18 @@ export default function ProductCard({ product, onOpenOrder }) {
               -{product.discount}%
             </div>
           )}
-
-          {/* Free Shipping Tag */}
-          <div
-            style={{
-              position: "absolute",
-              bottom: "8px",
-              left: "8px",
-              background: "rgba(13, 148, 136, 0.95)",
-              color: "#fff",
-              fontSize: "10px",
-              fontWeight: 600,
-              padding: "2px 6px",
-              borderRadius: "3px",
-              zIndex: 2,
-            }}
-          >
-            Freeship Xtra
-          </div>
         </div>
 
         {/* Content Box */}
-        <div style={{ padding: "12px 14px 10px" }}>
-          {/* Category Tag */}
-          <div style={{ fontSize: "11px", color: "#38bdf8", fontWeight: 600, marginBottom: "4px", textTransform: "uppercase" }}>
-            {product.categoryName || "Thùng Sơn Công Nghiệp"}
-          </div>
-
-          {/* Title */}
+        <div style={{ padding: "14px 14px 10px" }}>
+          {/* Title - Short & Clean */}
           <h3
             style={{
-              fontSize: "13.5px",
-              fontWeight: 600,
+              fontSize: "14px",
+              fontWeight: 700,
               color: "#ffffff",
-              margin: "0 0 6px",
-              lineHeight: 1.4,
+              margin: "0 0 8px",
+              lineHeight: 1.35,
               height: "38px",
               display: "-webkit-box",
               WebkitLineClamp: 2,
@@ -141,74 +94,36 @@ export default function ProductCard({ product, onOpenOrder }) {
               overflow: "hidden",
             }}
           >
-            {product.name}
+            {product.shortName || product.name}
           </h3>
 
-          {/* Quality & Spec Badge */}
-          <div style={{ display: "flex", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
-            <span
-              style={{
-                background: "rgba(255, 255, 255, 0.08)",
-                color: "#cbd5e1",
-                fontSize: "10.5px",
-                padding: "2px 6px",
-                borderRadius: "3px",
-                fontWeight: 500,
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-              }}
-            >
-              CO/CQ Đầy Đủ
-            </span>
-            <span
-              style={{
-                background: "rgba(16, 185, 129, 0.15)",
-                color: "#34d399",
-                fontSize: "10.5px",
-                padding: "2px 6px",
-                borderRadius: "3px",
-                fontWeight: 600,
-                border: "1px solid rgba(16, 185, 129, 0.25)",
-              }}
-            >
-              Giá Tận Xưởng
-            </span>
-          </div>
-
           {/* Price */}
-          <div style={{ display: "flex", alignItems: "baseline", gap: "8px", marginBottom: "8px", flexWrap: "wrap" }}>
-            <span style={{ fontSize: "17px", fontWeight: 800, color: "#ff4d4f" }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "8px", marginBottom: "8px" }}>
+            <span style={{ fontSize: "17px", fontWeight: 800, color: "#f87171" }}>
               ₫{product.price.toLocaleString("vi-VN")}
             </span>
             {product.originalPrice && (
-              <span style={{ fontSize: "11.5px", color: "#94a3b8", textDecoration: "line-through" }}>
+              <span style={{ fontSize: "12px", color: "#94a3b8", textDecoration: "line-through" }}>
                 ₫{product.originalPrice.toLocaleString("vi-VN")}
               </span>
             )}
           </div>
 
-          {/* Rating, Sold, Location */}
+          {/* Rating & Sold */}
           <div
             style={{
               display: "flex",
-              justifyContent: "space-between",
               alignItems: "center",
-              fontSize: "11px",
+              fontSize: "11.5px",
               color: "#94a3b8",
               marginBottom: "8px",
-              paddingBottom: "8px",
-              borderBottom: "1px dashed rgba(255, 255, 255, 0.1)",
+              gap: "4px",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
-              <Star size={11} fill="#f59e0b" color="#f59e0b" />
-              <span style={{ fontWeight: 700, color: "#ffffff" }}>{product.rating}</span>
-              <span style={{ margin: "0 2px" }}>•</span>
-              <span>Đã bán {product.soldCount}</span>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "2px" }}>
-              <MapPin size={10} color="#94a3b8" />
-              <span>{product.location || "Cần Thơ"}</span>
-            </div>
+            <Star size={12} fill="#f59e0b" color="#f59e0b" />
+            <span style={{ fontWeight: 700, color: "#ffffff" }}>{product.rating}</span>
+            <span style={{ margin: "0 2px" }}>•</span>
+            <span>Đã bán {product.soldCount}</span>
           </div>
         </div>
       </Link>
