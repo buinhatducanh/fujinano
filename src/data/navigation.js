@@ -1,53 +1,67 @@
-export const servicesSubMenu = [
+// Menu tinh gọn chuẩn Product Owner (PO) cho doanh nghiệp SME / Startup
+// Tập trung 100% vào: Sản Phẩm -> Báo Giá Chiết Khấu -> Dự Án Chứng Thực -> 2 Cách Bán Hàng
+
+export const productSubMenu = [
   {
-    title: "Sơn Epoxy Nhà Xưởng",
-    desc: "Hệ lăn & tự phẳng chuẩn công nghiệp",
+    title: "Sơn Sàn Epoxy 18L",
+    desc: "Tự phẳng & hệ lăn chịu tải 30 tấn",
     icon: "Layers",
-    href: "/#services",
+    href: "/#products",
+    badge: "Bán chạy",
     color: "#3b82f6",
   },
   {
-    title: "Sơn Sân Thể Thao",
-    desc: "Sân tennis, cầu lông, bóng rổ đạt chuẩn",
-    icon: "Award",
-    href: "/#services",
-    color: "#10b981",
-  },
-  {
-    title: "Sơn Giao Thông & Kẻ Vạch",
-    desc: "Sơn phản quang, dẻo nhiệt, phân làn",
-    icon: "Construction",
-    href: "/#services",
-    color: "#f59e0b",
-  },
-  {
-    title: "Sơn Chống Cháy & Chuyên Dụng",
-    desc: "Bảo vệ kết cấu thép, PCCC, chống ăn mòn",
-    icon: "ShieldCheck",
-    href: "/#services",
-    color: "#ef4444",
-  },
-  {
-    title: "Sơn Chống Thấm",
-    desc: "Bảo vệ tầng hầm, sân thượng, hồ bơi",
+    title: "Sơn Chống Thấm PU 18L",
+    desc: "Độ dẻo 600%, sân thượng mái sàn",
     icon: "Droplets",
-    href: "/#services",
+    href: "/#products",
+    badge: "Hot",
     color: "#0ea5e9",
   },
   {
-    title: "Mài Sàn & Đánh Bóng Bê Tông",
-    desc: "Tăng cứng, mài mịn sàn bê tông công nghiệp",
+    title: "Sơn Chống Cháy Thép 20KG",
+    desc: "Đạt chuẩn Cục PCCC chịu lửa 120P",
+    icon: "ShieldCheck",
+    href: "/#products",
+    badge: "PCCC",
+    color: "#ef4444",
+  },
+  {
+    title: "Sơn Sân Thể Thao 18L",
+    desc: "Chuẩn ITF sân tennis & pickleball",
+    icon: "Award",
+    href: "/#products",
+    color: "#10b981",
+  },
+  {
+    title: "Sơn Kẻ Vạch Giao Thông 20KG",
+    desc: "Nhiệt dẻo phản quang khô 2 phút",
+    icon: "Construction",
+    href: "/#products",
+    color: "#f59e0b",
+  },
+  {
+    title: "Sơn Lót & Tăng Cứng Mài Sàn",
+    desc: "Kháng kiềm Nano & Liquid Hardener",
     icon: "Paintbrush",
-    href: "/#services",
+    href: "/#products",
     color: "#8b5cf6",
   },
 ];
 
 export const navItems = [
-  { label: "Trang Chủ", href: "/" },
-  { label: "Thùng Sơn Bán Chạy", href: "/" },
-  { label: "Dịch Vụ Thi Công", href: "/#services", sub: servicesSubMenu },
-  { label: "Dự Án", href: "/#portfolio" },
-  { label: "Video", href: "/video" },
-  { label: "Tin Tức", href: "/tin-tuc" },
+  {
+    label: "Sản Phẩm",
+    href: "/#products",
+    sub: productSubMenu,
+  },
+  {
+    label: "Bảng Giá & Chiết Khấu",
+    href: "#quote",
+    isActionModal: true,
+  },
+  {
+    label: "Dự Án Thực Tế",
+    href: "/#projects",
+  },
 ];

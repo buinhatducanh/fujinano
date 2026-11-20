@@ -1,153 +1,62 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Logo from "./Logo";
-import {
-  MapPin,
-  Clock,
-  Phone,
-  MessageCircle,
-  Menu,
-  X,
-  ChevronDown,
-  Sparkles,
-  Layers,
-  Award,
-  Construction,
-  ShieldCheck,
-  Droplets,
-  Paintbrush,
-  FileText
-} from "lucide-react";
-import { navItems } from "../data/navigation";
-
-const iconMap = {
-  Layers: Layers,
-  Award: Award,
-  Construction: Construction,
-  ShieldCheck: ShieldCheck,
-  Droplets: Droplets,
-  Paintbrush: Paintbrush,
-};
+import { Search, Phone, FileText, X } from "lucide-react";
 
 export default function Navbar({ onOpenOrderModal }) {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const currentQuery = searchParams.get("q") || "";
+  const [keyword, setKeyword] = useState(currentQuery);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    setKeyword(currentQuery);
+  }, [currentQuery]);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (keyword.trim()) {
+      navigate(`/?q=${encodeURIComponent(keyword.trim())}`);
+    } else {
+      navigate("/");
+    }
+  };
+
+  const handleClear = () => {
+    setKeyword("");
+    navigate("/");
+  };
 
   return (
     <>
-      {/* Top Info Bar */}
-      <div
-        className="top-info-bar"
+      <header
         style={{
           position: "fixed",
           top: 0,
           left: 0,
           right: 0,
           zIndex: 1000,
-          height: scrolled ? "0px" : "36px",
-          overflow: "hidden",
-          background: "linear-gradient(90deg, #010A1C, #131b2e, #010A1C)",
-          borderBottom: "1px solid rgba(255,255,255,0.04)",
-          transition: "height 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          background: "rgba(0, 18, 55, 0.96)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          borderBottom: "1px solid rgba(255, 255, 255, 0.12)",
+          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.35)",
         }}
       >
         <div
           style={{
-            maxWidth: "1400px",
-            width: "100%",
-            padding: "0 32px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            fontSize: "11.5px",
-            fontFamily: "'DM Sans', sans-serif",
-            color: "rgba(255,255,255,0.5)",
-          }}
-        >
-          <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
-            <span style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-              <MapPin size={10} /> 45 Màu Thân, P. Cái Khế, TP. Cần Thơ
-            </span>
-            <span style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-              <Clock size={10} /> T2 - T7: 7:30 - 17:30
-            </span>
-          </div>
-
-          <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-            <a
-              href="mailto:info@fujinano.vn"
-              style={{
-                color: "rgba(255,255,255,0.5)",
-                textDecoration: "none",
-                transition: "color 0.2s",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.5)")}
-            >
-              info@fujinano.vn
-            </a>
-            <a
-              href="tel:0947707616"
-              style={{
-                color: "#ff4455",
-                textDecoration: "none",
-                fontWeight: 600,
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-              }}
-            >
-              <Phone size={10} /> 0947.707.616
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Navbar */}
-      <nav
-        className="main-navbar"
-        style={{
-          position: "fixed",
-          top: scrolled ? 0 : "36px",
-          left: 0,
-          right: 0,
-          zIndex: 999,
-          height: "72px",
-          transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
-          background: "rgba(0, 18, 55, 0.95)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
-          boxShadow: scrolled ? "0 4px 20px rgba(0,0,0,0.5)" : "none",
-        }}
-      >
-        <div
-          style={{
-            position: "relative",
-            zIndex: 2,
-            maxWidth: "1400px",
+            maxWidth: "1320px",
             margin: "0 auto",
-            padding: "0 24px",
-            height: "100%",
+            padding: "10px 20px",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            gap: "16px",
           }}
         >
-          {/* Logo */}
+          {/* 1. Logo Thương Hiệu */}
           <Link
             to="/"
-            className="nav-logo-wrap"
             style={{
               display: "flex",
               alignItems: "center",
@@ -158,415 +67,157 @@ export default function Navbar({ onOpenOrderModal }) {
             <Logo size="sm" dark={false} />
           </Link>
 
-          {/* Desktop Nav Items */}
-          <div
-            style={{ display: "flex", alignItems: "center", gap: "6px" }}
-            className="desk-nav"
+          {/* 2. Ô Tìm Kiếm Tập Trung (Shopee Style) */}
+          <form
+            onSubmit={handleSearchSubmit}
+            className="header-search-form"
+            style={{
+              flex: "1 1 520px",
+              maxWidth: "600px",
+              display: "flex",
+              alignItems: "center",
+              background: "#ffffff",
+              borderRadius: "8px",
+              padding: "3px 4px 3px 12px",
+              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.2)",
+            }}
           >
-            {navItems.map((item) =>
-              item.sub ? (
-                <div
-                  key={item.label}
-                  style={{ position: "relative" }}
-                  onMouseEnter={() => setServicesDropdownOpen(true)}
-                  onMouseLeave={() => setServicesDropdownOpen(false)}
-                >
-                  <a
-                    href={item.href}
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "5px",
-                      padding: "8px 14px",
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: "14px",
-                      fontWeight: 600,
-                      color: servicesDropdownOpen ? "#ff4d4f" : "#ffffff",
-                      textDecoration: "none",
-                      borderRadius: "6px",
-                      transition: "color 0.2s",
-                    }}
-                  >
-                    <span>{item.label}</span>
-                    <ChevronDown
-                      size={13}
-                      style={{
-                        transform: servicesDropdownOpen ? "rotate(180deg)" : "none",
-                        transition: "transform 0.2s",
-                      }}
-                    />
-                  </a>
-
-                  {/* Dropdown */}
-                  {servicesDropdownOpen && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "100%",
-                        left: "-80px",
-                        paddingTop: "6px",
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: "360px",
-                          background: "#081534",
-                          border: "1px solid rgba(255, 255, 255, 0.15)",
-                          borderRadius: "12px",
-                          padding: "8px",
-                          boxShadow: "0 16px 36px rgba(0,0,0,0.5)",
-                        }}
-                      >
-                        {item.sub.map((subItem) => {
-                          const IconComp = iconMap[subItem.icon] || Layers;
-                          return (
-                            <a
-                              key={subItem.title}
-                              href={subItem.href}
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "12px",
-                                padding: "10px 12px",
-                                textDecoration: "none",
-                                borderRadius: "8px",
-                                transition: "background 0.15s ease",
-                              }}
-                              onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.08)")}
-                              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-                            >
-                              <div
-                                style={{
-                                  width: "34px",
-                                  height: "34px",
-                                  borderRadius: "8px",
-                                  background: "rgba(255, 255, 255, 0.08)",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  flexShrink: 0,
-                                }}
-                              >
-                                <IconComp size={16} color="#38bdf8" />
-                              </div>
-                              <div>
-                                <div style={{ fontSize: "13.5px", fontWeight: 600, color: "#ffffff" }}>
-                                  {subItem.title}
-                                </div>
-                                <div style={{ fontSize: "11px", color: "#94a3b8" }}>
-                                  {subItem.desc}
-                                </div>
-                              </div>
-                            </a>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    padding: "8px 14px",
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: "14px",
-                    fontWeight: 600,
-                    color: "#ffffff",
-                    textDecoration: "none",
-                    borderRadius: "6px",
-                    transition: "color 0.2s",
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#ff4d4f")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#ffffff")}
-                >
-                  <span>{item.label}</span>
-                </a>
-              )
+            <Search size={17} color="#64748b" style={{ flexShrink: 0 }} />
+            <input
+              type="text"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              placeholder="Tìm kiếm thùng sơn (Epoxy, Chống thấm, Chống cháy, Sân tennis...)"
+              style={{
+                flex: 1,
+                border: "none",
+                outline: "none",
+                padding: "8px 10px",
+                fontSize: "13.5px",
+                color: "#0f172a",
+                background: "transparent",
+                minWidth: 0,
+              }}
+            />
+            {keyword && (
+              <button
+                type="button"
+                onClick={handleClear}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "#94a3b8",
+                  padding: "4px 8px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <X size={15} />
+              </button>
             )}
-          </div>
+            <button
+              type="submit"
+              style={{
+                background: "#dc2626",
+                color: "#ffffff",
+                border: "none",
+                borderRadius: "6px",
+                padding: "8px 18px",
+                fontSize: "13px",
+                fontWeight: 700,
+                cursor: "pointer",
+                whiteSpace: "nowrap",
+                transition: "background 0.15s ease",
+                flexShrink: 0,
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "#b91c1c")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "#dc2626")}
+            >
+              Tìm Kiếm
+            </button>
+          </form>
 
-          {/* Desktop Right CTA Buttons */}
+          {/* 3. Đúng 2 Phương Thức Bán Hàng Cốt Lõi */}
           <div
-            style={{ display: "flex", gap: "10px", alignItems: "center" }}
-            className="desk-nav"
+            className="header-actions"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              flexShrink: 0,
+            }}
           >
-            {/* Phương thức 1: Đặt mua / Báo giá */}
+            {/* Phương thức 1: Để lại SĐT / Nhận Báo Giá */}
             <button
               onClick={() => onOpenOrderModal && onOpenOrderModal(null)}
               style={{
                 display: "flex",
                 alignItems: "center",
                 gap: "6px",
-                padding: "8px 16px",
+                padding: "9px 16px",
                 borderRadius: "8px",
                 background: "#dc2626",
                 color: "#ffffff",
                 cursor: "pointer",
-                fontFamily: "'DM Sans', sans-serif",
                 fontSize: "13px",
                 fontWeight: 700,
                 border: "none",
-                transition: "background 0.2s",
+                boxShadow: "0 2px 8px rgba(220, 38, 38, 0.35)",
+                whiteSpace: "nowrap",
+                transition: "background 0.15s ease",
               }}
               onMouseEnter={(e) => (e.currentTarget.style.background = "#b91c1c")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "#dc2626")}
             >
-              <FileText size={14} />
-              <span>Báo Giá / Đặt Mua</span>
+              <FileText size={15} />
+              <span>Báo Giá Nhanh</span>
             </button>
 
-            <a
-              href="https://zalo.me/0947707616"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-                padding: "7px 14px",
-                borderRadius: "8px",
-                background: "rgba(255, 255, 255, 0.08)",
-                color: "#ffffff",
-                textDecoration: "none",
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: "13px",
-                fontWeight: 600,
-                border: "1px solid rgba(255, 255, 255, 0.15)",
-              }}
-            >
-              <MessageCircle size={14} color="#38bdf8" />
-              Zalo
-            </a>
-
-            {/* Phương thức 2: Gọi hotline */}
+            {/* Phương thức 2: Hotline Trực Tiếp */}
             <a
               href="tel:0947707616"
               style={{
                 display: "flex",
                 alignItems: "center",
                 gap: "6px",
-                padding: "8px 16px",
-                background: "#030c22",
+                padding: "8px 14px",
+                background: "rgba(8, 22, 54, 0.9)",
                 color: "#ffffff",
                 borderRadius: "8px",
-                border: "1px solid rgba(255, 255, 255, 0.25)",
+                border: "1px solid rgba(255, 255, 255, 0.22)",
                 textDecoration: "none",
-                fontFamily: "'DM Sans', sans-serif",
                 fontSize: "13px",
                 fontWeight: 700,
                 whiteSpace: "nowrap",
-                transition: "background 0.2s",
+                transition: "border-color 0.15s ease",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "#0f172a")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "#030c22")}
+              onMouseEnter={(e) => (e.currentTarget.style.borderColor = "rgba(34, 197, 94, 0.7)")}
+              onMouseLeave={(e) => (e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.22)")}
             >
-              <Phone size={13} color="#22c55e" />
+              <Phone size={14} color="#22c55e" />
               <span>0947.707.616</span>
             </a>
           </div>
-
-          {/* Mobile Toggle Button */}
-          <button
-            className="mob-toggle"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            style={{
-              display: "none",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              color: "#ffffff",
-              padding: "6px",
-            }}
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
         </div>
+      </header>
 
-        {/* Mobile Slide Drawer */}
-        {mobileMenuOpen && (
-          <div
-            style={{
-              position: "absolute",
-              top: "100%",
-              left: 0,
-              right: 0,
-              background: "#081534",
-              borderBottom: "1px solid rgba(255, 255, 255, 0.15)",
-              boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
-              padding: "16px 24px 28px",
-              display: "flex",
-              flexDirection: "column",
-              gap: "6px",
-              maxHeight: "80vh",
-              overflowY: "auto",
-            }}
-          >
-            {navItems.map((item) => (
-              <div key={item.label}>
-                <a
-                  href={item.href}
-                  onClick={() => !item.sub && setMobileMenuOpen(false)}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    padding: "12px 0",
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: "15px",
-                    fontWeight: 600,
-                    color: "#ffffff",
-                    textDecoration: "none",
-                    borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
-                  }}
-                >
-                  {item.label}
-                </a>
-                {item.sub && (
-                  <div style={{ paddingLeft: "12px", marginBottom: "8px" }}>
-                    {item.sub.map((subItem) => (
-                      <a
-                        key={subItem.title}
-                        href={subItem.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        style={{
-                          display: "block",
-                          padding: "8px 0",
-                          fontSize: "13px",
-                          color: "#94a3b8",
-                          textDecoration: "none",
-                        }}
-                      >
-                        • {subItem.title}
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "16px" }}>
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenOrderModal && onOpenOrderModal(null);
-                }}
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  justifyContent: "center",
-                  padding: "12px",
-                  background: "#dc2626",
-                  color: "#fff",
-                  borderRadius: "8px",
-                  border: "none",
-                  fontWeight: 700,
-                  fontSize: "14px",
-                  cursor: "pointer",
-                }}
-              >
-                <FileText size={16} />
-                <span>Đặt Mua / Báo Giá Nhanh</span>
-              </button>
-
-              <a
-                href="tel:0947707616"
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  justifyContent: "center",
-                  padding: "12px",
-                  background: "#030c22",
-                  border: "1px solid rgba(255, 255, 255, 0.25)",
-                  color: "#fff",
-                  borderRadius: "8px",
-                  textDecoration: "none",
-                  fontWeight: 700,
-                  fontSize: "14px",
-                }}
-              >
-                <Phone size={16} color="#22c55e" />
-                <span>Gọi Hotline: 0947.707.616</span>
-              </a>
-            </div>
-          </div>
-        )}
-      </nav>
-
-      {/* Embedded Component Styles */}
+      {/* Responsive Styles */}
       <style>{`
-        @keyframes gradientSlide {
-          0% { transform: translateX(-50%); }
-          100% { transform: translateX(0%); }
-        }
-
-        @keyframes dropReveal {
-          from { opacity: 0; transform: translateY(-12px) scale(0.96); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        @keyframes mobileSlide {
-          from { opacity: 0; transform: translateY(-10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-
-        .nav-link-3d:hover {
-          background: rgba(255,255,255,0.06) !important;
-          transform: translateY(-1px);
-          text-shadow: 0 0 20px rgba(255,255,255,0.2);
-        }
-
-        .cta-pill-3d:hover {
-          background: rgba(255,255,255,0.1) !important;
-          border-color: rgba(255,255,255,0.25) !important;
-          transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        }
-
-        .hotline-3d {
-          animation: hotlinePulse 2.5s infinite;
-        }
-
-        .hotline-3d:hover {
-          transform: translateY(-3px) scale(1.03) !important;
-          box-shadow: 0 12px 30px rgba(230,0,18,0.5) !important;
-          animation: none !important;
-        }
-
-        @keyframes hotlinePulse {
-          0%, 100% { box-shadow: 0 4px 20px rgba(230,0,18,0.3), 0 0 0 0px rgba(230,0,18,0.3); }
-          50% { box-shadow: 0 4px 20px rgba(230,0,18,0.3), 0 0 0 8px rgba(230,0,18,0); }
-        }
-
-        .hotline-shine {
-          position: absolute;
-          top: -50%;
-          left: -100%;
-          width: 50%;
-          height: 200%;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-          transform: rotate(30deg);
-          animation: shineMove 3.5s infinite;
-        }
-
-        @keyframes shineMove {
-          0% { left: -100%; }
-          30% { left: 150%; }
-          100% { left: 150%; }
-        }
-
-        @media (max-width: 960px) {
-          .desk-nav { display: none !important; }
-          .mob-toggle { display: flex !important; }
-          .top-info-bar { display: none !important; }
-          .main-navbar { top: 0 !important; }
+        @media (max-width: 768px) {
+          .header-search-form {
+            order: 3;
+            flex-basis: 100% !important;
+            max-width: 100% !important;
+            margin-top: 4px;
+          }
+          header > div {
+            flex-wrap: wrap !important;
+            padding: 8px 14px !important;
+          }
+          .header-actions span {
+            display: inline;
+          }
         }
       `}</style>
     </>
