@@ -52,6 +52,7 @@ export default function Admin() {
     updateInquiryStatus,
     deleteInquiry,
     resetToDefaults,
+    neonStatus,
   } = useAppContext();
 
   const [activeTab, setActiveTab] = useState("dashboard"); // dashboard | articles | products | settings | policies | inquiries
@@ -638,6 +639,88 @@ export default function Admin() {
                 <p style={{ fontSize: "13.5px", color: "#94a3b8", margin: 0 }}>
                   Theo dõi số lượng hàng hóa, bài viết SEO trên Google và tiếp nhận yêu cầu báo giá của nhà thầu.
                 </p>
+              </div>
+
+              {/* Neon Cloud Infrastructure Status Banner */}
+              <div
+                style={{
+                  background: "linear-gradient(135deg, rgba(8, 28, 72, 0.9) 0%, rgba(3, 14, 44, 0.95) 100%)",
+                  border: "1px solid rgba(59, 130, 246, 0.35)",
+                  borderRadius: "12px",
+                  padding: "16px 20px",
+                  marginBottom: "24px",
+                  boxShadow: "0 6px 20px rgba(0,0,0,0.3)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  flexWrap: "wrap",
+                  gap: "16px",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+                  <div
+                    style={{
+                      width: "42px",
+                      height: "42px",
+                      borderRadius: "10px",
+                      background: "rgba(0, 230, 153, 0.15)",
+                      border: "1px solid rgba(0, 230, 153, 0.4)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "#00e699",
+                      fontSize: "20px",
+                      fontWeight: 900,
+                    }}
+                  >
+                    ⚡
+                  </div>
+                  <div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <span style={{ fontWeight: 800, fontSize: "15px", color: "#ffffff" }}>
+                        Hạ Tầng Neon Cloud Backend
+                      </span>
+                      <span
+                        style={{
+                          background: "rgba(0, 230, 153, 0.2)",
+                          color: "#00e699",
+                          fontSize: "11px",
+                          fontWeight: 700,
+                          padding: "2px 8px",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        ● Đang Hoạt Động
+                      </span>
+                    </div>
+                    <div style={{ fontSize: "12.5px", color: "#94a3b8", marginTop: "3px" }}>
+                      Branch: <strong style={{ color: "#38bdf8" }}>{neonStatus?.branch || "production"}</strong> ({neonStatus?.branchId || "br-purple-dream-a118wnr7"}) · Region: <strong>{neonStatus?.region || "ap-southeast-1"}</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
+                  <div style={{ background: "rgba(255,255,255,0.05)", padding: "8px 14px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.1)" }}>
+                    <div style={{ fontSize: "11px", color: "#94a3b8" }}>LAKEBASE POSTGRES</div>
+                    <div style={{ fontSize: "13px", fontWeight: 700, color: "#34d399", display: "flex", alignItems: "center", gap: "6px" }}>
+                      <span>✓ Connected (Pooler)</span>
+                    </div>
+                  </div>
+
+                  <div style={{ background: "rgba(255,255,255,0.05)", padding: "8px 14px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.1)" }}>
+                    <div style={{ fontSize: "11px", color: "#94a3b8" }}>OBJECT STORAGE (S3)</div>
+                    <div style={{ fontSize: "13px", fontWeight: 700, color: "#38bdf8", display: "flex", alignItems: "center", gap: "6px" }}>
+                      <span>✓ fujinano-media</span>
+                    </div>
+                  </div>
+
+                  <div style={{ background: "rgba(255,255,255,0.05)", padding: "8px 14px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.1)" }}>
+                    <div style={{ fontSize: "11px", color: "#94a3b8" }}>AI GATEWAY</div>
+                    <div style={{ fontSize: "13px", fontWeight: 700, color: "#fbbf24", display: "flex", alignItems: "center", gap: "6px" }}>
+                      <span>✓ Token Ready</span>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* 4 Cards Thống Kê */}

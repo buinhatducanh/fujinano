@@ -167,6 +167,40 @@ export function AppProvider({ children }) {
     }
   });
 
+  // 6. Trạng Thái Kết Nối Neon Cloud (Postgres, S3, AI Gateway)
+  const [neonStatus, setNeonStatus] = useState(null);
+
+  // Sync from Neon Postgres on load
+  useEffect(() => {
+    fetch("/api/neon/status")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setNeonStatus(data);
+        }
+      })
+      .catch(() => {});
+
+    fetch("/api/neon/inquiries")
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success && res.data && res.data.length > 0) {
+          setInquiries((prev) => {
+            const remoteMap = new Map(res.data.map((item) => [item.id, item]));
+            // Merge with local inquiries
+            const merged = [...res.data];
+            prev.forEach((item) => {
+              if (!remoteMap.has(item.id)) {
+                merged.push(item);
+              }
+            });
+            return merged;
+          });
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   // Sync to localStorage
   useEffect(() => {
     localStorage.setItem("fujinano_products", JSON.stringify(products));
@@ -243,6 +277,14 @@ export function AppProvider({ children }) {
       ...newInquiry,
     };
     setInquiries((prev) => [item, ...prev]);
+
+    // Async push to Neon Postgres
+    fetch("/api/neon/inquiries", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(item),
+    }).catch((err) => console.warn("Failed to save lead to Neon Postgres:", err));
+
     return item;
   };
 
@@ -252,6 +294,13 @@ export function AppProvider({ children }) {
         item.id === id ? { ...item, status, ...(notes !== undefined ? { notes } : {}) } : item
       )
     );
+
+    // Sync status change to Neon Postgres
+    fetch("/api/neon/inquiries", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, status, notes }),
+    }).catch((err) => console.warn("Failed to sync status to Neon Postgres:", err));
   };
 
   const deleteInquiry = (id) => {
@@ -278,6 +327,10 @@ export function AppProvider({ children }) {
         products,
         categories,
         articles,
+        siteSettings,
+        policies,
+        inquiries,
+        neonStatus,
         siteSettings,
         policies,
         inquiries,
