@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Phone, Mail, Clock, ShieldCheck, Send, CheckCircle2 } from "lucide-react";
+import { useAppContext } from "../context/AppContext";
 
 export default function Contact({ onOpenOrderModal }) {
+  const { siteSettings, addInquiry } = useAppContext();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -17,6 +19,15 @@ export default function Contact({ onOpenOrderModal }) {
     if (!formData.name || !formData.phone) {
       alert("Vui lòng điền Họ tên và Số điện thoại");
       return;
+    }
+    if (addInquiry) {
+      addInquiry({
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        topic: formData.topic,
+        notes: formData.message,
+      });
     }
     setSubmitted(true);
   };
@@ -77,7 +88,7 @@ export default function Contact({ onOpenOrderModal }) {
             }}
           >
             <h2 style={{ fontSize: "18px", fontWeight: 700, marginBottom: "20px", color: "#ffffff" }}>
-              CÔNG TY TNHH FUJI NANO VIỆT NAM
+              {siteSettings?.companyName || "CÔNG TY TNHH FUJI NANO VIỆT NAM"}
             </h2>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
@@ -88,7 +99,7 @@ export default function Contact({ onOpenOrderModal }) {
                 <div>
                   <div style={{ fontSize: "12px", color: "#94a3b8", fontWeight: 600 }}>TRỤ SỞ &amp; SHOWROOM TRƯNG BÀY:</div>
                   <div style={{ fontSize: "14px", color: "#ffffff", fontWeight: 600, marginTop: "2px" }}>
-                    Số 45 đường Mậu Thân, Phường Cái Khế, Quận Ninh Kiều, TP. Cần Thơ
+                    {siteSettings?.address || "Số 45 đường Mậu Thân, Phường Cái Khế, Quận Ninh Kiều, TP. Cần Thơ"}
                   </div>
                 </div>
               </div>
@@ -100,7 +111,9 @@ export default function Contact({ onOpenOrderModal }) {
                 <div>
                   <div style={{ fontSize: "12px", color: "#94a3b8", fontWeight: 600 }}>HOTLINE KỸ SƯ 24/7 &amp; ZALO:</div>
                   <div style={{ fontSize: "16px", color: "#22c55e", fontWeight: 800, marginTop: "2px" }}>
-                    <a href="tel:0947707616" style={{ color: "inherit", textDecoration: "none" }}>0947.707.616</a>
+                    <a href={`tel:${siteSettings?.hotlineRaw || "0947707616"}`} style={{ color: "inherit", textDecoration: "none" }}>
+                      {siteSettings?.hotline || "0947.707.616"}
+                    </a>
                   </div>
                 </div>
               </div>
@@ -112,7 +125,9 @@ export default function Contact({ onOpenOrderModal }) {
                 <div>
                   <div style={{ fontSize: "12px", color: "#94a3b8", fontWeight: 600 }}>EMAIL TIẾP NHẬN BÁO GIÁ:</div>
                   <div style={{ fontSize: "14px", color: "#ffffff", marginTop: "2px" }}>
-                    <a href="mailto:info@fujinano.vn" style={{ color: "inherit" }}>info@fujinano.vn</a>
+                    <a href={`mailto:${siteSettings?.email || "info@fujinano.vn"}`} style={{ color: "inherit" }}>
+                      {siteSettings?.email || "info@fujinano.vn"}
+                    </a>
                   </div>
                 </div>
               </div>
@@ -124,14 +139,14 @@ export default function Contact({ onOpenOrderModal }) {
                 <div>
                   <div style={{ fontSize: "12px", color: "#94a3b8", fontWeight: 600 }}>GIỜ MỞ CỬA KHO HÀNG:</div>
                   <div style={{ fontSize: "14px", color: "#ffffff", marginTop: "2px" }}>
-                    Thứ 2 - Thứ 7: 7:30 - 17:30 (Chủ nhật hỗ trợ qua Hotline)
+                    {siteSettings?.workingHours || "Thứ 2 - Thứ 7: 7:30 - 17:30 (Chủ nhật hỗ trợ qua Hotline)"}
                   </div>
                 </div>
               </div>
             </div>
 
             <div style={{ marginTop: "24px", paddingTop: "20px", borderTop: "1px solid rgba(255, 255, 255, 0.1)", fontSize: "13px", color: "#94a3b8" }}>
-              • Mã số thuế: <strong style={{ color: "#ffffff" }}>1801784735</strong><br />
+              • Mã số thuế: <strong style={{ color: "#ffffff" }}>{siteSettings?.taxId || "1801784735"}</strong><br />
               • Đầy đủ hóa đơn GTGT điện tử và chứng chỉ xuất xưởng CO/CQ cho mọi đơn hàng.
             </div>
           </div>
@@ -314,7 +329,7 @@ export default function Contact({ onOpenOrderModal }) {
           <div style={{ width: "100%", height: "380px", borderRadius: "10px", overflow: "hidden" }}>
             <iframe
               title="Bản đồ FUJINANO Cần Thơ"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.84151740994!2d105.7725!3d10.038!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31a0629f6f6e5a61%3A0x6b445a6c4296fb77!2zNDUgTcledSBUaMOibiwgQ8OhaSBLaOG6vywgTmluaCBLaeG7gXUsIEPhuqduIFRoxqEsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s"
+              src={siteSettings?.googleMapsEmbed || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.84151740994!2d105.7725!3d10.038!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31a0629f6f6e5a61%3A0x6b445a6c4296fb77!2zNDUgTcledSBUaMOibiwgQ8OhaSBLaOG6vywgTmluaCBLaeG7gXUsIEPhuqduIFRoxqEsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s"}
               width="100%"
               height="100%"
               style={{ border: 0 }}

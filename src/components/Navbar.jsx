@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Logo from "./Logo";
 import { Phone, FileText, Menu, X, Search, ChevronRight, Building2, Briefcase, Newspaper, MapPin, Layers } from "lucide-react";
+import { useAppContext } from "../context/AppContext";
 
 export default function Navbar({ onOpenOrderModal }) {
+  const { siteSettings } = useAppContext();
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -199,7 +201,7 @@ export default function Navbar({ onOpenOrderModal }) {
 
             {/* Phương thức 2: Hotline Kỹ Sư Trực Tiếp */}
             <a
-              href="tel:0947707616"
+              href={`tel:${siteSettings?.hotlineRaw || "0947707616"}`}
               className="desk-nav"
               style={{
                 display: "flex",
@@ -220,7 +222,7 @@ export default function Navbar({ onOpenOrderModal }) {
               onMouseLeave={(e) => (e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)")}
             >
               <Phone size={14} color="#22c55e" />
-              <span>0947.707.616</span>
+              <span>{siteSettings?.hotline || "0947.707.616"}</span>
             </a>
 
             {/* Mobile Menu Button */}
@@ -342,7 +344,7 @@ export default function Navbar({ onOpenOrderModal }) {
               </button>
 
               <a
-                href="tel:0947707616"
+                href={`tel:${siteSettings?.hotlineRaw || "0947707616"}`}
                 style={{
                   width: "100%",
                   padding: "12px",
@@ -359,7 +361,7 @@ export default function Navbar({ onOpenOrderModal }) {
                   gap: "6px",
                 }}
               >
-                <Phone size={16} color="#22c55e" /> Gọi Hotline: 0947.707.616
+                <Phone size={16} color="#22c55e" /> Gọi Hotline: {siteSettings?.hotline || "0947.707.616"}
               </a>
             </div>
           </div>

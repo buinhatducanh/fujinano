@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Tag } from "lucide-react";
 import { newsArticles } from "../data/news";
+import { useAppContext } from "../context/AppContext";
 
 function NewsCard({ article, index, isVisible }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -156,6 +157,8 @@ function NewsCard({ article, index, isVisible }) {
 }
 
 export default function NewsList() {
+  const { articles } = useAppContext();
+  const listToRender = articles && articles.length > 0 ? articles : newsArticles;
   const sectionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -247,9 +250,9 @@ export default function NewsList() {
             gap: "22px",
           }}
         >
-          {newsArticles.map((article, idx) => (
+          {listToRender.map((article, idx) => (
             <NewsCard
-              key={article.title}
+              key={article.slug || article.title}
               article={article}
               index={idx}
               isVisible={isVisible}

@@ -14,11 +14,12 @@ import {
   Check,
   Building
 } from "lucide-react";
-import { products } from "../data/products";
 import ProductCard from "../components/ProductCard";
+import { useAppContext } from "../context/AppContext";
 
 export default function ProductDetail({ onOpenOrderModal }) {
   const { slug } = useParams();
+  const { products, siteSettings, policies } = useAppContext();
 
   // Find product by slug or id, fallback to products[0]
   const product = products.find((p) => p.slug === slug || p.id === slug) || products[0];
@@ -485,7 +486,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
 
               {/* CÁCH 2: GỌI TRỰC TIẾP CHO SHOP */}
               <a
-                href="tel:0947707616"
+                href={`tel:${siteSettings?.hotlineRaw || "0947707616"}`}
                 style={{
                   background: "#030c22",
                   color: "#ffffff",
@@ -512,7 +513,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "6px", fontWeight: 700, fontSize: "14px" }}>
                   <Phone size={16} color="#22c55e" />
-                  <span>GỌI: 0947.707.616</span>
+                  <span>GỌI: {siteSettings?.hotline || "0947.707.616"}</span>
                 </div>
                 <span style={{ fontSize: "11px", color: "#94a3b8" }}>
                   Tư vấn kỹ thuật trực tiếp 24/7
@@ -603,7 +604,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
 
           <div style={{ display: "flex", gap: "10px" }}>
             <a
-              href="tel:0947707616"
+              href={`tel:${siteSettings?.hotlineRaw || "0947707616"}`}
               style={{
                 background: "#030c22",
                 color: "#fff",
@@ -621,7 +622,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
               <Phone size={13} color="#22c55e" /> Gọi Shop
             </a>
             <a
-              href="https://zalo.me/0947707616"
+              href={`https://zalo.me/${siteSettings?.hotlineRaw || "0947707616"}`}
               target="_blank"
               rel="noopener noreferrer"
               style={{

@@ -2,22 +2,25 @@ import React, { useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Calendar, Clock, Tag } from "lucide-react";
 import { newsArticles } from "../data/news";
+import { useAppContext } from "../context/AppContext";
 
 export default function NewsDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const article = newsArticles.find((n) => n.slug === slug);
+  const { articles } = useAppContext();
+  const allArticles = articles && articles.length > 0 ? articles : newsArticles;
+  const article = allArticles.find((n) => n.slug === slug);
 
   useEffect(() => {
     if (article) {
-      document.title = `${article.title} | FUJINANO`;
+      document.title = article.metaTitle || `${article.title} | FUJINANO`;
       let meta = document.querySelector('meta[name="description"]');
       if (!meta) {
         meta = document.createElement("meta");
         meta.setAttribute("name", "description");
         document.head.appendChild(meta);
       }
-      meta.setAttribute("content", article.excerpt);
+      meta.setAttribute("content", article.metaDescription || article.excerpt);
     }
     window.scrollTo(0, 0);
     return () => {

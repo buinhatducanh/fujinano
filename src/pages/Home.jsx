@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { Search, Phone, FileText, ShieldCheck, Truck, RotateCcw, Headphones, ArrowRight, X } from "lucide-react";
-import { categories, products } from "../data/products";
+import { categories } from "../data/products";
 import { projects } from "../data/projects";
 import ProductCard from "../components/ProductCard";
+import CustomerReviewsSection from "../components/CustomerReviewsSection";
+import { useAppContext } from "../context/AppContext";
 
 export default function Home({ onOpenOrderModal }) {
+  const { products, siteSettings } = useAppContext();
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParam = searchParams.get("q") || "";
   const [searchInput, setSearchInput] = useState(queryParam);
@@ -486,6 +489,11 @@ export default function Home({ onOpenOrderModal }) {
         </div>
 
         {/* ======================================================== */}
+        {/* 4.5. ĐÁNH GIÁ CỦA KHÁCH HÀNG & NHÀ THẦU                  */}
+        {/* ======================================================== */}
+        <CustomerReviewsSection />
+
+        {/* ======================================================== */}
         {/* 5. CAM KẾT CHẤT LƯỢNG (GỌN GÀNG)                         */}
         {/* ======================================================== */}
         <div
@@ -555,7 +563,7 @@ export default function Home({ onOpenOrderModal }) {
         </button>
 
         <a
-          href="tel:0947707616"
+          href={`tel:${siteSettings?.hotlineRaw || "0947707616"}`}
           style={{
             background: "#030c22",
             color: "#ffffff",
@@ -575,7 +583,7 @@ export default function Home({ onOpenOrderModal }) {
           onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
         >
           <Phone size={15} color="#22c55e" />
-          <span>0947.707.616</span>
+          <span>{siteSettings?.hotline || "0947.707.616"}</span>
         </a>
       </div>
     </div>

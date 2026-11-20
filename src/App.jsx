@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
@@ -13,9 +13,14 @@ import NewsList from "./pages/NewsList";
 import NewsDetail from "./pages/NewsDetail";
 import VideoList from "./pages/VideoList";
 import VideoDetail from "./pages/VideoDetail";
+import Admin from "./pages/Admin";
 import OrderModal from "./components/OrderModal";
+import { AppProvider } from "./context/AppContext";
 
-export default function App() {
+function AppContent() {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith("/admin");
+
   const [orderModalData, setOrderModalData] = useState({
     isOpen: false,
     product: null,
@@ -37,6 +42,14 @@ export default function App() {
   const handleCloseOrderModal = () => {
     setOrderModalData((prev) => ({ ...prev, isOpen: false }));
   };
+
+  if (isAdmin) {
+    return (
+      <Routes>
+        <Route path="/admin" element={<Admin />} />
+      </Routes>
+    );
+  }
 
   return (
     <div style={{ fontFamily: "'DM Sans', sans-serif", overflowX: "hidden", minHeight: "100vh" }}>
@@ -132,5 +145,13 @@ export default function App() {
         initialQuantity={orderModalData.quantity}
       />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AppProvider>
+      <AppContent />
+    </AppProvider>
   );
 }

@@ -8,8 +8,11 @@ import {
   Phone,
   MessageCircle,
   QrCode,
-  FileText
+  FileText,
+  ShieldCheck,
+  Settings
 } from "lucide-react";
+import { useAppContext } from "../context/AppContext";
 
 const serviceLinks = [
   { label: "Sơn Epoxy Nhà Xưởng", href: "/#products" },
@@ -30,6 +33,8 @@ const navLinks = [
 ];
 
 export default function Footer({ onOpenOrderModal }) {
+  const { siteSettings } = useAppContext();
+
   return (
     <footer
       id="about"
@@ -72,10 +77,10 @@ export default function Footer({ onOpenOrderModal }) {
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             {[
-              { icon: Globe, text: "CÔNG TY TNHH FUJI NANO VIỆT NAM", bold: true },
-              { icon: MapPin, text: "45 Mậu Thân, P. Cái Khế, TP. Cần Thơ" },
-              { icon: Mail, text: "baogia@fujinano.com" },
-              { icon: Globe, text: "www.fujinano.com" },
+              { icon: Globe, text: siteSettings?.companyName || "CÔNG TY TNHH FUJI NANO VIỆT NAM", bold: true },
+              { icon: MapPin, text: siteSettings?.address || "45 Mậu Thân, P. Cái Khế, TP. Cần Thơ" },
+              { icon: Mail, text: siteSettings?.emailBaoGia || siteSettings?.email || "baogia@fujinano.com" },
+              { icon: Globe, text: siteSettings?.website || "www.fujinano.vn" },
             ].map(({ icon: Icon, text, bold }, idx) => (
               <div key={idx} style={{ display: "flex", gap: "8px", alignItems: "flex-start" }}>
                 <Icon
@@ -459,22 +464,43 @@ export default function Footer({ onOpenOrderModal }) {
             style={{
               fontFamily: "'DM Sans', sans-serif",
               fontSize: "12px",
-              color: "rgba(255,255,255,0.22)",
+              color: "rgba(255,255,255,0.3)",
               fontWeight: 300,
             }}
           >
-            © 2025 FUJINANO — Công Ty TNHH Fuji Nano Việt Nam · MST: 1801784735 · Giám đốc: Ngô Anh Tú
+            © {new Date().getFullYear()} FUJINANO — {siteSettings?.companyName || "Công Ty TNHH Fuji Nano Việt Nam"} · MST: {siteSettings?.taxId || "1801784735"} · Giám đốc: {siteSettings?.representative || "Ngô Anh Tú"}
           </span>
-          <span
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "12px",
-              color: "rgba(255,255,255,0.22)",
-              fontWeight: 300,
-            }}
-          >
-            Thiết kế bởi FUJINANO Team
-          </span>
+          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+            <Link
+              to="/admin"
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "12px",
+                color: "rgba(56, 189, 248, 0.7)",
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "5px",
+                padding: "3px 8px",
+                borderRadius: "4px",
+                background: "rgba(56, 189, 248, 0.1)",
+                border: "1px solid rgba(56, 189, 248, 0.2)",
+              }}
+            >
+              <Settings size={12} />
+              <span>Quản Trị CMS</span>
+            </Link>
+            <span
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "12px",
+                color: "rgba(255,255,255,0.22)",
+                fontWeight: 300,
+              }}
+            >
+              Hệ thống B2B &amp; Báo Giá
+            </span>
+          </div>
         </div>
       </div>
     </footer>

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { X, CheckCircle2, Phone, Send, ShieldCheck, Truck } from "lucide-react";
 import { products } from "../data/products";
+import { useAppContext } from "../context/AppContext";
 
 export default function OrderModal({ isOpen, onClose, product, initialVariant, initialColor, initialQuantity = 1 }) {
+  const { addInquiry, siteSettings } = useAppContext();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -24,6 +26,16 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (addInquiry) {
+      addInquiry({
+        name: formData.name,
+        phone: formData.phone,
+        product: currentProduct.shortName || currentProduct.name,
+        quantity: initialQuantity,
+        topic: `Đặt mua: ${selectedVolume} - Màu: ${selectedColor}`,
+        notes: `Địa chỉ: ${formData.address || "Chưa có"}. Ghi chú: ${formData.note || "Không có"}. Tổng tiền ước tính: ${totalPrice.toLocaleString("vi-VN")} ₫`,
+      });
+    }
     setIsSuccess(true);
   };
 
@@ -116,7 +128,7 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
             </p>
             <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
               <a
-                href="tel:0947707616"
+                href={`tel:${siteSettings?.hotlineRaw || "0947707616"}`}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -130,7 +142,7 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
                   fontSize: "13.5px",
                 }}
               >
-                <Phone size={15} /> Gọi Hotline: 0947.707.616
+                <Phone size={15} /> Gọi Hotline: {siteSettings?.hotline || "0947.707.616"}
               </a>
               <button
                 onClick={handleClose}
@@ -366,10 +378,10 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
                 <span style={{ fontSize: "12px", color: "#94a3b8" }}>
                   Hoặc gọi hotline trực tiếp:{" "}
                   <a
-                    href="tel:0947707616"
+                    href={`tel:${siteSettings?.hotlineRaw || "0947707616"}`}
                     style={{ color: "#38bdf8", fontWeight: 700, textDecoration: "underline" }}
                   >
-                    0947.707.616
+                    {siteSettings?.hotline || "0947.707.616"}
                   </a>
                 </span>
               </div>
