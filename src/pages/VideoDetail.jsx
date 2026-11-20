@@ -511,6 +511,10 @@ export default function VideoDetail() {
                         <img
                           src={rel.thumbnail}
                           alt={rel.title}
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = "/images/slider/epoxy_floor.png";
+                          }}
                           style={{ width: "100%", height: "100%", objectFit: "cover" }}
                         />
                         <div

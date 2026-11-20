@@ -172,7 +172,30 @@ export function AppProvider({ children }) {
   const [videos, setVideos] = useState(() => {
     try {
       const saved = localStorage.getItem("fujinano_videos");
-      return saved ? JSON.parse(saved) : defaultVideos;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Tự động nâng cấp thumbnail nếu còn dùng link Unsplash ngoài dễ lỗi
+        const fallbackThumbnails = {
+          "vid-1": "/images/slider/epoxy_floor.png",
+          "short-1": "/images/products/fn-epoxy-18l.jpg",
+          "vid-2": "/images/slider/polished_concrete.png",
+          "short-2": "/images/products/fn-hardener-20l.jpg",
+          "vid-3": "/images/slider/sports_court.png",
+          "short-3": "/images/products/fn-waterproof-18l.jpg",
+          "vid-4": "/images/slider/fireproof_steel.png",
+          "short-4": "/images/products/fn-traffic-20kg.jpg",
+        };
+        return parsed.map((item) => {
+          if (!item.thumbnail || item.thumbnail.includes("images.unsplash.com")) {
+            return {
+              ...item,
+              thumbnail: fallbackThumbnails[item.id] || "/images/slider/epoxy_floor.png",
+            };
+          }
+          return item;
+        });
+      }
+      return defaultVideos;
     } catch {
       return defaultVideos;
     }
