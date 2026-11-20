@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, CheckCircle2, Phone, Send, ShieldCheck, Truck, Sparkles } from "lucide-react";
+import { X, CheckCircle2, Phone, Send, ShieldCheck, Truck } from "lucide-react";
 import { products } from "../data/products";
 
 export default function OrderModal({ isOpen, onClose, product, initialVariant, initialColor, initialQuantity = 1 }) {
@@ -38,9 +38,9 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
         position: "fixed",
         inset: 0,
         zIndex: 9999,
-        background: "rgba(0, 10, 30, 0.82)",
-        backdropFilter: "blur(8px)",
-        WebkitBackdropFilter: "blur(8px)",
+        background: "rgba(15, 23, 42, 0.65)",
+        backdropFilter: "blur(4px)",
+        WebkitBackdropFilter: "blur(4px)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -50,16 +50,16 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
     >
       <div
         style={{
-          background: "linear-gradient(135deg, rgba(0, 20, 65, 0.98), rgba(0, 10, 35, 0.98))",
-          border: "1.5px solid rgba(0, 150, 255, 0.4)",
-          borderRadius: "16px",
+          background: "#ffffff",
+          borderRadius: "14px",
           width: "100%",
-          maxWidth: "520px",
+          maxWidth: "500px",
           maxHeight: "92vh",
           overflowY: "auto",
-          boxShadow: "0 25px 60px rgba(0,0,0,0.7), 0 0 30px rgba(0, 100, 255, 0.2)",
+          boxShadow: "0 20px 50px rgba(0,0,0,0.18)",
           position: "relative",
-          color: "#fff",
+          color: "#0f172a",
+          border: "1px solid #e2e8f0",
           fontFamily: "'DM Sans', sans-serif",
         }}
         onClick={(e) => e.stopPropagation()}
@@ -67,88 +67,81 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
         {/* Header Modal */}
         <div
           style={{
-            padding: "18px 24px",
-            borderBottom: "1px solid rgba(255,255,255,0.1)",
+            padding: "18px 22px",
+            borderBottom: "1px solid #e2e8f0",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            background: "linear-gradient(90deg, #e60012 0%, #0055cc 100%)",
-            color: "#fff",
-            borderRadius: "14px 14px 0 0",
+            background: "#0f172a",
+            color: "#ffffff",
+            borderRadius: "13px 13px 0 0",
           }}
         >
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <Sparkles size={16} color="#ffeb3b" />
-              <h3 style={{ fontSize: "16px", fontWeight: 800, margin: 0, letterSpacing: "0.5px" }}>
-                ĐỂ LẠI THÔNG TIN ĐẶT MUA / BÁO GIÁ
-              </h3>
-            </div>
-            <p style={{ fontSize: "12px", opacity: 0.9, margin: "3px 0 0" }}>
-              Kỹ sư FUJINANO sẽ gọi lại tư vấn kỹ thuật &amp; báo giá chiết khấu trong 5-15 phút
+            <h3 style={{ fontSize: "16px", fontWeight: 700, margin: 0 }}>
+              ĐỂ LẠI THÔNG TIN ĐẶT MUA / BÁO GIÁ
+            </h3>
+            <p style={{ fontSize: "12px", color: "#94a3b8", margin: "3px 0 0" }}>
+              Kỹ sư FUJINANO sẽ gọi lại tư vấn kỹ thuật &amp; báo giá trong 5-15 phút
             </p>
           </div>
           <button
             onClick={handleClose}
             style={{
-              background: "rgba(255,255,255,0.2)",
+              background: "rgba(255,255,255,0.1)",
               border: "none",
               borderRadius: "50%",
-              width: "32px",
-              height: "32px",
+              width: "30px",
+              height: "30px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               cursor: "pointer",
-              color: "#fff",
-              transition: "background 0.2s",
+              color: "#ffffff",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.4)")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.2)")}
           >
-            <X size={18} />
+            <X size={16} />
           </button>
         </div>
 
         {isSuccess ? (
-          <div style={{ padding: "40px 24px", textAlign: "center" }}>
-            <CheckCircle2 size={56} color="#00e676" style={{ margin: "0 auto 16px" }} />
-            <h4 style={{ fontSize: "20px", fontWeight: 800, color: "#fff", marginBottom: "8px" }}>
+          <div style={{ padding: "36px 24px", textAlign: "center" }}>
+            <CheckCircle2 size={52} color="#16a34a" style={{ margin: "0 auto 14px" }} />
+            <h4 style={{ fontSize: "18px", fontWeight: 700, color: "#0f172a", marginBottom: "8px" }}>
               ĐÃ GỬI THÔNG TIN THÀNH CÔNG!
             </h4>
-            <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.8)", lineHeight: 1.6, marginBottom: "24px" }}>
-              Cảm ơn quý khách <strong>{formData.name}</strong>. Kỹ sư tư vấn của{" "}
-              <strong style={{ color: "#00a8ff" }}>FUJINANO</strong> sẽ liên hệ qua SĐT <strong style={{ color: "#ffeb3b" }}>{formData.phone}</strong> trong vòng 5-15 phút để xác nhận số lượng thùng, hướng dẫn định mức thi công và thời gian giao hàng tận nơi.
+            <p style={{ fontSize: "13.5px", color: "#64748b", lineHeight: 1.6, marginBottom: "22px" }}>
+              Cảm ơn quý khách <strong>{formData.name}</strong>. Kỹ sư tư vấn sẽ gọi vào số điện thoại{" "}
+              <strong style={{ color: "#dc2626" }}>{formData.phone}</strong> trong vòng 5-15 phút để xác nhận số lượng thùng, bảng mã màu và tiến độ giao hàng.
             </p>
-            <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
               <a
                 href="tel:0947707616"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "6px",
-                  padding: "11px 22px",
-                  background: "linear-gradient(135deg, #e60012, #ff2a2a)",
-                  color: "#fff",
+                  padding: "10px 18px",
+                  background: "#dc2626",
+                  color: "#ffffff",
                   borderRadius: "8px",
                   textDecoration: "none",
                   fontWeight: 700,
-                  fontSize: "14px",
-                  boxShadow: "0 4px 14px rgba(230,0,18,0.5)",
+                  fontSize: "13.5px",
                 }}
               >
-                <Phone size={16} /> Gọi Hotline Ngay: 0947.707.616
+                <Phone size={15} /> Gọi Hotline: 0947.707.616
               </a>
               <button
                 onClick={handleClose}
                 style={{
-                  padding: "11px 22px",
-                  background: "rgba(255,255,255,0.15)",
-                  color: "#fff",
-                  border: "1px solid rgba(255,255,255,0.2)",
+                  padding: "10px 18px",
+                  background: "#f1f5f9",
+                  color: "#334155",
+                  border: "1px solid #cbd5e1",
                   borderRadius: "8px",
                   fontWeight: 600,
-                  fontSize: "14px",
+                  fontSize: "13.5px",
                   cursor: "pointer",
                 }}
               >
@@ -157,39 +150,39 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} style={{ padding: "20px 24px" }}>
-            {/* Thông tin thùng sơn tóm tắt */}
+          <form onSubmit={handleSubmit} style={{ padding: "20px 22px" }}>
+            {/* Tóm tắt thùng sơn đã chọn */}
             <div
               style={{
                 display: "flex",
-                gap: "14px",
+                gap: "12px",
                 padding: "12px",
-                background: "rgba(0, 10, 30, 0.6)",
-                borderRadius: "10px",
-                marginBottom: "20px",
-                border: "1px solid rgba(0, 100, 255, 0.25)",
+                background: "#f8fafc",
+                borderRadius: "8px",
+                marginBottom: "18px",
+                border: "1px solid #e2e8f0",
               }}
             >
               <img
                 src={currentProduct.images?.[0] || "/images/slider/epoxy_floor.png"}
                 alt={currentProduct.name}
                 style={{
-                  width: "72px",
-                  height: "72px",
+                  width: "64px",
+                  height: "64px",
                   objectFit: "cover",
-                  borderRadius: "8px",
-                  border: "1px solid rgba(255,255,255,0.15)",
+                  borderRadius: "6px",
+                  border: "1px solid #e2e8f0",
                   flexShrink: 0,
                 }}
               />
               <div style={{ flex: 1, minWidth: 0 }}>
                 <h4
                   style={{
-                    fontSize: "13.5px",
+                    fontSize: "13px",
                     fontWeight: 600,
-                    color: "#fff",
-                    margin: "0 0 4px",
-                    lineHeight: 1.4,
+                    color: "#0f172a",
+                    margin: "0 0 3px",
+                    lineHeight: 1.35,
                     display: "-webkit-box",
                     WebkitLineClamp: 2,
                     WebkitBoxOrient: "vertical",
@@ -198,24 +191,24 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
                 >
                   {currentProduct.name}
                 </h4>
-                <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.65)", marginBottom: "4px" }}>
-                  Quy cách: <strong style={{ color: "#00a8ff" }}>{selectedVolume}</strong> | Màu: <strong style={{ color: "#00a8ff" }}>{selectedColor}</strong>
+                <div style={{ fontSize: "11.5px", color: "#64748b", marginBottom: "3px" }}>
+                  Quy cách: <strong>{selectedVolume}</strong> | Màu: <strong>{selectedColor}</strong>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: "15px", fontWeight: 800, color: "#ff4d4f" }}>
+                  <span style={{ fontSize: "14.5px", fontWeight: 800, color: "#dc2626" }}>
                     ₫{totalPrice.toLocaleString("vi-VN")}
                   </span>
-                  <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.6)" }}>
+                  <span style={{ fontSize: "11.5px", color: "#64748b" }}>
                     Số lượng: x{initialQuantity} thùng
                   </span>
                 </div>
               </div>
             </div>
 
-            {/* Form nhập thông tin */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+            {/* Form Fields */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
               <div>
-                <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "rgba(255,255,255,0.9)", marginBottom: "6px" }}>
+                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 600, color: "#334155", marginBottom: "5px" }}>
                   Họ và tên quý khách *
                 </label>
                 <input
@@ -226,22 +219,21 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   style={{
                     width: "100%",
-                    padding: "11px 14px",
-                    borderRadius: "8px",
-                    background: "rgba(0, 15, 45, 0.8)",
-                    border: "1px solid rgba(0, 100, 255, 0.3)",
-                    color: "#fff",
-                    fontSize: "14px",
+                    padding: "9px 12px",
+                    borderRadius: "6px",
+                    background: "#ffffff",
+                    border: "1px solid #cbd5e1",
+                    color: "#0f172a",
+                    fontSize: "13.5px",
                     outline: "none",
-                    boxSizing: "border-box",
                   }}
-                  onFocus={(e) => (e.currentTarget.style.borderColor = "#00a8ff")}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(0, 100, 255, 0.3)")}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = "#0f172a")}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = "#cbd5e1")}
                 />
               </div>
 
               <div>
-                <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "rgba(255,255,255,0.9)", marginBottom: "6px" }}>
+                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 600, color: "#334155", marginBottom: "5px" }}>
                   Số điện thoại nhận tư vấn &amp; báo giá *
                 </label>
                 <input
@@ -252,135 +244,129 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   style={{
                     width: "100%",
-                    padding: "11px 14px",
-                    borderRadius: "8px",
-                    background: "rgba(0, 15, 45, 0.8)",
-                    border: "1px solid rgba(0, 100, 255, 0.3)",
-                    color: "#fff",
-                    fontSize: "14px",
+                    padding: "9px 12px",
+                    borderRadius: "6px",
+                    background: "#ffffff",
+                    border: "1px solid #cbd5e1",
+                    color: "#0f172a",
+                    fontSize: "13.5px",
                     outline: "none",
-                    boxSizing: "border-box",
                   }}
-                  onFocus={(e) => (e.currentTarget.style.borderColor = "#00a8ff")}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(0, 100, 255, 0.3)")}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = "#0f172a")}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = "#cbd5e1")}
                 />
               </div>
 
               <div>
-                <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "rgba(255,255,255,0.9)", marginBottom: "6px" }}>
+                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 600, color: "#334155", marginBottom: "5px" }}>
                   Địa chỉ giao hàng (Tỉnh / Thành phố / Tên Công Trình)
                 </label>
                 <input
                   type="text"
-                  placeholder="Ví dụ: KCN Trà Nóc, TP. Cần Thơ hoặc Quận 7, TP.HCM"
+                  placeholder="Ví dụ: KCN Trà Nóc, Cần Thơ hoặc Quận 7, TP.HCM"
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                   style={{
                     width: "100%",
-                    padding: "11px 14px",
-                    borderRadius: "8px",
-                    background: "rgba(0, 15, 45, 0.8)",
-                    border: "1px solid rgba(0, 100, 255, 0.3)",
-                    color: "#fff",
-                    fontSize: "14px",
+                    padding: "9px 12px",
+                    borderRadius: "6px",
+                    background: "#ffffff",
+                    border: "1px solid #cbd5e1",
+                    color: "#0f172a",
+                    fontSize: "13.5px",
                     outline: "none",
-                    boxSizing: "border-box",
                   }}
-                  onFocus={(e) => (e.currentTarget.style.borderColor = "#00a8ff")}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(0, 100, 255, 0.3)")}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = "#0f172a")}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = "#cbd5e1")}
                 />
               </div>
 
               <div>
-                <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "rgba(255,255,255,0.9)", marginBottom: "6px" }}>
-                  Yêu cầu kỹ thuật / Diện tích cần sơn (m²)
+                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 600, color: "#334155", marginBottom: "5px" }}>
+                  Diện tích cần sơn hoặc ghi chú thêm
                 </label>
                 <textarea
                   rows={2}
-                  placeholder="Ví dụ: Cần sơn 800m2 sàn xưởng cơ khí, nền bê tông mác 250..."
+                  placeholder="Ví dụ: Cần sơn 500m2 sàn nhà xưởng, giao trong tuần..."
                   value={formData.note}
                   onChange={(e) => setFormData({ ...formData, note: e.target.value })}
                   style={{
                     width: "100%",
-                    padding: "10px 14px",
-                    borderRadius: "8px",
-                    background: "rgba(0, 15, 45, 0.8)",
-                    border: "1px solid rgba(0, 100, 255, 0.3)",
-                    color: "#fff",
-                    fontSize: "14px",
+                    padding: "9px 12px",
+                    borderRadius: "6px",
+                    background: "#ffffff",
+                    border: "1px solid #cbd5e1",
+                    color: "#0f172a",
+                    fontSize: "13.5px",
                     outline: "none",
-                    boxSizing: "border-box",
                     resize: "vertical",
                   }}
-                  onFocus={(e) => (e.currentTarget.style.borderColor = "#00a8ff")}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(0, 100, 255, 0.3)")}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = "#0f172a")}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = "#cbd5e1")}
                 />
               </div>
 
-              {/* Cam kết của shop */}
+              {/* Cam kết */}
               <div
                 style={{
                   display: "flex",
                   gap: "12px",
-                  fontSize: "12px",
-                  color: "rgba(255,255,255,0.7)",
-                  padding: "10px",
-                  background: "rgba(255,255,255,0.04)",
-                  borderRadius: "8px",
-                  border: "1px dashed rgba(255,255,255,0.15)",
+                  fontSize: "11.5px",
+                  color: "#475569",
+                  padding: "8px 12px",
+                  background: "#f1f5f9",
+                  borderRadius: "6px",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                  <ShieldCheck size={14} color="#00e676" />
+                <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                  <ShieldCheck size={13} color="#16a34a" />
                   <span>100% Chính hãng</span>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                  <Truck size={14} color="#00e676" />
-                  <span>Giao tận chân công trình</span>
+                <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                  <Truck size={13} color="#2563eb" />
+                  <span>Giao tận nơi</span>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                  <CheckCircle2 size={14} color="#00e676" />
+                <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                  <CheckCircle2 size={13} color="#16a34a" />
                   <span>CO/CQ &amp; VAT</span>
                 </div>
               </div>
 
-              {/* Nút gửi thông tin */}
+              {/* Nút gửi */}
               <button
                 type="submit"
                 style={{
                   width: "100%",
-                  padding: "14px",
-                  background: "linear-gradient(135deg, #e60012, #ff2a2a)",
-                  color: "#fff",
+                  padding: "12px",
+                  background: "#dc2626",
+                  color: "#ffffff",
                   border: "none",
                   borderRadius: "8px",
-                  fontSize: "15px",
-                  fontWeight: 800,
+                  fontSize: "14px",
+                  fontWeight: 700,
                   cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "8px",
-                  boxShadow: "0 4px 16px rgba(230, 0, 18, 0.4)",
-                  marginTop: "6px",
-                  transition: "transform 0.15s ease",
+                  gap: "6px",
+                  marginTop: "4px",
+                  transition: "background 0.2s",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.02)")}
-                onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "#b91c1c")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "#dc2626")}
               >
-                <Send size={16} />
-                <span>GỬI YÊU CẦU ĐẶT MUA / BÁO GIÁ</span>
+                <Send size={15} />
+                <span>GỬI YÊU CẦU BÁO GIÁ NGAY</span>
               </button>
 
-              {/* Hoặc gọi trực tiếp */}
-              <div style={{ textAlign: "center", marginTop: "4px" }}>
-                <span style={{ fontSize: "12.5px", color: "rgba(255,255,255,0.6)" }}>
-                  Cần gấp tư vấn kỹ thuật ngay lập tức?{" "}
+              <div style={{ textAlign: "center", marginTop: "2px" }}>
+                <span style={{ fontSize: "12px", color: "#64748b" }}>
+                  Hoặc gọi hotline trực tiếp:{" "}
                   <a
                     href="tel:0947707616"
-                    style={{ color: "#ffeb3b", fontWeight: 700, textDecoration: "underline" }}
+                    style={{ color: "#0f172a", fontWeight: 700, textDecoration: "underline" }}
                   >
-                    Gọi Hotline 0947.707.616
+                    0947.707.616
                   </a>
                 </span>
               </div>

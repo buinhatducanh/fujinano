@@ -26,34 +26,12 @@ export default function Footer({ onOpenOrderModal }) {
     <footer
       id="about"
       style={{
-        background: "transparent",
-        borderTop: "1px solid rgba(255,255,255,0.05)",
+        background: "#0f172a",
+        borderTop: "3px solid #dc2626",
         position: "relative",
+        color: "#ffffff",
       }}
     >
-      {/* Top Gradient Highlight Bar */}
-      <div
-        style={{
-          height: "4px",
-          background: "linear-gradient(90deg, #0a0f1e 0%, #0055cc 30%, #e60012 70%, #0a0f1e 100%)",
-          boxShadow: "0 -4px 20px rgba(0,85,204,0.4), 0 4px 20px rgba(230,0,18,0.4)",
-          position: "relative",
-          zIndex: 10,
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: "30%",
-          width: "40%",
-          height: "2px",
-          background: "linear-gradient(90deg, transparent, #ffffff, transparent)",
-          opacity: 0.6,
-          filter: "blur(1px)",
-          zIndex: 11,
-        }}
-      />
 
       <div
         className="grid-mobile-1 pad-section-mobile gap-mobile-sm"

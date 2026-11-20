@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Star, Phone, FileText, CheckCircle2, ShieldCheck, MapPin } from "lucide-react";
+import { Star, Phone, FileText, MapPin, ShieldCheck } from "lucide-react";
 
 export default function ProductCard({ product, onOpenOrder }) {
   if (!product) return null;
@@ -8,27 +8,25 @@ export default function ProductCard({ product, onOpenOrder }) {
   return (
     <div
       style={{
-        background: "rgba(0, 20, 65, 0.72)",
-        backdropFilter: "blur(14px)",
-        WebkitBackdropFilter: "blur(14px)",
+        background: "#ffffff",
         borderRadius: "10px",
         overflow: "hidden",
-        border: "1px solid rgba(0, 102, 255, 0.25)",
+        border: "1px solid #e2e8f0",
         display: "flex",
         flexDirection: "column",
-        transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+        transition: "transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease",
         position: "relative",
-        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.35)",
+        boxShadow: "0 2px 6px rgba(0, 0, 0, 0.04)",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-4px)";
-        e.currentTarget.style.borderColor = "rgba(0, 150, 255, 0.65)";
-        e.currentTarget.style.boxShadow = "0 12px 30px rgba(0, 85, 204, 0.38)";
+        e.currentTarget.style.transform = "translateY(-3px)";
+        e.currentTarget.style.borderColor = "#cbd5e1";
+        e.currentTarget.style.boxShadow = "0 8px 24px rgba(0, 0, 0, 0.08)";
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = "translateY(0)";
-        e.currentTarget.style.borderColor = "rgba(0, 102, 255, 0.25)";
-        e.currentTarget.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.35)";
+        e.currentTarget.style.borderColor = "#e2e8f0";
+        e.currentTarget.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.04)";
       }}
     >
       {/* Clickable Image & Info link */}
@@ -37,7 +35,7 @@ export default function ProductCard({ product, onOpenOrder }) {
         style={{ textDecoration: "none", color: "inherit", display: "block" }}
       >
         {/* Product Image Wrapper */}
-        <div style={{ position: "relative", width: "100%", paddingTop: "100%", background: "#020c24", overflow: "hidden" }}>
+        <div style={{ position: "relative", width: "100%", paddingTop: "100%", background: "#f8fafc", overflow: "hidden" }}>
           <img
             src={product.images?.[0] || "/images/slider/epoxy_floor.png"}
             alt={product.name}
@@ -49,76 +47,71 @@ export default function ProductCard({ product, onOpenOrder }) {
               width: "100%",
               height: "100%",
               objectFit: "cover",
-              transition: "transform 0.4s ease",
+              transition: "transform 0.35s ease",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.08)")}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.06)")}
             onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
           />
 
-          {/* Shopee Mall Badge */}
+          {/* Genuine / Mall Badge */}
           {product.isMall && (
             <div
               style={{
                 position: "absolute",
                 top: "8px",
                 left: "8px",
-                background: "linear-gradient(135deg, #e60012, #ff2a2a)",
-                color: "#fff",
+                background: "#dc2626",
+                color: "#ffffff",
                 fontSize: "10px",
-                fontWeight: 800,
-                padding: "3px 8px",
+                fontWeight: 700,
+                padding: "2px 7px",
                 borderRadius: "4px",
                 display: "flex",
                 alignItems: "center",
                 gap: "3px",
                 zIndex: 2,
-                boxShadow: "0 2px 6px rgba(230,0,18,0.5)",
-                letterSpacing: "0.5px",
+                boxShadow: "0 2px 4px rgba(220, 38, 38, 0.2)",
+                letterSpacing: "0.3px",
               }}
             >
-              MALL CHÍNH HÃNG
+              CHÍNH HÃNG
             </div>
           )}
 
-          {/* Shopee Yellow Discount Tag */}
+          {/* Discount Tag */}
           {product.discount > 0 && (
             <div
               style={{
                 position: "absolute",
-                top: 0,
-                right: "10px",
-                background: "linear-gradient(180deg, #ffb300, #ff8f00)",
-                color: "#000",
-                padding: "4px 5px 6px",
+                top: "8px",
+                right: "8px",
+                background: "#fef08a",
+                color: "#991b1b",
+                padding: "2px 6px",
                 fontSize: "11px",
-                fontWeight: 900,
-                textAlign: "center",
-                lineHeight: 1.1,
+                fontWeight: 800,
+                borderRadius: "4px",
                 zIndex: 2,
-                clipPath: "polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%)",
-                width: "38px",
-                boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
+                border: "1px solid #fde047",
               }}
             >
-              <div style={{ color: "#d50000" }}>-{product.discount}%</div>
-              <div style={{ fontSize: "8.5px", color: "#111", textTransform: "uppercase", fontWeight: 800 }}>GIẢM</div>
+              -{product.discount}%
             </div>
           )}
 
-          {/* Freeship Xtra Badge */}
+          {/* Free Shipping Tag */}
           <div
             style={{
               position: "absolute",
               bottom: "8px",
               left: "8px",
-              background: "rgba(0, 191, 165, 0.9)",
+              background: "#0d9488",
               color: "#fff",
               fontSize: "10px",
-              fontWeight: 700,
-              padding: "2px 7px",
+              fontWeight: 600,
+              padding: "2px 6px",
               borderRadius: "3px",
               zIndex: 2,
-              backdropFilter: "blur(4px)",
             }}
           >
             Freeship Xtra
@@ -126,9 +119,9 @@ export default function ProductCard({ product, onOpenOrder }) {
         </div>
 
         {/* Content Box */}
-        <div style={{ padding: "12px 14px 8px" }}>
-          {/* Category Mini Tag */}
-          <div style={{ fontSize: "11px", color: "rgba(0, 200, 255, 0.9)", fontWeight: 600, marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+        <div style={{ padding: "12px 14px 10px" }}>
+          {/* Category Tag */}
+          <div style={{ fontSize: "11px", color: "#2563eb", fontWeight: 600, marginBottom: "4px", textTransform: "uppercase" }}>
             {product.categoryName || "Thùng Sơn Công Nghiệp"}
           </div>
 
@@ -137,8 +130,8 @@ export default function ProductCard({ product, onOpenOrder }) {
             style={{
               fontSize: "13.5px",
               fontWeight: 600,
-              color: "#ffffff",
-              margin: "0 0 8px",
+              color: "#0f172a",
+              margin: "0 0 6px",
               lineHeight: 1.4,
               height: "38px",
               display: "-webkit-box",
@@ -150,43 +143,41 @@ export default function ProductCard({ product, onOpenOrder }) {
             {product.name}
           </h3>
 
-          {/* Quality Tags */}
-          <div style={{ display: "flex", gap: "6px", marginBottom: "10px", flexWrap: "wrap" }}>
+          {/* Quality & Spec Badge */}
+          <div style={{ display: "flex", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
             <span
               style={{
-                border: "1px solid rgba(230, 0, 18, 0.6)",
-                background: "rgba(230, 0, 18, 0.12)",
-                color: "#ff4d4f",
+                background: "#f1f5f9",
+                color: "#475569",
                 fontSize: "10.5px",
-                padding: "1px 6px",
+                padding: "2px 6px",
                 borderRadius: "3px",
-                fontWeight: 600,
-              }}
-            >
-              Hàng Nhà Máy
-            </span>
-            <span
-              style={{
-                border: "1px solid rgba(0, 230, 118, 0.5)",
-                background: "rgba(0, 230, 118, 0.1)",
-                color: "#00e676",
-                fontSize: "10.5px",
-                padding: "1px 6px",
-                borderRadius: "3px",
-                fontWeight: 600,
+                fontWeight: 500,
               }}
             >
               CO/CQ Đầy Đủ
+            </span>
+            <span
+              style={{
+                background: "#ecfdf5",
+                color: "#059669",
+                fontSize: "10.5px",
+                padding: "2px 6px",
+                borderRadius: "3px",
+                fontWeight: 600,
+              }}
+            >
+              Giá Tận Xưởng
             </span>
           </div>
 
           {/* Price */}
           <div style={{ display: "flex", alignItems: "baseline", gap: "8px", marginBottom: "8px", flexWrap: "wrap" }}>
-            <span style={{ fontSize: "17px", fontWeight: 800, color: "#ff4d4f", textShadow: "0 0 10px rgba(255, 77, 79, 0.3)" }}>
+            <span style={{ fontSize: "17px", fontWeight: 800, color: "#dc2626" }}>
               ₫{product.price.toLocaleString("vi-VN")}
             </span>
             {product.originalPrice && (
-              <span style={{ fontSize: "11.5px", color: "rgba(255,255,255,0.45)", textDecoration: "line-through" }}>
+              <span style={{ fontSize: "11.5px", color: "#94a3b8", textDecoration: "line-through" }}>
                 ₫{product.originalPrice.toLocaleString("vi-VN")}
               </span>
             )}
@@ -199,20 +190,20 @@ export default function ProductCard({ product, onOpenOrder }) {
               justifyContent: "space-between",
               alignItems: "center",
               fontSize: "11px",
-              color: "rgba(255,255,255,0.6)",
-              marginBottom: "10px",
+              color: "#64748b",
+              marginBottom: "8px",
               paddingBottom: "8px",
-              borderBottom: "1px dashed rgba(255,255,255,0.1)",
+              borderBottom: "1px dashed #e2e8f0",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
-              <Star size={11} fill="#ffce3d" color="#ffce3d" />
-              <span style={{ fontWeight: 700, color: "#fff" }}>{product.rating}</span>
+              <Star size={11} fill="#f59e0b" color="#f59e0b" />
+              <span style={{ fontWeight: 700, color: "#1e293b" }}>{product.rating}</span>
               <span style={{ margin: "0 2px" }}>•</span>
               <span>Đã bán {product.soldCount}</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "2px" }}>
-              <MapPin size={10} color="#00a8ff" />
+              <MapPin size={10} color="#64748b" />
               <span>{product.location || "Cần Thơ"}</span>
             </div>
           </div>
@@ -225,7 +216,7 @@ export default function ProductCard({ product, onOpenOrder }) {
           padding: "0 10px 10px",
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
-          gap: "8px",
+          gap: "6px",
           marginTop: "auto",
         }}
       >
@@ -238,10 +229,10 @@ export default function ProductCard({ product, onOpenOrder }) {
             onOpenOrder(product);
           }}
           style={{
-            background: "linear-gradient(135deg, #e60012, #ff2a2a)",
-            color: "#fff",
+            background: "#dc2626",
+            color: "#ffffff",
             border: "none",
-            borderRadius: "5px",
+            borderRadius: "6px",
             padding: "8px 4px",
             fontSize: "11.5px",
             fontWeight: 700,
@@ -250,17 +241,10 @@ export default function ProductCard({ product, onOpenOrder }) {
             alignItems: "center",
             justifyContent: "center",
             gap: "4px",
-            transition: "all 0.2s ease",
-            boxShadow: "0 2px 8px rgba(230, 0, 18, 0.4)",
+            transition: "background 0.2s ease",
           }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "scale(1.03)";
-            e.currentTarget.style.boxShadow = "0 4px 12px rgba(230, 0, 18, 0.6)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "scale(1)";
-            e.currentTarget.style.boxShadow = "0 2px 8px rgba(230, 0, 18, 0.4)";
-          }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = "#b91c1c")}
+          onMouseLeave={(e) => (e.currentTarget.style.background = "#dc2626")}
           title="Để lại thông tin nhận tư vấn và đặt mua"
         >
           <FileText size={13} />
@@ -272,10 +256,10 @@ export default function ProductCard({ product, onOpenOrder }) {
           href="tel:0947707616"
           onClick={(e) => e.stopPropagation()}
           style={{
-            background: "rgba(0, 10, 30, 0.85)",
-            color: "#ffeb3b",
-            border: "1px solid rgba(255, 235, 59, 0.5)",
-            borderRadius: "5px",
+            background: "#0f172a",
+            color: "#ffffff",
+            border: "1px solid #334155",
+            borderRadius: "6px",
             padding: "8px 4px",
             fontSize: "11.5px",
             fontWeight: 700,
@@ -285,24 +269,13 @@ export default function ProductCard({ product, onOpenOrder }) {
             justifyContent: "center",
             gap: "4px",
             textDecoration: "none",
-            transition: "all 0.2s ease",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+            transition: "background 0.2s ease",
           }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#ffeb3b";
-            e.currentTarget.style.color = "#000";
-            e.currentTarget.style.transform = "scale(1.03)";
-            e.currentTarget.style.boxShadow = "0 4px 12px rgba(255, 235, 59, 0.4)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "rgba(0, 10, 30, 0.85)";
-            e.currentTarget.style.color = "#ffeb3b";
-            e.currentTarget.style.transform = "scale(1)";
-            e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
-          }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = "#1e293b")}
+          onMouseLeave={(e) => (e.currentTarget.style.background = "#0f172a")}
           title="Gọi trực tiếp hotline shop"
         >
-          <Phone size={13} />
+          <Phone size={13} color="#22c55e" />
           <span>Gọi Shop</span>
         </a>
       </div>

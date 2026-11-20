@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Zap, Flame, Clock, ShieldCheck, Truck, Headphones, RotateCcw, ChevronRight, Phone, FileText, Search, Sparkles } from "lucide-react";
+import { Search, Phone, FileText, CheckCircle2, ShieldCheck, Truck, RotateCcw, Headphones, Sparkles, Filter, X } from "lucide-react";
 import { categories, products } from "../data/products";
 import ProductCard from "../components/ProductCard";
 
@@ -8,53 +8,15 @@ export default function Home({ onOpenOrderModal }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParam = searchParams.get("q") || "";
   const [searchInput, setSearchInput] = useState(queryParam);
-
   const [activeCategory, setActiveCategory] = useState("all");
-  const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Countdown timer for Flash Sale
-  const [timeLeft, setTimeLeft] = useState({
-    hours: 3,
-    minutes: 42,
-    seconds: 15,
-  });
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev.seconds > 0) {
-          return { ...prev, seconds: prev.seconds - 1 };
-        } else if (prev.minutes > 0) {
-          return { ...prev, minutes: 59, seconds: 59 };
-        } else if (prev.hours > 0) {
-          return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        }
-        return { hours: 4, minutes: 0, seconds: 0 };
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  // Hero carousel slides
-  const slides = [
-    {
-      title: "TỔNG KHO SƠN SÀN EPOXY & THÙNG SƠN CÔNG NGHIỆP",
-      subtitle: "Kháng Hóa Chất • Chịu Xe Nâng 30 Tấn • Bề Mặt Sáng Bóng Như Gương",
-      image: "/images/slider/epoxy_floor.png",
-      tag: "GIÁ SỈ TẬN NHÀ MÁY",
-    },
-    {
-      title: "SƠN SÂN THỂ THAO TENNIS & SƠN KẺ VẠCH NHIỆT DẺO",
-      subtitle: "Đạt Chuẩn Thi Đấu Quốc Tế ITF • Bền Màu 10 Năm • Chống Trơn Trượt",
-      image: "/images/slider/sports_court.png",
-      tag: "ĐẠI LÝ ỦY QUYỀN CHÍNH HÃNG",
-    },
-    {
-      title: "HÓA CHẤT TĂNG CỨNG & MÀI BÓNG BÊ TÔNG LIQUID HARDENER",
-      subtitle: "Công Nghệ Nhật Bản • Kháng Bụi 100% • Bảo Vệ Nền Kho Logistics Bền Vững",
-      image: "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=1200&h=500&fit=crop&auto=format",
-      tag: "CÔNG NGHỆ NANO NHẬT BẢN",
-    },
+  const quickKeywords = [
+    "Sơn Epoxy 18L",
+    "Chống Thấm PU",
+    "Sơn Chống Cháy 120P",
+    "Sơn Sân Tennis",
+    "Sơn Lót Kháng Kiềm",
+    "Mài Sàn Bê Tông",
   ];
 
   const handleSearchSubmit = (e) => {
@@ -64,6 +26,16 @@ export default function Home({ onOpenOrderModal }) {
     } else {
       setSearchParams({});
     }
+  };
+
+  const handleKeywordClick = (kw) => {
+    setSearchInput(kw);
+    setSearchParams({ q: kw });
+  };
+
+  const handleClearSearch = () => {
+    setSearchInput("");
+    setSearchParams({});
   };
 
   // Filter products by category and search
@@ -77,710 +49,293 @@ export default function Home({ onOpenOrderModal }) {
     return matchCategory && matchQuery;
   });
 
-  const flashSaleProducts = products.filter((p) => p.flashSale);
-
   return (
-    <div style={{ minHeight: "100vh", padding: "120px 0 80px", position: "relative", zIndex: 1 }}>
-      {/* 1. Shopee Top Banner Section (Styled with FUJINANO Dark Glass Theme) */}
-      <div style={{ maxWidth: "1360px", margin: "0 auto", padding: "0 24px" }}>
-        {/* Compact Search & Action Bar (Shopee style in FUJINANO theme) */}
+    <div style={{ minHeight: "100vh", padding: "100px 0 60px", background: "#f4f6fa" }}>
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 20px" }}>
+        
+        {/* 1. KHU VỰC TẬP TRUNG TÌM KIẾM SẢN PHẨM (PROMINENT SEARCH SECTION) */}
         <div
           style={{
-            background: "rgba(0, 18, 55, 0.75)",
-            backdropFilter: "blur(16px)",
-            WebkitBackdropFilter: "blur(16px)",
-            border: "1px solid rgba(0, 102, 255, 0.3)",
-            borderRadius: "12px",
-            padding: "12px 20px",
+            background: "#ffffff",
+            borderRadius: "14px",
+            padding: "24px",
+            boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
+            border: "1px solid #e2e8f0",
             marginBottom: "20px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: "14px",
-            boxShadow: "0 8px 24px rgba(0,0,0,0.35)",
           }}
         >
-          {/* Search form */}
+          {/* Header Title & Slogan */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "10px" }}>
+            <div>
+              <h1 style={{ fontSize: "20px", fontWeight: 800, color: "#0f172a", margin: 0, letterSpacing: "-0.3px" }}>
+                TỔNG KHO PHÂN PHỐI THÙNG SƠN CHÍNH HÃNG FUJINANO
+              </h1>
+              <p style={{ fontSize: "13px", color: "#64748b", margin: "4px 0 0" }}>
+                Sơn Epoxy sàn, PU chống thấm, sơn chống cháy, sơn thể thao - Giá sỉ tận nhà máy
+              </p>
+            </div>
+
+            {/* 2 Cách Mua Nhanh Header CTAs */}
+            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+              <button
+                onClick={() => onOpenOrderModal && onOpenOrderModal(null)}
+                style={{
+                  background: "#dc2626",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "8px",
+                  padding: "8px 14px",
+                  fontSize: "12.5px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  transition: "background 0.2s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "#b91c1c")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "#dc2626")}
+              >
+                <FileText size={14} />
+                <span>Để Lại SĐT Báo Giá</span>
+              </button>
+
+              <a
+                href="tel:0947707616"
+                style={{
+                  background: "#0f172a",
+                  color: "#ffffff",
+                  borderRadius: "8px",
+                  padding: "8px 14px",
+                  fontSize: "12.5px",
+                  fontWeight: 700,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  textDecoration: "none",
+                }}
+              >
+                <Phone size={14} color="#22c55e" />
+                <span>Gọi: 0947.707.616</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Ô TÌM KIẾM LỚN VÀ RÕ RÀNG */}
           <form
             onSubmit={handleSearchSubmit}
             style={{
               display: "flex",
               alignItems: "center",
-              background: "rgba(0, 10, 30, 0.7)",
-              border: "1px solid rgba(0, 140, 255, 0.4)",
-              borderRadius: "8px",
-              padding: "4px 6px",
-              flex: "1 1 380px",
-              maxWidth: "560px",
+              background: "#f8fafc",
+              border: "1.5px solid #cbd5e1",
+              borderRadius: "10px",
+              padding: "4px 6px 4px 16px",
+              boxShadow: "0 1px 3px rgba(0,0,0,0.02)",
+              transition: "border-color 0.2s",
             }}
           >
+            <Search size={18} color="#64748b" style={{ flexShrink: 0, marginRight: "8px" }} />
             <input
               type="text"
-              placeholder="Tìm thùng sơn Epoxy, chống thấm, chống cháy, sơn sân tennis..."
+              placeholder="Nhập tên thùng sơn cần tìm (Ví dụ: Epoxy tự phẳng, PU chống thấm 20kg, sơn chống cháy...)"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               style={{
                 flex: 1,
-                background: "transparent",
                 border: "none",
+                background: "transparent",
                 outline: "none",
-                color: "#fff",
-                fontSize: "13.5px",
-                padding: "8px 12px",
+                fontSize: "14px",
+                color: "#0f172a",
+                padding: "8px 0",
               }}
             />
+            {searchInput && (
+              <button
+                type="button"
+                onClick={handleClearSearch}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "#94a3b8",
+                  cursor: "pointer",
+                  padding: "6px 10px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <X size={16} />
+              </button>
+            )}
             <button
               type="submit"
               style={{
-                background: "linear-gradient(135deg, #e60012, #ff2a2a)",
+                background: "#0f172a",
                 color: "#fff",
                 border: "none",
-                borderRadius: "6px",
-                padding: "8px 18px",
+                borderRadius: "8px",
+                padding: "9px 20px",
+                fontSize: "13.5px",
+                fontWeight: 700,
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
                 gap: "6px",
-                fontWeight: 700,
-                fontSize: "13px",
+                flexShrink: 0,
               }}
             >
-              <Search size={15} />
               <span>Tìm Kiếm</span>
             </button>
           </form>
 
-          {/* 2 CÁCH BÁN HÀNG NỔI BẬT NGAY TRÊN TOP BAR */}
-          <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" }}>
-            {/* Cách 1 */}
-            <button
-              onClick={() => onOpenOrderModal && onOpenOrderModal(null)}
-              style={{
-                background: "linear-gradient(135deg, #e60012, #ff2a2a)",
-                color: "#fff",
-                border: "none",
-                borderRadius: "8px",
-                padding: "10px 18px",
-                fontSize: "13px",
-                fontWeight: 700,
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                boxShadow: "0 4px 15px rgba(230,0,18,0.4)",
-                transition: "all 0.2s",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
-              onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-            >
-              <FileText size={15} />
-              <span>ĐẶT MUA / BÁO GIÁ NHANH</span>
-            </button>
-
-            {/* Cách 2 */}
-            <a
-              href="tel:0947707616"
-              style={{
-                background: "rgba(0, 10, 30, 0.8)",
-                color: "#ffeb3b",
-                border: "1px solid rgba(255, 235, 59, 0.5)",
-                borderRadius: "8px",
-                padding: "10px 18px",
-                fontSize: "13px",
-                fontWeight: 700,
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                boxShadow: "0 4px 15px rgba(0,0,0,0.3)",
-                transition: "all 0.2s",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "#ffeb3b";
-                e.currentTarget.style.color = "#000";
-                e.currentTarget.style.transform = "scale(1.03)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "rgba(0, 10, 30, 0.8)";
-                e.currentTarget.style.color = "#ffeb3b";
-                e.currentTarget.style.transform = "scale(1)";
-              }}
-            >
-              <Phone size={15} />
-              <span>GỌI SHOP: 0947.707.616</span>
-            </a>
-          </div>
-        </div>
-
-        {/* Hero Slider & Right Promo Banners */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "2.1fr 1fr",
-            gap: "16px",
-            marginBottom: "24px",
-          }}
-          className="grid-2"
-        >
-          {/* Main Carousel (Left) */}
-          <div
-            style={{
-              position: "relative",
-              borderRadius: "14px",
-              overflow: "hidden",
-              height: "320px",
-              border: "1.5px solid rgba(0, 120, 255, 0.35)",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.45)",
-              background: "#010a1c",
-            }}
-          >
-            {slides.map((s, idx) => (
-              <div
-                key={idx}
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  opacity: currentSlide === idx ? 1 : 0,
-                  transition: "opacity 0.6s ease-in-out",
-                  pointerEvents: currentSlide === idx ? "auto" : "none",
-                }}
-              >
-                <img
-                  src={s.image}
-                  alt={s.title}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    filter: "brightness(0.65)",
-                  }}
-                />
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    background: "linear-gradient(to right, rgba(0, 10, 35, 0.92) 0%, rgba(0, 15, 50, 0.5) 60%, transparent 100%)",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    padding: "0 36px",
-                    color: "#fff",
-                  }}
-                >
-                  <span
-                    style={{
-                      background: "linear-gradient(135deg, #e60012, #ff2a2a)",
-                      color: "#fff",
-                      padding: "3px 10px",
-                      borderRadius: "4px",
-                      fontSize: "11px",
-                      fontWeight: 800,
-                      letterSpacing: "0.5px",
-                      width: "fit-content",
-                      marginBottom: "12px",
-                      boxShadow: "0 2px 8px rgba(230,0,18,0.5)",
-                    }}
-                  >
-                    {s.tag}
-                  </span>
-                  <h2
-                    style={{
-                      fontSize: "23px",
-                      fontWeight: 800,
-                      lineHeight: 1.3,
-                      marginBottom: "8px",
-                      maxWidth: "480px",
-                      textShadow: "0 2px 8px rgba(0,0,0,0.7)",
-                    }}
-                  >
-                    {s.title}
-                  </h2>
-                  <p
-                    style={{
-                      fontSize: "13.5px",
-                      color: "rgba(255,255,255,0.85)",
-                      marginBottom: "20px",
-                      maxWidth: "440px",
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    {s.subtitle}
-                  </p>
-
-                  <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-                    <button
-                      onClick={() => onOpenOrderModal && onOpenOrderModal(null)}
-                      style={{
-                        background: "linear-gradient(135deg, #e60012, #ff2a2a)",
-                        color: "#fff",
-                        border: "none",
-                        padding: "9px 20px",
-                        borderRadius: "6px",
-                        fontSize: "13px",
-                        fontWeight: 700,
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "6px",
-                        boxShadow: "0 4px 14px rgba(230,0,18,0.4)",
-                      }}
-                    >
-                      <FileText size={15} /> Nhận Báo Giá Nhanh
-                    </button>
-                    <a
-                      href="tel:0947707616"
-                      style={{
-                        background: "rgba(0, 20, 60, 0.75)",
-                        border: "1px solid rgba(255, 235, 59, 0.5)",
-                        color: "#ffeb3b",
-                        textDecoration: "none",
-                        padding: "9px 20px",
-                        borderRadius: "6px",
-                        fontSize: "13px",
-                        fontWeight: 700,
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "6px",
-                      }}
-                    >
-                      <Phone size={15} /> Gọi Hotline: 0947.707.616
-                    </a>
-                  </div>
-                </div>
-              </div>
-            ))}
-
-            {/* Slider indicators */}
-            <div
-              style={{
-                position: "absolute",
-                bottom: "16px",
-                left: "36px",
-                display: "flex",
-                gap: "6px",
-                zIndex: 10,
-              }}
-            >
-              {slides.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrentSlide(idx)}
-                  style={{
-                    width: currentSlide === idx ? "26px" : "8px",
-                    height: "8px",
-                    borderRadius: "4px",
-                    background: currentSlide === idx ? "#e60012" : "rgba(255,255,255,0.4)",
-                    border: "none",
-                    cursor: "pointer",
-                    padding: 0,
-                    transition: "all 0.2s",
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Right 2 Promo Banners (Metallic dark glass theme) */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "12px", height: "320px" }}>
-            {/* Banner 1 */}
-            <div
-              style={{
-                flex: 1,
-                borderRadius: "14px",
-                overflow: "hidden",
-                position: "relative",
-                background: "linear-gradient(135deg, rgba(0, 25, 75, 0.85), rgba(0, 10, 35, 0.9))",
-                border: "1px solid rgba(0, 140, 255, 0.35)",
-                color: "#fff",
-                padding: "20px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                boxShadow: "0 6px 20px rgba(0,0,0,0.3)",
-              }}
-            >
-              <div style={{ fontSize: "11px", color: "#ffeb3b", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                ★ Chiết Khấu Đến 35% Thùng Sơn
-              </div>
-              <h4 style={{ fontSize: "16px", fontWeight: 700, margin: "6px 0 6px", lineHeight: 1.3 }}>
-                Sơn Epoxy Sàn &amp; Sơn Chống Thấm PU
-              </h4>
-              <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.75)", marginBottom: "12px" }}>
-                Áp dụng nhà thầu &amp; đại lý đơn từ 5 thùng
-              </div>
+          {/* Quick Keywords Pills */}
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "12px", flexWrap: "wrap" }}>
+            <span style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>Gợi ý tìm nhanh:</span>
+            {quickKeywords.map((kw) => (
               <button
-                onClick={() => onOpenOrderModal && onOpenOrderModal(null)}
+                key={kw}
+                onClick={() => handleKeywordClick(kw)}
                 style={{
-                  alignSelf: "flex-start",
-                  background: "linear-gradient(135deg, #e60012, #ff2a2a)",
-                  color: "#fff",
-                  border: "none",
-                  padding: "6px 14px",
-                  borderRadius: "5px",
+                  background: queryParam === kw ? "#e2e8f0" : "#f1f5f9",
+                  color: queryParam === kw ? "#0f172a" : "#475569",
+                  border: "1px solid #e2e8f0",
+                  borderRadius: "20px",
+                  padding: "4px 12px",
                   fontSize: "12px",
-                  fontWeight: 700,
+                  fontWeight: 500,
                   cursor: "pointer",
+                  transition: "all 0.15s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "#e2e8f0";
+                  e.currentTarget.style.color = "#0f172a";
+                }}
+                onMouseLeave={(e) => {
+                  if (queryParam !== kw) {
+                    e.currentTarget.style.background = "#f1f5f9";
+                    e.currentTarget.style.color = "#475569";
+                  }
                 }}
               >
-                Nhận Báo Giá Dự Án &rarr;
+                {kw}
               </button>
-            </div>
-
-            {/* Banner 2 */}
-            <div
-              style={{
-                flex: 1,
-                borderRadius: "14px",
-                overflow: "hidden",
-                position: "relative",
-                background: "linear-gradient(135deg, rgba(30, 0, 10, 0.85), rgba(0, 15, 45, 0.9))",
-                border: "1px solid rgba(230, 0, 18, 0.35)",
-                color: "#fff",
-                padding: "20px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                boxShadow: "0 6px 20px rgba(0,0,0,0.3)",
-              }}
-            >
-              <div style={{ fontSize: "11px", color: "#ffeb3b", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                ★ Kỹ Sư Khảo Sát Tận Nơi
-              </div>
-              <h4 style={{ fontSize: "16px", fontWeight: 700, margin: "6px 0 6px", lineHeight: 1.3 }}>
-                Đo Độ Ẩm &amp; Mác Nền Bê Tông Miễn Phí
-              </h4>
-              <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.75)", marginBottom: "12px" }}>
-                Hỗ trợ kỹ thuật thực địa 24/7 toàn quốc
-              </div>
-              <a
-                href="tel:0947707616"
-                style={{
-                  alignSelf: "flex-start",
-                  background: "#ffeb3b",
-                  color: "#000",
-                  textDecoration: "none",
-                  padding: "6px 14px",
-                  borderRadius: "5px",
-                  fontSize: "12px",
-                  fontWeight: 800,
-                }}
-              >
-                Gọi Kỹ Sư Trực Tiếp &rarr;
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Shopee Service Guarantee Strip */}
-        <div
-          style={{
-            background: "rgba(0, 18, 55, 0.65)",
-            backdropFilter: "blur(12px)",
-            border: "1px solid rgba(0, 100, 255, 0.25)",
-            borderRadius: "12px",
-            padding: "16px 24px",
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-            gap: "16px",
-            marginBottom: "24px",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <ShieldCheck size={22} color="#00e676" />
-            <span style={{ fontSize: "13px", color: "#fff", fontWeight: 600 }}>100% Sơn Chính Hãng (CO/CQ)</span>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <Truck size={22} color="#00a8ff" />
-            <span style={{ fontSize: "13px", color: "#fff", fontWeight: 600 }}>Giao Hàng Tận Chân Công Trình</span>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <RotateCcw size={22} color="#ffeb3b" />
-            <span style={{ fontSize: "13px", color: "#fff", fontWeight: 600 }}>Đổi Trả 7 Ngày Miễn Phí</span>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <Headphones size={22} color="#ff4d4f" />
-            <span style={{ fontSize: "13px", color: "#fff", fontWeight: 600 }}>Kỹ Sư Tư Vấn &amp; Khảo Sát 24/7</span>
-          </div>
-        </div>
-      </div>
-
-      {/* 2. Shopee Category Icon Grid (Dark theme) */}
-      <div style={{ maxWidth: "1360px", margin: "0 auto", padding: "0 24px", marginBottom: "24px" }}>
-        <div
-          style={{
-            background: "rgba(0, 18, 55, 0.72)",
-            backdropFilter: "blur(14px)",
-            border: "1px solid rgba(0, 100, 255, 0.25)",
-            borderRadius: "12px",
-            padding: "20px 24px",
-            boxShadow: "0 8px 30px rgba(0,0,0,0.35)",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
-            <Sparkles size={16} color="#00a8ff" />
-            <span style={{ fontSize: "14px", fontWeight: 800, color: "#fff", textTransform: "uppercase", letterSpacing: "1px" }}>
-              DANH MỤC THÙNG SƠN CÔNG NGHIỆP
-            </span>
-          </div>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(130px, 1fr))",
-              gap: "14px",
-            }}
-          >
-            {categories.map((cat) => {
-              const isActive = activeCategory === cat.id;
-              return (
-                <div
-                  key={cat.id}
-                  onClick={() => setActiveCategory(activeCategory === cat.id ? "all" : cat.id)}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    padding: "12px 8px",
-                    borderRadius: "10px",
-                    border: isActive ? "2px solid #e60012" : "1px solid rgba(0, 100, 255, 0.2)",
-                    background: isActive ? "rgba(230, 0, 18, 0.15)" : "rgba(0, 10, 30, 0.55)",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                    textAlign: "center",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) e.currentTarget.style.borderColor = "rgba(0, 150, 255, 0.5)";
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) e.currentTarget.style.borderColor = "rgba(0, 100, 255, 0.2)";
-                  }}
-                >
-                  <div
-                    style={{
-                      width: "60px",
-                      height: "60px",
-                      borderRadius: "50%",
-                      overflow: "hidden",
-                      background: "#010a1c",
-                      marginBottom: "10px",
-                      boxShadow: "0 4px 10px rgba(0,0,0,0.4)",
-                      border: "1px solid rgba(255,255,255,0.15)",
-                    }}
-                  >
-                    <img src={cat.img} alt={cat.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                  </div>
-                  <span style={{ fontSize: "12.5px", fontWeight: 600, color: isActive ? "#ff4d4f" : "#fff", lineHeight: 1.3 }}>
-                    {cat.name}
-                  </span>
-                  <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.5)", marginTop: "2px" }}>
-                    {cat.count} sản phẩm
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* 3. Shopee Flash Sale Section (Dark Glowing Theme) */}
-      <div style={{ maxWidth: "1360px", margin: "0 auto", padding: "0 24px", marginBottom: "24px" }}>
-        <div
-          style={{
-            background: "rgba(0, 18, 55, 0.75)",
-            backdropFilter: "blur(14px)",
-            border: "1px solid rgba(230, 0, 18, 0.4)",
-            borderRadius: "12px",
-            overflow: "hidden",
-            boxShadow: "0 8px 30px rgba(230, 0, 18, 0.15)",
-          }}
-        >
-          {/* Flash Sale Header */}
-          <div
-            style={{
-              padding: "16px 24px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              borderBottom: "1px solid rgba(255,255,255,0.08)",
-              background: "linear-gradient(90deg, rgba(230, 0, 18, 0.25) 0%, transparent 100%)",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: "14px", flexWrap: "wrap" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#ff4d4f", fontWeight: 800, fontSize: "18px", letterSpacing: "0.5px" }}>
-                <Zap size={22} fill="#ff4d4f" color="#ff4d4f" />
-                <span>FLASH SALE THÙNG SƠN GIÁ TỐT</span>
-              </div>
-
-              {/* Countdown Clocks */}
-              <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
-                <span style={{ background: "#010a1c", color: "#ffeb3b", border: "1px solid rgba(255,235,59,0.3)", padding: "4px 8px", borderRadius: "4px", fontWeight: 800, fontSize: "13px" }}>
-                  {String(timeLeft.hours).padStart(2, "0")}
-                </span>
-                <span style={{ fontWeight: 800, color: "#fff" }}>:</span>
-                <span style={{ background: "#010a1c", color: "#ffeb3b", border: "1px solid rgba(255,235,59,0.3)", padding: "4px 8px", borderRadius: "4px", fontWeight: 800, fontSize: "13px" }}>
-                  {String(timeLeft.minutes).padStart(2, "0")}
-                </span>
-                <span style={{ fontWeight: 800, color: "#fff" }}>:</span>
-                <span style={{ background: "#010a1c", color: "#ffeb3b", border: "1px solid rgba(255,235,59,0.3)", padding: "4px 8px", borderRadius: "4px", fontWeight: 800, fontSize: "13px" }}>
-                  {String(timeLeft.seconds).padStart(2, "0")}
-                </span>
-              </div>
-            </div>
-
-            <div
-              onClick={() => setActiveCategory("all")}
-              style={{ fontSize: "13px", color: "#ff4d4f", fontWeight: 700, display: "flex", alignItems: "center", gap: "3px", cursor: "pointer" }}
-            >
-              <span>Xem tất cả ưu đãi</span>
-              <ChevronRight size={16} />
-            </div>
-          </div>
-
-          {/* Flash Sale Products Row */}
-          <div
-            style={{
-              padding: "20px 24px",
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-              gap: "16px",
-            }}
-          >
-            {flashSaleProducts.slice(0, 4).map((product) => (
-              <ProductCard key={product.id} product={product} onOpenOrder={onOpenOrderModal} />
             ))}
           </div>
         </div>
-      </div>
 
-      {/* 4. Shopee Daily Discover (Gợi Ý Hôm Nay) - Tabbed Main Feed */}
-      <div style={{ maxWidth: "1360px", margin: "0 auto", padding: "0 24px" }}>
-        {/* Sticky Tab Header */}
+        {/* 2. BỘ LỌC DANH MỤC THÙNG SƠN (HORIZONTAL CATEGORY PILLS) */}
         <div
           style={{
-            background: "rgba(0, 18, 55, 0.85)",
-            backdropFilter: "blur(16px)",
-            border: "1px solid rgba(0, 100, 255, 0.25)",
-            borderBottom: "3px solid #e60012",
-            borderRadius: "12px 12px 0 0",
-            padding: "0 20px",
+            background: "#ffffff",
+            borderRadius: "12px",
+            padding: "12px 16px",
+            boxShadow: "0 1px 4px rgba(0,0,0,0.03)",
+            border: "1px solid #e2e8f0",
+            marginBottom: "16px",
             display: "flex",
             alignItems: "center",
             gap: "8px",
             overflowX: "auto",
-            boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
+            whiteSpace: "nowrap",
           }}
         >
-          <div
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#64748b", fontSize: "12.5px", fontWeight: 700, paddingRight: "8px", borderRight: "1px solid #e2e8f0", flexShrink: 0 }}>
+            <Filter size={14} />
+            <span>DANH MỤC:</span>
+          </div>
+
+          <button
             onClick={() => setActiveCategory("all")}
             style={{
-              padding: "16px 22px",
-              fontSize: "14px",
-              fontWeight: 800,
-              color: activeCategory === "all" ? "#ff4d4f" : "rgba(255,255,255,0.7)",
+              background: activeCategory === "all" ? "#0f172a" : "#f8fafc",
+              color: activeCategory === "all" ? "#ffffff" : "#475569",
+              border: activeCategory === "all" ? "1px solid #0f172a" : "1px solid #e2e8f0",
+              borderRadius: "8px",
+              padding: "7px 14px",
+              fontSize: "12.5px",
+              fontWeight: 700,
               cursor: "pointer",
-              borderBottom: activeCategory === "all" ? "3px solid #e60012" : "none",
-              marginBottom: activeCategory === "all" ? "-3px" : "0",
-              whiteSpace: "nowrap",
+              transition: "all 0.15s ease",
+              flexShrink: 0,
             }}
           >
-            GỢI Ý HÔM NAY (TẤT CẢ THÙNG SƠN)
-          </div>
-          {categories.slice(0, 5).map((cat) => (
-            <div
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              style={{
-                padding: "16px 18px",
-                fontSize: "13px",
-                fontWeight: 600,
-                color: activeCategory === cat.id ? "#ff4d4f" : "rgba(255,255,255,0.65)",
-                cursor: "pointer",
-                borderBottom: activeCategory === cat.id ? "3px solid #e60012" : "none",
-                marginBottom: activeCategory === cat.id ? "-3px" : "0",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {cat.name}
-            </div>
-          ))}
+            Tất Cả ({products.length})
+          </button>
+
+          {categories.map((cat) => {
+            const isSelected = activeCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(isSelected ? "all" : cat.id)}
+                style={{
+                  background: isSelected ? "#0f172a" : "#f8fafc",
+                  color: isSelected ? "#ffffff" : "#475569",
+                  border: isSelected ? "1px solid #0f172a" : "1px solid #e2e8f0",
+                  borderRadius: "8px",
+                  padding: "7px 14px",
+                  fontSize: "12.5px",
+                  fontWeight: isSelected ? 700 : 500,
+                  cursor: "pointer",
+                  transition: "all 0.15s ease",
+                  flexShrink: 0,
+                }}
+              >
+                {cat.name}
+              </button>
+            );
+          })}
         </div>
 
-        {/* 2 Selling Methods Notification Banner */}
+        {/* 3. THÔNG BÁO 2 CÁCH MUA HÀNG TIỆN LỢI */}
         <div
           style={{
-            background: "linear-gradient(90deg, rgba(230, 0, 18, 0.2) 0%, rgba(0, 85, 204, 0.2) 100%)",
-            borderLeft: "4px solid #e60012",
-            borderRight: "1px solid rgba(0, 100, 255, 0.2)",
-            padding: "12px 20px",
-            fontSize: "13px",
-            color: "#fff",
+            background: "#eff6ff",
+            border: "1px solid #bfdbfe",
+            borderRadius: "10px",
+            padding: "10px 16px",
+            fontSize: "12.5px",
+            color: "#1e40af",
+            marginBottom: "20px",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             flexWrap: "wrap",
-            gap: "10px",
+            gap: "8px",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ fontWeight: 800, color: "#ffeb3b" }}>⚡ 2 CÁCH MUA HÀNG TIỆN LỢI:</span>
-            <span>(1) Bấm <strong>"Đặt Mua"</strong> để lại thông tin nhận báo giá chiết khấu, hoặc (2) Bấm <strong>"Gọi Shop"</strong> gặp kỹ sư tư vấn 24/7!</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <span style={{ fontWeight: 800 }}>⚡ 2 CÁCH MUA HÀNG TIỆN LỢI:</span>
+            <span>(1) Bấm <strong>"Đặt Mua"</strong> để lại số điện thoại nhận báo giá chiết khấu, hoặc (2) Bấm <strong>"Gọi Shop"</strong> để gặp kỹ sư tư vấn ngay!</span>
           </div>
-          <div style={{ display: "flex", gap: "8px" }}>
-            <button
-              onClick={() => onOpenOrderModal && onOpenOrderModal(null)}
-              style={{
-                background: "linear-gradient(135deg, #e60012, #ff2a2a)",
-                color: "#fff",
-                border: "none",
-                padding: "5px 14px",
-                borderRadius: "4px",
-                fontSize: "12px",
-                fontWeight: 700,
-                cursor: "pointer",
-              }}
-            >
-              Để Lại Thông Tin
-            </button>
-            <a
-              href="tel:0947707616"
-              style={{
-                background: "rgba(0, 10, 30, 0.8)",
-                border: "1px solid rgba(255,235,59,0.5)",
-                color: "#ffeb3b",
-                textDecoration: "none",
-                padding: "5px 14px",
-                borderRadius: "4px",
-                fontSize: "12px",
-                fontWeight: 700,
-              }}
-            >
-              Gọi 0947.707.616
-            </a>
+          <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+            <span style={{ fontSize: "11.5px", color: "#2563eb", fontWeight: 600 }}>• Miễn phí vận chuyển từ 2 thùng</span>
+            <span style={{ fontSize: "11.5px", color: "#2563eb", fontWeight: 600 }}>• CO/CQ &amp; Hóa đơn VAT</span>
           </div>
         </div>
 
-        {/* Product Cards Grid */}
-        <div
-          style={{
-            background: "rgba(0, 15, 45, 0.65)",
-            backdropFilter: "blur(14px)",
-            padding: "24px",
-            border: "1px solid rgba(0, 100, 255, 0.25)",
-            borderTop: "none",
-            borderRadius: "0 0 12px 12px",
-            boxShadow: "0 10px 30px rgba(0,0,0,0.4)",
-          }}
-        >
+        {/* 4. LƯỚI SẢN PHẨM THÙNG SƠN (TRUNG TÂM TRANG) */}
+        <div style={{ marginBottom: "30px" }}>
           {queryParam && (
-            <div style={{ marginBottom: "18px", fontSize: "14px", color: "rgba(255,255,255,0.8)" }}>
-              Kết quả tìm kiếm cho từ khóa: <strong style={{ color: "#00a8ff" }}>"{queryParam}"</strong> ({filteredProducts.length} thùng sơn)
+            <div style={{ marginBottom: "14px", fontSize: "13.5px", color: "#475569" }}>
+              Kết quả tìm kiếm cho: <strong style={{ color: "#0f172a" }}>"{queryParam}"</strong> ({filteredProducts.length} thùng sơn)
             </div>
           )}
 
           {filteredProducts.length === 0 ? (
-            <div style={{ padding: "60px 0", textAlign: "center", color: "rgba(255,255,255,0.5)" }}>
-              <p style={{ fontSize: "16px", marginBottom: "14px" }}>Không tìm thấy thùng sơn phù hợp.</p>
+            <div
+              style={{
+                background: "#ffffff",
+                borderRadius: "12px",
+                padding: "60px 20px",
+                textAlign: "center",
+                border: "1px solid #e2e8f0",
+              }}
+            >
+              <p style={{ fontSize: "15px", color: "#64748b", marginBottom: "14px" }}>
+                Không tìm thấy thùng sơn nào phù hợp với từ khóa "{queryParam}".
+              </p>
               <button
                 onClick={() => {
                   setActiveCategory("all");
@@ -788,11 +343,12 @@ export default function Home({ onOpenOrderModal }) {
                   setSearchInput("");
                 }}
                 style={{
-                  background: "linear-gradient(135deg, #e60012, #ff2a2a)",
+                  background: "#0f172a",
                   color: "#fff",
                   border: "none",
-                  padding: "10px 22px",
-                  borderRadius: "6px",
+                  padding: "9px 20px",
+                  borderRadius: "8px",
+                  fontSize: "13px",
                   fontWeight: 700,
                   cursor: "pointer",
                 }}
@@ -804,7 +360,7 @@ export default function Home({ onOpenOrderModal }) {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+                gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))",
                 gap: "16px",
               }}
             >
@@ -814,68 +370,119 @@ export default function Home({ onOpenOrderModal }) {
             </div>
           )}
         </div>
+
+        {/* 5. DẢI CAM KẾT CHẤT LƯỢNG (NHẸ NHÀNG, TINH TẾ) */}
+        <div
+          style={{
+            background: "#ffffff",
+            borderRadius: "12px",
+            padding: "20px 24px",
+            border: "1px solid #e2e8f0",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: "20px",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center", color: "#16a34a", flexShrink: 0 }}>
+              <ShieldCheck size={20} />
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: "13px", color: "#0f172a" }}>100% Sơn Chính Hãng</div>
+              <div style={{ fontSize: "11.5px", color: "#64748b" }}>Đầy đủ chứng chỉ CO/CQ, xuất hóa đơn VAT</div>
+            </div>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "#eff6ff", display: "flex", alignItems: "center", justifyContent: "center", color: "#2563eb", flexShrink: 0 }}>
+              <Truck size={20} />
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: "13px", color: "#0f172a" }}>Giao Tận Chân Công Trình</div>
+              <div style={{ fontSize: "11.5px", color: "#64748b" }}>Đội xe giao nhanh Cần Thơ, TP.HCM &amp; gửi chành xe</div>
+            </div>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "#fefce8", display: "flex", alignItems: "center", justifyContent: "center", color: "#ca8a04", flexShrink: 0 }}>
+              <RotateCcw size={20} />
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: "13px", color: "#0f172a" }}>Đổi Trả Trong 7 Ngày</div>
+              <div style={{ fontSize: "11.5px", color: "#64748b" }}>Đổi trả nếu phát sinh lỗi bao bì hoặc sai màu</div>
+            </div>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "#fef2f2", display: "flex", alignItems: "center", justifyContent: "center", color: "#dc2626", flexShrink: 0 }}>
+              <Headphones size={20} />
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: "13px", color: "#0f172a" }}>Kỹ Sư Tư Vấn 24/7</div>
+              <div style={{ fontSize: "11.5px", color: "#64748b" }}>Hỗ trợ tính định mức $m^2$ &amp; khảo sát miễn phí</div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* 5. Quick Floating Actions (Call & Quote) */}
+      {/* 6. NÚT NỔI GỌI & BÁO GIÁ DỄ BẤM (GỌN GÀNG, KHÔNG CHÓI) */}
       <div
         style={{
           position: "fixed",
-          bottom: "28px",
-          right: "28px",
+          bottom: "24px",
+          right: "24px",
           display: "flex",
           flexDirection: "column",
-          gap: "12px",
+          gap: "10px",
           zIndex: 999,
         }}
       >
-        {/* Method 1: Nút để lại thông tin đặt mua nổi */}
         <button
           onClick={() => onOpenOrderModal && onOpenOrderModal(null)}
           style={{
-            background: "linear-gradient(135deg, #e60012, #ff2a2a)",
-            color: "#fff",
+            background: "#dc2626",
+            color: "#ffffff",
             border: "none",
             borderRadius: "30px",
-            padding: "12px 20px",
-            fontWeight: 800,
-            fontSize: "13.5px",
+            padding: "11px 18px",
+            fontWeight: 700,
+            fontSize: "13px",
             display: "flex",
             alignItems: "center",
-            gap: "8px",
+            gap: "7px",
             cursor: "pointer",
-            boxShadow: "0 6px 20px rgba(230, 0, 18, 0.5)",
-            transition: "transform 0.2s ease",
+            boxShadow: "0 4px 14px rgba(220, 38, 38, 0.3)",
+            transition: "transform 0.15s ease",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.04)")}
           onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
         >
-          <FileText size={17} />
+          <FileText size={16} />
           <span>Đặt Mua / Báo Giá</span>
         </button>
 
-        {/* Method 2: Nút gọi hotline nổi */}
         <a
           href="tel:0947707616"
           style={{
-            background: "#010a1c",
-            color: "#ffeb3b",
-            border: "2px solid #ffeb3b",
+            background: "#0f172a",
+            color: "#ffffff",
+            border: "1px solid #334155",
             borderRadius: "30px",
-            padding: "12px 20px",
-            fontWeight: 800,
-            fontSize: "13.5px",
+            padding: "11px 18px",
+            fontWeight: 700,
+            fontSize: "13px",
             display: "flex",
             alignItems: "center",
-            gap: "8px",
+            gap: "7px",
             textDecoration: "none",
-            boxShadow: "0 6px 20px rgba(0,0,0,0.5)",
-            transition: "transform 0.2s ease",
+            boxShadow: "0 4px 14px rgba(15, 23, 42, 0.3)",
+            transition: "transform 0.15s ease",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.04)")}
           onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
         >
-          <Phone size={17} color="#ffeb3b" />
-          <span>Gọi Shop: 0947.707.616</span>
+          <Phone size={16} color="#22c55e" />
+          <span>Gọi: 0947.707.616</span>
         </a>
       </div>
     </div>

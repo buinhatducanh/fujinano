@@ -122,54 +122,20 @@ export default function Navbar({ onOpenOrderModal }) {
           left: 0,
           right: 0,
           zIndex: 999,
-          height: "90px",
-          transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+          height: "72px",
+          transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+          background: "#ffffff",
+          borderBottom: "1px solid #e2e8f0",
+          boxShadow: scrolled ? "0 4px 16px rgba(0,0,0,0.06)" : "0 1px 3px rgba(0,0,0,0.03)",
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: scrolled
-              ? "rgba(0, 15, 60, 0.96)"
-              : "rgba(0, 15, 60, 0.5)",
-            backdropFilter: "blur(20px) saturate(1.8)",
-            WebkitBackdropFilter: "blur(20px) saturate(1.8)",
-            transition: "background 0.4s ease",
-          }}
-        />
-
-        {/* Animated Gradient Line at Bottom */}
-        <div
-          className="nav-gradient-border"
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "1px",
-            overflow: "hidden",
-          }}
-        >
-          <div
-            className="nav-gradient-line"
-            style={{
-              width: "200%",
-              height: "100%",
-              background:
-                "linear-gradient(90deg, transparent, #e60012, #0055cc, #ff8800, #e60012, transparent)",
-              animation: "gradientSlide 4s linear infinite",
-            }}
-          />
-        </div>
-
         <div
           style={{
             position: "relative",
             zIndex: 2,
             maxWidth: "1400px",
             margin: "0 auto",
-            padding: "0 32px",
+            padding: "0 24px",
             height: "100%",
             display: "flex",
             alignItems: "center",
@@ -178,38 +144,21 @@ export default function Navbar({ onOpenOrderModal }) {
         >
           {/* Logo */}
           <Link
-            to="/#home"
+            to="/"
             className="nav-logo-wrap"
             style={{
               display: "flex",
               alignItems: "center",
               textDecoration: "none",
               flexShrink: 0,
-              position: "relative",
             }}
           >
-            <Logo size="md" dark={false} />
-            <div
-              className="logo-glow"
-              style={{
-                position: "absolute",
-                width: "120px",
-                height: "60px",
-                borderRadius: "50%",
-                background:
-                  "radial-gradient(ellipse, rgba(230,0,18,0.15) 0%, rgba(0,85,204,0.08) 60%, transparent 100%)",
-                filter: "blur(16px)",
-                left: "50%",
-                top: "50%",
-                transform: "translate(-50%, -50%)",
-                pointerEvents: "none",
-              }}
-            />
+            <Logo size="sm" dark={true} />
           </Link>
 
           {/* Desktop Nav Items */}
           <div
-            style={{ display: "flex", alignItems: "center", gap: "4px" }}
+            style={{ display: "flex", alignItems: "center", gap: "6px" }}
             className="desk-nav"
           >
             {navItems.map((item) =>
@@ -222,162 +171,87 @@ export default function Navbar({ onOpenOrderModal }) {
                 >
                   <a
                     href={item.href}
-                    className="nav-link-3d"
                     style={{
                       display: "inline-flex",
                       alignItems: "center",
                       gap: "5px",
-                      padding: "8px 16px",
+                      padding: "8px 14px",
                       fontFamily: "'DM Sans', sans-serif",
                       fontSize: "14px",
-                      fontWeight: 500,
-                      color: "#fff",
+                      fontWeight: 600,
+                      color: servicesDropdownOpen ? "#dc2626" : "#1e293b",
                       textDecoration: "none",
-                      borderRadius: "8px",
-                      transition: "all 0.25s",
-                      background: servicesDropdownOpen
-                        ? "rgba(255,255,255,0.08)"
-                        : "transparent",
-                      position: "relative",
-                      overflow: "hidden",
+                      borderRadius: "6px",
+                      transition: "color 0.2s",
                     }}
                   >
-                    <span style={{ position: "relative", zIndex: 1 }}>{item.label}</span>
+                    <span>{item.label}</span>
                     <ChevronDown
                       size={13}
                       style={{
                         transform: servicesDropdownOpen ? "rotate(180deg)" : "none",
-                        transition: "transform 0.25s",
-                        position: "relative",
-                        zIndex: 1,
+                        transition: "transform 0.2s",
                       }}
                     />
                   </a>
 
-                  {/* Mega Dropdown */}
+                  {/* Dropdown */}
                   {servicesDropdownOpen && (
                     <div
                       style={{
                         position: "absolute",
                         top: "100%",
-                        left: "-120px",
-                        paddingTop: "8px",
+                        left: "-80px",
+                        paddingTop: "6px",
                       }}
                     >
                       <div
-                        className="mega-dropdown"
                         style={{
-                          width: "420px",
-                          background: "rgba(0, 20, 75, 0.97)",
-                          backdropFilter: "blur(24px) saturate(1.5)",
-                          border: "1px solid rgba(255,255,255,0.08)",
-                          borderRadius: "20px",
+                          width: "360px",
+                          background: "#ffffff",
+                          border: "1px solid #e2e8f0",
+                          borderRadius: "12px",
                           padding: "8px",
-                          boxShadow:
-                            "0 25px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.03) inset",
-                          animation: "dropReveal 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
-                          overflow: "hidden",
+                          boxShadow: "0 12px 30px rgba(0,0,0,0.1)",
                         }}
                       >
-                        <div
-                          style={{
-                            position: "absolute",
-                            top: "-20px",
-                            left: "50%",
-                            width: "160px",
-                            height: "40px",
-                            background: "rgba(230, 0, 18, 0.15)",
-                            filter: "blur(30px)",
-                            transform: "translateX(-50%)",
-                            pointerEvents: "none",
-                          }}
-                        />
-
-                        <div
-                          style={{
-                            padding: "12px 16px 8px",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "6px",
-                          }}
-                        >
-                          <Sparkles size={12} color="#ff4455" />
-                          <span
-                            style={{
-                              fontSize: "10px",
-                              textTransform: "uppercase",
-                              letterSpacing: "2px",
-                              color: "rgba(255,255,255,0.35)",
-                              fontWeight: 700,
-                              fontFamily: "'DM Sans', sans-serif",
-                            }}
-                          >
-                            Dịch Vụ Chuyên Nghiệp
-                          </span>
-                        </div>
-
                         {item.sub.map((subItem) => {
                           const IconComp = iconMap[subItem.icon] || Layers;
                           return (
                             <a
                               key={subItem.title}
                               href={subItem.href}
-                              className="dropdown-item-3d"
                               style={{
                                 display: "flex",
                                 alignItems: "center",
-                                gap: "14px",
-                                padding: "14px 16px",
+                                gap: "12px",
+                                padding: "10px 12px",
                                 textDecoration: "none",
-                                borderRadius: "14px",
-                                transition: "all 0.2s ease",
-                                position: "relative",
-                                overflow: "hidden",
+                                borderRadius: "8px",
+                                transition: "background 0.15s ease",
                               }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.background = `${subItem.color}15`;
-                                e.currentTarget.style.transform = "translateX(6px)";
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.background = "transparent";
-                                e.currentTarget.style.transform = "translateX(0)";
-                              }}
+                              onMouseEnter={(e) => (e.currentTarget.style.background = "#f8fafc")}
+                              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                             >
                               <div
                                 style={{
-                                  width: "42px",
-                                  height: "42px",
-                                  borderRadius: "12px",
-                                  background: `linear-gradient(135deg, ${subItem.color}22, ${subItem.color}0a)`,
-                                  border: `1px solid ${subItem.color}33`,
+                                  width: "34px",
+                                  height: "34px",
+                                  borderRadius: "8px",
+                                  background: "#f1f5f9",
                                   display: "flex",
                                   alignItems: "center",
                                   justifyContent: "center",
                                   flexShrink: 0,
-                                  transition: "all 0.25s",
                                 }}
                               >
-                                <IconComp size={18} color={subItem.color} />
+                                <IconComp size={16} color="#0f172a" />
                               </div>
                               <div>
-                                <div
-                                  style={{
-                                    fontFamily: "'DM Sans', sans-serif",
-                                    fontSize: "14px",
-                                    fontWeight: 600,
-                                    color: "#fff",
-                                    marginBottom: "2px",
-                                  }}
-                                >
+                                <div style={{ fontSize: "13.5px", fontWeight: 600, color: "#0f172a" }}>
                                   {subItem.title}
                                 </div>
-                                <div
-                                  style={{
-                                    fontFamily: "'DM Sans', sans-serif",
-                                    fontSize: "11.5px",
-                                    color: "rgba(255,255,255,0.55)",
-                                  }}
-                                >
+                                <div style={{ fontSize: "11px", color: "#64748b" }}>
                                   {subItem.desc}
                                 </div>
                               </div>
@@ -392,23 +266,22 @@ export default function Navbar({ onOpenOrderModal }) {
                 <a
                   key={item.label}
                   href={item.href}
-                  className="nav-link-3d"
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    padding: "8px 16px",
+                    padding: "8px 14px",
                     fontFamily: "'DM Sans', sans-serif",
                     fontSize: "14px",
-                    fontWeight: 500,
-                    color: "#fff",
+                    fontWeight: 600,
+                    color: "#1e293b",
                     textDecoration: "none",
-                    borderRadius: "8px",
-                    transition: "all 0.25s",
-                    position: "relative",
-                    overflow: "hidden",
+                    borderRadius: "6px",
+                    transition: "color 0.2s",
                   }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#dc2626")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#1e293b")}
                 >
-                  <span style={{ position: "relative", zIndex: 1 }}>{item.label}</span>
+                  <span>{item.label}</span>
                 </a>
               )
             )}
@@ -422,30 +295,23 @@ export default function Navbar({ onOpenOrderModal }) {
             {/* Phương thức 1: Đặt mua / Báo giá */}
             <button
               onClick={() => onOpenOrderModal && onOpenOrderModal(null)}
-              className="cta-pill-3d"
               style={{
                 display: "flex",
                 alignItems: "center",
                 gap: "6px",
-                padding: "9px 16px",
-                borderRadius: "10px",
-                background: "linear-gradient(135deg, rgba(230,0,18,0.2), rgba(0,85,204,0.2))",
-                color: "#ffeb3b",
+                padding: "8px 16px",
+                borderRadius: "8px",
+                background: "#dc2626",
+                color: "#ffffff",
                 cursor: "pointer",
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "13px",
                 fontWeight: 700,
-                transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
-                border: "1.5px solid rgba(255,235,59,0.5)",
+                border: "none",
+                transition: "background 0.2s",
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "#ffeb3b";
-                e.currentTarget.style.color = "#000";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "linear-gradient(135deg, rgba(230,0,18,0.2), rgba(0,85,204,0.2))";
-                e.currentTarget.style.color = "#ffeb3b";
-              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "#b91c1c")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "#dc2626")}
             >
               <FileText size={14} />
               <span>Báo Giá / Đặt Mua</span>
@@ -455,53 +321,48 @@ export default function Navbar({ onOpenOrderModal }) {
               href="https://zalo.me/0947707616"
               target="_blank"
               rel="noopener noreferrer"
-              className="cta-pill-3d"
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "6px",
-                padding: "9px 16px",
-                borderRadius: "10px",
-                background: "rgba(255,255,255,0.04)",
-                color: "#fff",
+                gap: "5px",
+                padding: "7px 14px",
+                borderRadius: "8px",
+                background: "#f1f5f9",
+                color: "#334155",
                 textDecoration: "none",
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "13px",
-                fontWeight: 500,
-                transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
-                border: "1px solid rgba(255,255,255,0.1)",
+                fontWeight: 600,
+                border: "1px solid #e2e8f0",
               }}
             >
-              <MessageCircle size={13} />
+              <MessageCircle size={14} color="#0284c7" />
               Zalo
             </a>
 
             {/* Phương thức 2: Gọi hotline */}
             <a
               href="tel:0947707616"
-              className="hotline-3d"
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "7px",
-                padding: "9px 20px",
-                background: "linear-gradient(135deg, #e60012, #cc0010)",
-                color: "#fff",
-                borderRadius: "10px",
+                gap: "6px",
+                padding: "8px 16px",
+                background: "#0f172a",
+                color: "#ffffff",
+                borderRadius: "8px",
                 textDecoration: "none",
                 fontFamily: "'DM Sans', sans-serif",
-                fontSize: "13.5px",
-                fontWeight: 600,
+                fontSize: "13px",
+                fontWeight: 700,
                 whiteSpace: "nowrap",
-                transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
-                boxShadow: "0 4px 20px rgba(230,0,18,0.3), 0 0 0 0 rgba(230,0,18,0.4)",
-                position: "relative",
-                overflow: "hidden",
+                transition: "background 0.2s",
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "#1e293b")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "#0f172a")}
             >
-              <div className="hotline-shine" />
-              <Phone size={13} style={{ position: "relative", zIndex: 1 }} />
-              <span style={{ position: "relative", zIndex: 1 }}>0947.707.616</span>
+              <Phone size={13} color="#22c55e" />
+              <span>0947.707.616</span>
             </a>
           </div>
 
@@ -514,7 +375,7 @@ export default function Navbar({ onOpenOrderModal }) {
               background: "none",
               border: "none",
               cursor: "pointer",
-              color: "#fff",
+              color: "#0f172a",
               padding: "6px",
             }}
           >
@@ -530,16 +391,15 @@ export default function Navbar({ onOpenOrderModal }) {
               top: "100%",
               left: 0,
               right: 0,
-              background: "rgba(0, 15, 65, 0.98)",
-              backdropFilter: "blur(24px)",
-              borderTop: "1px solid rgba(255,255,255,0.06)",
+              background: "#ffffff",
+              borderBottom: "1px solid #e2e8f0",
+              boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
               padding: "16px 24px 28px",
               display: "flex",
               flexDirection: "column",
-              gap: "4px",
-              maxHeight: "85vh",
+              gap: "6px",
+              maxHeight: "80vh",
               overflowY: "auto",
-              animation: "mobileSlide 0.3s ease",
             }}
           >
             {navItems.map((item) => (
@@ -551,13 +411,13 @@ export default function Navbar({ onOpenOrderModal }) {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    padding: "14px 0",
+                    padding: "12px 0",
                     fontFamily: "'DM Sans', sans-serif",
                     fontSize: "15px",
-                    fontWeight: 500,
-                    color: "#fff",
+                    fontWeight: 600,
+                    color: "#0f172a",
                     textDecoration: "none",
-                    borderBottom: "1px solid rgba(255,255,255,0.04)",
+                    borderBottom: "1px solid #f1f5f9",
                   }}
                 >
                   {item.label}
@@ -571,9 +431,9 @@ export default function Navbar({ onOpenOrderModal }) {
                         onClick={() => setMobileMenuOpen(false)}
                         style={{
                           display: "block",
-                          padding: "10px 0",
+                          padding: "8px 0",
                           fontSize: "13px",
-                          color: "rgba(255,255,255,0.55)",
+                          color: "#64748b",
                           textDecoration: "none",
                         }}
                       >
@@ -585,26 +445,51 @@ export default function Navbar({ onOpenOrderModal }) {
               </div>
             ))}
 
-            <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
-              <a
-                href="tel:0947707616"
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "16px" }}>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenOrderModal && onOpenOrderModal(null);
+                }}
                 style={{
-                  flex: 1,
+                  width: "100%",
                   display: "flex",
                   alignItems: "center",
                   gap: "8px",
                   justifyContent: "center",
-                  padding: "14px",
-                  background: "#e60012",
+                  padding: "12px",
+                  background: "#dc2626",
                   color: "#fff",
-                  borderRadius: "10px",
-                  textDecoration: "none",
-                  fontWeight: 600,
+                  borderRadius: "8px",
+                  border: "none",
+                  fontWeight: 700,
                   fontSize: "14px",
-                  fontFamily: "'DM Sans', sans-serif",
+                  cursor: "pointer",
                 }}
               >
-                <Phone size={14} /> 0947.707.616
+                <FileText size={16} />
+                <span>Đặt Mua / Báo Giá Nhanh</span>
+              </button>
+
+              <a
+                href="tel:0947707616"
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  justifyContent: "center",
+                  padding: "12px",
+                  background: "#0f172a",
+                  color: "#fff",
+                  borderRadius: "8px",
+                  textDecoration: "none",
+                  fontWeight: 700,
+                  fontSize: "14px",
+                }}
+              >
+                <Phone size={16} color="#22c55e" />
+                <span>Gọi Hotline: 0947.707.616</span>
               </a>
             </div>
           </div>
