@@ -44,7 +44,8 @@ import {
   Cpu,
   Video as VideoIcon,
   Film,
-  Zap
+  Zap,
+  MessageSquare
 } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
 
@@ -603,6 +604,58 @@ export default function Admin() {
   });
 
   // =========================================================================
+  // 4c. STATE & LOGIC CHO QUẢN TRỊ LEADS / YÊU CẦU BÁO GIÁ
+  // =========================================================================
+  const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
+  const [selectedInquiry, setSelectedInquiry] = useState(null);
+  const [inquiryNotesText, setInquiryNotesText] = useState("");
+  const [inquiryStatusSelect, setInquiryStatusSelect] = useState("pending");
+  const [inquirySearch, setInquirySearch] = useState("");
+  const [inquiryFilterStatus, setInquiryFilterStatus] = useState("all");
+
+  const openInquiryModal = (inq) => {
+    setSelectedInquiry(inq);
+    setInquiryNotesText(inq.notes || "");
+    setInquiryStatusSelect(inq.status || "pending");
+    setInquiryModalOpen(true);
+  };
+
+  const handleSaveInquiryNotes = () => {
+    if (!selectedInquiry) return;
+    updateInquiryStatus(selectedInquiry.id, inquiryStatusSelect, inquiryNotesText);
+    showToast(`✓ Đã lưu cập nhật cho: ${selectedInquiry.name}`);
+    setInquiryModalOpen(false);
+  };
+
+  const filteredInquiries = useMemo(() => {
+    return (inquiries || []).filter((item) => {
+      const q = (inquirySearch || "").toLowerCase().trim();
+      const matchSearch =
+        q === "" ||
+        (item.name || "").toLowerCase().includes(q) ||
+        (item.phone || "").includes(q) ||
+        (item.product || "").toLowerCase().includes(q) ||
+        (item.topic || "").toLowerCase().includes(q) ||
+        (item.notes || "").toLowerCase().includes(q);
+      const matchStatus =
+        inquiryFilterStatus === "all" || item.status === inquiryFilterStatus;
+      return matchSearch && matchStatus;
+    });
+  }, [inquiries, inquirySearch, inquiryFilterStatus]);
+
+  const contactedInquiriesCount = useMemo(() => {
+    return (inquiries || []).filter((i) => i.status === "contacted").length;
+  }, [inquiries]);
+
+  const completedInquiriesCount = useMemo(() => {
+    return (inquiries || []).filter((i) => i.status === "completed").length;
+  }, [inquiries]);
+
+  const cancelledInquiriesCount = useMemo(() => {
+    return (inquiries || []).filter((i) => i.status === "cancelled").length;
+  }, [inquiries]);
+
+  // =========================================================================
   // 5. THỐNG KÊ DASHBOARD
   // =========================================================================
   const pendingInquiriesCount = inquiries.filter((i) => i.status === "pending").length;
@@ -958,6 +1011,13 @@ export default function Admin() {
         flexDirection: "column",
       }}
     >
+      <style>{`
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 960px) {
+          .admin-main-layout { flex-direction: column !important; }
+          .admin-sidebar { width: 100% !important; border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.08) !important; }
+        }
+      `}</style>
       {/* Toast Notification */}
       {toastMessage && (
         <div
@@ -1152,9 +1212,10 @@ export default function Admin() {
       {/* ===================================================================== */}
       {/* BODY LAYOUT: SIDEBAR + MAIN CONTENT AREA                             */}
       {/* ===================================================================== */}
-      <div style={{ display: "flex", flex: 1, minHeight: "calc(100vh - 65px)" }}>
+      <div className="admin-main-layout" style={{ display: "flex", flex: 1, minHeight: "calc(100vh - 65px)" }}>
         {/* SIDEBAR NAVIGATION */}
         <aside
+          className="admin-sidebar"
           style={{
             width: "260px",
             background: "rgba(2, 12, 38, 0.98)",
@@ -1320,12 +1381,11 @@ export default function Admin() {
               {/* Neon Cloud Infrastructure Status Banner */}
               <div
                 style={{
-                  background: "linear-gradient(135deg, rgba(8, 28, 72, 0.9) 0%, rgba(3, 14, 44, 0.95) 100%)",
-                  border: "1px solid rgba(59, 130, 246, 0.35)",
+                  background: "rgba(6, 20, 52, 0.85)",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
                   borderRadius: "12px",
                   padding: "16px 20px",
                   marginBottom: "24px",
-                  boxShadow: "0 6px 20px rgba(0,0,0,0.3)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
@@ -1339,17 +1399,15 @@ export default function Admin() {
                       width: "42px",
                       height: "42px",
                       borderRadius: "10px",
-                      background: "rgba(0, 230, 153, 0.15)",
-                      border: "1px solid rgba(0, 230, 153, 0.4)",
+                      background: "rgba(56, 189, 248, 0.12)",
+                      border: "1px solid rgba(56, 189, 248, 0.25)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      color: "#00e699",
-                      fontSize: "20px",
-                      fontWeight: 900,
+                      color: "#38bdf8",
                     }}
                   >
-                    ⚡
+                    <Database size={20} />
                   </div>
                   <div>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -1358,19 +1416,20 @@ export default function Admin() {
                       </span>
                       <span
                         style={{
-                          background: "rgba(0, 230, 153, 0.2)",
-                          color: "#00e699",
+                          background: "rgba(16, 185, 129, 0.15)",
+                          color: "#34d399",
                           fontSize: "11px",
                           fontWeight: 700,
                           padding: "2px 8px",
                           borderRadius: "4px",
+                          border: "1px solid rgba(16, 185, 129, 0.3)",
                         }}
                       >
                         ● Đang Hoạt Động
                       </span>
                     </div>
                     <div style={{ fontSize: "12.5px", color: "#94a3b8", marginTop: "3px" }}>
-                      Branch: <strong style={{ color: "#38bdf8" }}>{neonStatus?.branch || "production"}</strong> ({neonStatus?.branchId || "br-purple-dream-a118wnr7"}) · Region: <strong>{neonStatus?.region || "ap-southeast-1"}</strong>
+                      Branch: <strong style={{ color: "#38bdf8" }}>{neonStatus?.branch || "production"}</strong> ({neonStatus?.branchId || "br-purple-dream-a118wnr7"}) · Region: <strong>{neonStatus?.region || "ap-southeast-1"} (Singapore)</strong>
                     </div>
                   </div>
                 </div>
@@ -1549,67 +1608,147 @@ export default function Admin() {
                       </tr>
                     </thead>
                     <tbody>
-                      {inquiries.slice(0, 4).map((item) => (
-                        <tr key={item.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                          <td style={{ padding: "12px", fontWeight: 600 }}>{item.name}</td>
-                          <td style={{ padding: "12px", color: "#38bdf8", fontWeight: 700 }}>
-                            <a href={`tel:${item.phone}`} style={{ color: "inherit" }}>
-                              {item.phone}
+                      {inquiries.slice(0, 6).map((item) => (
+                        <tr
+                          key={item.id}
+                          style={{
+                            borderBottom: "1px solid rgba(255,255,255,0.06)",
+                            transition: "background 0.15s ease",
+                          }}
+                        >
+                          <td style={{ padding: "12px 14px", fontWeight: 600 }}>
+                            <div style={{ color: "#ffffff" }}>{item.name}</div>
+                            {item.email && (
+                              <div style={{ fontSize: "11px", color: "#64748b" }}>{item.email}</div>
+                            )}
+                          </td>
+                          <td style={{ padding: "12px 14px", fontWeight: 700 }}>
+                            <a
+                              href={`tel:${(item.phone || "").replace(/[^0-9+]/g, "")}`}
+                              style={{
+                                color: "#22c55e",
+                                textDecoration: "none",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "5px",
+                              }}
+                              title="Bấm để gọi trực tiếp cho khách hàng"
+                            >
+                              <Phone size={12} />
+                              <span>{item.phone}</span>
                             </a>
                           </td>
-                          <td style={{ padding: "12px", color: "#cbd5e1" }}>
-                            {item.product || item.topic}
-                            {item.quantity ? ` (${item.quantity} thùng)` : ""}
+                          <td style={{ padding: "12px 14px", color: "#cbd5e1" }}>
+                            <div style={{ color: "#38bdf8", fontWeight: 600 }}>
+                              {item.product || item.topic || "Tư vấn sơn công nghiệp"}
+                            </div>
+                            {(item.quantity || item.area) && (
+                              <div style={{ fontSize: "11.5px", color: "#94a3b8" }}>
+                                {item.quantity ? `${item.quantity} thùng` : ""}
+                                {item.quantity && item.area ? " • " : ""}
+                                {item.area ? `Diện tích: ${item.area}` : ""}
+                              </div>
+                            )}
                           </td>
-                          <td style={{ padding: "12px", color: "#94a3b8", fontSize: "12px" }}>{item.date}</td>
-                          <td style={{ padding: "12px" }}>
-                            <span
+                          <td style={{ padding: "12px 14px", color: "#94a3b8", fontSize: "12px", whiteSpace: "nowrap" }}>
+                            {item.date}
+                          </td>
+                          <td style={{ padding: "12px 14px" }}>
+                            <select
+                              value={item.status || "pending"}
+                              onChange={(e) => {
+                                updateInquiryStatus(item.id, e.target.value);
+                                const statusMap = {
+                                  pending: "Chờ gọi lại",
+                                  contacted: "Đã tư vấn",
+                                  completed: "Đã chốt đơn",
+                                  cancelled: "Hủy yêu cầu",
+                                };
+                                showToast(`✓ Đã đổi trạng thái sang "${statusMap[e.target.value]}": ${item.name}`);
+                              }}
                               style={{
-                                display: "inline-block",
-                                padding: "3px 8px",
-                                borderRadius: "4px",
-                                fontSize: "11px",
-                                fontWeight: 700,
                                 background:
                                   item.status === "pending"
-                                    ? "rgba(239, 68, 68, 0.2)"
+                                    ? "rgba(239, 68, 68, 0.18)"
                                     : item.status === "contacted"
-                                    ? "rgba(245, 158, 11, 0.2)"
-                                    : "rgba(16, 185, 129, 0.2)",
+                                    ? "rgba(245, 158, 11, 0.18)"
+                                    : item.status === "completed"
+                                    ? "rgba(16, 185, 129, 0.18)"
+                                    : "rgba(148, 163, 184, 0.18)",
                                 color:
                                   item.status === "pending"
                                     ? "#f87171"
                                     : item.status === "contacted"
                                     ? "#fbbf24"
-                                    : "#34d399",
-                              }}
-                            >
-                              {item.status === "pending"
-                                ? "Chờ gọi lại"
-                                : item.status === "contacted"
-                                ? "Đã tư vấn"
-                                : "Đã chốt đơn"}
-                            </span>
-                          </td>
-                          <td style={{ padding: "12px", textAlign: "right" }}>
-                            <a
-                              href={`tel:${item.phone}`}
-                              style={{
-                                background: "#16a34a",
-                                color: "#ffffff",
-                                padding: "5px 10px",
-                                borderRadius: "4px",
+                                    : item.status === "completed"
+                                    ? "#34d399"
+                                    : "#94a3b8",
+                                border:
+                                  item.status === "pending"
+                                    ? "1px solid rgba(239, 68, 68, 0.35)"
+                                    : item.status === "contacted"
+                                    ? "1px solid rgba(245, 158, 11, 0.35)"
+                                    : item.status === "completed"
+                                    ? "1px solid rgba(16, 185, 129, 0.35)"
+                                    : "1px solid rgba(148, 163, 184, 0.35)",
+                                padding: "4px 8px",
+                                borderRadius: "6px",
                                 fontSize: "11.5px",
                                 fontWeight: 700,
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: "4px",
-                                textDecoration: "none",
+                                cursor: "pointer",
+                                outline: "none",
                               }}
                             >
-                              <Phone size={12} />
-                              <span>Gọi Shop</span>
-                            </a>
+                              <option value="pending" style={{ background: "#061434", color: "#f87171" }}>Chờ gọi lại</option>
+                              <option value="contacted" style={{ background: "#061434", color: "#fbbf24" }}>Đã tư vấn</option>
+                              <option value="completed" style={{ background: "#061434", color: "#34d399" }}>Đã chốt đơn</option>
+                              <option value="cancelled" style={{ background: "#061434", color: "#94a3b8" }}>Hủy</option>
+                            </select>
+                          </td>
+                          <td style={{ padding: "12px 14px", textAlign: "right" }}>
+                            <div style={{ display: "inline-flex", gap: "6px" }}>
+                              <a
+                                href={`tel:${(item.phone || "").replace(/[^0-9+]/g, "")}`}
+                                style={{
+                                  background: "#16a34a",
+                                  color: "#ffffff",
+                                  padding: "5px 11px",
+                                  borderRadius: "6px",
+                                  fontSize: "11.5px",
+                                  fontWeight: 700,
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  gap: "4px",
+                                  textDecoration: "none",
+                                  transition: "background 0.15s ease",
+                                }}
+                                title={`Gọi trực tiếp cho ${item.name} (${item.phone})`}
+                              >
+                                <Phone size={12} />
+                                <span>Gọi Khách</span>
+                              </a>
+
+                              <button
+                                onClick={() => openInquiryModal(item)}
+                                style={{
+                                  background: "rgba(59, 130, 246, 0.15)",
+                                  color: "#38bdf8",
+                                  border: "1px solid rgba(59, 130, 246, 0.3)",
+                                  padding: "5px 8px",
+                                  borderRadius: "6px",
+                                  fontSize: "11.5px",
+                                  fontWeight: 600,
+                                  cursor: "pointer",
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  gap: "4px",
+                                }}
+                                title="Xem chi tiết & ghi chú trao đổi"
+                              >
+                                <FileText size={12} />
+                                <span>Ghi Chú</span>
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -2196,163 +2335,465 @@ export default function Admin() {
           {/* =================================================================== */}
           {activeTab === "inquiries" && (
             <div>
-              <div style={{ marginBottom: "24px" }}>
-                <h1 style={{ fontSize: "24px", fontWeight: 800, margin: "0 0 6px" }}>
-                  Danh Sách Yêu Cầu Báo Giá &amp; Khách Hàng Để Lại SĐT
-                </h1>
-                <p style={{ fontSize: "13.5px", color: "#94a3b8", margin: 0 }}>
-                  Thu thập từ các nút "Đặt Mua / Báo Giá Nhanh" và form gửi tin nhắn trên website.
-                </p>
-              </div>
-
+              {/* Header */}
               <div
                 style={{
-                  background: "rgba(8, 22, 54, 0.85)",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  justifyContent: "space-between",
+                  flexWrap: "wrap",
+                  gap: "14px",
+                  marginBottom: "22px",
+                }}
+              >
+                <div>
+                  <h1
+                    style={{
+                      fontSize: "24px",
+                      fontWeight: 800,
+                      margin: "0 0 6px",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                    }}
+                  >
+                    <PhoneCall size={24} color="#38bdf8" />
+                    <span>Quản Lý Yêu Cầu Báo Giá &amp; Lead B2B</span>
+                  </h1>
+                  <p style={{ fontSize: "13.5px", color: "#94a3b8", margin: 0 }}>
+                    Tiếp nhận và xử lý lead từ các nút "Đặt Mua / Báo Giá Nhanh" trên website. Tự động đồng bộ với Neon Lakebase Postgres.
+                  </p>
+                </div>
+
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <button
+                    onClick={() => {
+                      if (adminToken) {
+                        fetchInquiriesFromDb(adminToken);
+                        showToast("✓ Đã đồng bộ dữ liệu mới nhất từ Neon Postgres!");
+                      }
+                    }}
+                    style={{
+                      background: "rgba(59, 130, 246, 0.15)",
+                      color: "#38bdf8",
+                      border: "1px solid rgba(59, 130, 246, 0.3)",
+                      borderRadius: "8px",
+                      padding: "8px 14px",
+                      fontSize: "12.5px",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                    }}
+                  >
+                    <RefreshCw size={14} />
+                    <span>Đồng Bộ Neon DB</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* 5 Thống Kê CRM Pipeline */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
+                  gap: "12px",
+                  marginBottom: "20px",
+                }}
+              >
+                <div
+                  style={{
+                    background: "rgba(6, 20, 52, 0.8)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    borderRadius: "10px",
+                    padding: "14px 16px",
+                  }}
+                >
+                  <div style={{ fontSize: "12px", color: "#94a3b8" }}>Tổng Lead Yêu Cầu</div>
+                  <div style={{ fontSize: "22px", fontWeight: 800, color: "#ffffff", marginTop: "4px" }}>
+                    {inquiries.length}
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    background: "rgba(6, 20, 52, 0.8)",
+                    border: "1px solid rgba(239, 68, 68, 0.25)",
+                    borderRadius: "10px",
+                    padding: "14px 16px",
+                  }}
+                >
+                  <div style={{ fontSize: "12px", color: "#f87171" }}>Chờ Gọi Lại (Mới)</div>
+                  <div style={{ fontSize: "22px", fontWeight: 800, color: "#f87171", marginTop: "4px" }}>
+                    {pendingInquiriesCount}
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    background: "rgba(6, 20, 52, 0.8)",
+                    border: "1px solid rgba(245, 158, 11, 0.25)",
+                    borderRadius: "10px",
+                    padding: "14px 16px",
+                  }}
+                >
+                  <div style={{ fontSize: "12px", color: "#fbbf24" }}>Đã Liên Hệ Tư Vấn</div>
+                  <div style={{ fontSize: "22px", fontWeight: 800, color: "#fbbf24", marginTop: "4px" }}>
+                    {contactedInquiriesCount}
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    background: "rgba(6, 20, 52, 0.8)",
+                    border: "1px solid rgba(16, 185, 129, 0.25)",
+                    borderRadius: "10px",
+                    padding: "14px 16px",
+                  }}
+                >
+                  <div style={{ fontSize: "12px", color: "#34d399" }}>Đã Chốt Đơn</div>
+                  <div style={{ fontSize: "22px", fontWeight: 800, color: "#34d399", marginTop: "4px" }}>
+                    {completedInquiriesCount}
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    background: "rgba(6, 20, 52, 0.8)",
+                    border: "1px solid rgba(148, 163, 184, 0.2)",
+                    borderRadius: "10px",
+                    padding: "14px 16px",
+                  }}
+                >
+                  <div style={{ fontSize: "12px", color: "#94a3b8" }}>Hủy / Không Nhu Cầu</div>
+                  <div style={{ fontSize: "22px", fontWeight: 800, color: "#94a3b8", marginTop: "4px" }}>
+                    {cancelledInquiriesCount}
+                  </div>
+                </div>
+              </div>
+
+              {/* Toolbar: Tìm kiếm & Lọc Trạng Thái */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  flexWrap: "wrap",
+                  gap: "12px",
+                  marginBottom: "18px",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    background: "rgba(6, 20, 52, 0.8)",
+                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    borderRadius: "8px",
+                    padding: "6px 12px",
+                    width: "100%",
+                    maxWidth: "340px",
+                  }}
+                >
+                  <Search size={15} color="#64748b" style={{ flexShrink: 0 }} />
+                  <input
+                    type="text"
+                    placeholder="Tìm theo tên, SĐT, sản phẩm..."
+                    value={inquirySearch}
+                    onChange={(e) => setInquirySearch(e.target.value)}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      outline: "none",
+                      color: "#fff",
+                      padding: "4px 8px",
+                      fontSize: "13px",
+                      width: "100%",
+                    }}
+                  />
+                  {inquirySearch && (
+                    <button
+                      onClick={() => setInquirySearch("")}
+                      style={{
+                        background: "transparent",
+                        border: "none",
+                        color: "#94a3b8",
+                        cursor: "pointer",
+                        padding: 0,
+                      }}
+                    >
+                      <X size={14} />
+                    </button>
+                  )}
+                </div>
+
+                {/* Filter Pills */}
+                <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                  {[
+                    { id: "all", label: `Tất Cả (${inquiries.length})` },
+                    { id: "pending", label: `Chờ Gọi (${pendingInquiriesCount})` },
+                    { id: "contacted", label: `Đã Tư Vấn (${contactedInquiriesCount})` },
+                    { id: "completed", label: `Đã Chốt (${completedInquiriesCount})` },
+                    { id: "cancelled", label: `Đã Hủy (${cancelledInquiriesCount})` },
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setInquiryFilterStatus(tab.id)}
+                      style={{
+                        padding: "6px 12px",
+                        borderRadius: "6px",
+                        fontSize: "12px",
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        border: "none",
+                        background:
+                          inquiryFilterStatus === tab.id
+                            ? "#2563eb"
+                            : "rgba(255, 255, 255, 0.08)",
+                        color: inquiryFilterStatus === tab.id ? "#ffffff" : "#94a3b8",
+                        transition: "all 0.15s ease",
+                      }}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Bảng Danh Sách Leads */}
+              <div
+                style={{
+                  background: "rgba(6, 20, 52, 0.85)",
                   borderRadius: "12px",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
                   overflow: "hidden",
                 }}
               >
-                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13.5px" }}>
-                  <thead>
-                    <tr
-                      style={{
-                        background: "rgba(2, 14, 42, 0.95)",
-                        borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
-                        color: "#94a3b8",
-                        textAlign: "left",
-                      }}
-                    >
-                      <th style={{ padding: "14px 16px" }}>Họ Tên / Đơn Vị</th>
-                      <th style={{ padding: "14px 16px" }}>Số Điện Thoại</th>
-                      <th style={{ padding: "14px 16px" }}>Sản Phẩm &amp; Quy Cách</th>
-                      <th style={{ padding: "14px 16px" }}>Ghi Chú Yêu Cầu</th>
-                      <th style={{ padding: "14px 16px" }}>Thời Gian</th>
-                      <th style={{ padding: "14px 16px" }}>Trạng Thái</th>
-                      <th style={{ padding: "14px 16px", textAlign: "right" }}>Thao Tác</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {inquiries.map((item) => (
+                <div style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
+                    <thead>
                       <tr
-                        key={item.id}
-                        style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.06)" }}
+                        style={{
+                          background: "rgba(2, 14, 42, 0.95)",
+                          borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+                          color: "#94a3b8",
+                          textAlign: "left",
+                        }}
                       >
-                        <td style={{ padding: "14px 16px", fontWeight: 700 }}>
-                          {item.name}
-                          {item.email && (
-                            <div style={{ fontSize: "11.5px", color: "#94a3b8", fontWeight: 400 }}>
-                              {item.email}
-                            </div>
-                          )}
-                        </td>
-
-                        <td style={{ padding: "14px 16px" }}>
-                          <a
-                            href={`tel:${item.phone}`}
-                            style={{
-                              color: "#22c55e",
-                              fontWeight: 800,
-                              textDecoration: "none",
-                              fontSize: "14px",
-                            }}
-                          >
-                            {item.phone}
-                          </a>
-                        </td>
-
-                        <td style={{ padding: "14px 16px" }}>
-                          <div style={{ fontWeight: 600, color: "#38bdf8" }}>
-                            {item.product || item.topic}
-                          </div>
-                          {(item.quantity || item.area) && (
-                            <div style={{ fontSize: "12px", color: "#cbd5e1" }}>
-                              {item.quantity ? `SL: ${item.quantity} thùng` : ""}{" "}
-                              {item.area ? `• Diện tích: ${item.area}` : ""}
-                            </div>
-                          )}
-                        </td>
-
-                        <td style={{ padding: "14px 16px", color: "#cbd5e1", maxWidth: "240px", fontSize: "12.5px" }}>
-                          {item.notes || "Khách yêu cầu gọi lại báo giá chiết khấu"}
-                        </td>
-
-                        <td style={{ padding: "14px 16px", color: "#94a3b8", fontSize: "12px" }}>
-                          {item.date}
-                        </td>
-
-                        <td style={{ padding: "14px 16px" }}>
-                          <select
-                            value={item.status}
-                            onChange={(e) => updateInquiryStatus(item.id, e.target.value)}
-                            style={{
-                              background:
-                                item.status === "pending"
-                                  ? "#dc2626"
-                                  : item.status === "contacted"
-                                  ? "#d97706"
-                                  : "#16a34a",
-                              color: "#ffffff",
-                              border: "none",
-                              padding: "4px 8px",
-                              borderRadius: "4px",
-                              fontWeight: 700,
-                              fontSize: "11.5px",
-                              cursor: "pointer",
-                            }}
-                          >
-                            <option value="pending">Chờ gọi lại</option>
-                            <option value="contacted">Đã liên hệ tư vấn</option>
-                            <option value="completed">Đã chốt đơn</option>
-                            <option value="cancelled">Hủy yêu cầu</option>
-                          </select>
-                        </td>
-
-                        <td style={{ padding: "14px 16px", textAlign: "right" }}>
-                          <div style={{ display: "inline-flex", gap: "6px" }}>
-                            <a
-                              href={`tel:${item.phone}`}
-                              style={{
-                                background: "#16a34a",
-                                color: "#ffffff",
-                                padding: "6px 10px",
-                                borderRadius: "4px",
-                                fontSize: "12px",
-                                fontWeight: 700,
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: "4px",
-                                textDecoration: "none",
-                              }}
-                            >
-                              <Phone size={13} />
-                              <span>Gọi Ngay</span>
-                            </a>
-
-                            <button
-                              onClick={() => {
-                                if (window.confirm("Xóa yêu cầu báo giá này?")) {
-                                  deleteInquiry(item.id);
-                                  showToast("✓ Đã xóa yêu cầu báo giá!");
-                                }
-                              }}
-                              style={{
-                                background: "rgba(239, 68, 68, 0.15)",
-                                color: "#f87171",
-                                border: "none",
-                                padding: "6px 8px",
-                                borderRadius: "4px",
-                                cursor: "pointer",
-                              }}
-                            >
-                              <Trash2 size={13} />
-                            </button>
-                          </div>
-                        </td>
+                        <th style={{ padding: "12px 14px" }}>Họ Tên / Đơn Vị</th>
+                        <th style={{ padding: "12px 14px" }}>Số Điện Thoại</th>
+                        <th style={{ padding: "12px 14px" }}>Sản Phẩm &amp; Quy Cách</th>
+                        <th style={{ padding: "12px 14px" }}>Ghi Chú Báo Giá</th>
+                        <th style={{ padding: "12px 14px" }}>Thời Gian</th>
+                        <th style={{ padding: "12px 14px" }}>Trạng Thái</th>
+                        <th style={{ padding: "12px 14px", textAlign: "right" }}>Thao Tác</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {filteredInquiries.length === 0 ? (
+                        <tr>
+                          <td colSpan={7} style={{ padding: "36px", textAlign: "center", color: "#94a3b8" }}>
+                            Không tìm thấy yêu cầu báo giá nào phù hợp với bộ lọc hiện tại.
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredInquiries.map((item) => (
+                          <tr
+                            key={item.id}
+                            style={{
+                              borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
+                              transition: "background 0.15s ease",
+                            }}
+                          >
+                            <td style={{ padding: "12px 14px", fontWeight: 700 }}>
+                              <div style={{ color: "#ffffff" }}>{item.name}</div>
+                              {item.email && (
+                                <div style={{ fontSize: "11px", color: "#64748b", fontWeight: 400 }}>
+                                  {item.email}
+                                </div>
+                              )}
+                            </td>
+
+                            <td style={{ padding: "12px 14px" }}>
+                              <a
+                                href={`tel:${(item.phone || "").replace(/[^0-9+]/g, "")}`}
+                                style={{
+                                  color: "#22c55e",
+                                  fontWeight: 800,
+                                  textDecoration: "none",
+                                  fontSize: "13.5px",
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  gap: "5px",
+                                }}
+                                title="Bấm để gọi trực tiếp cho khách hàng"
+                              >
+                                <Phone size={13} />
+                                <span>{item.phone}</span>
+                              </a>
+                            </td>
+
+                            <td style={{ padding: "12px 14px" }}>
+                              <div style={{ fontWeight: 600, color: "#38bdf8" }}>
+                                {item.product || item.topic || "Tư vấn sơn công nghiệp"}
+                              </div>
+                              {(item.quantity || item.area) && (
+                                <div style={{ fontSize: "11.5px", color: "#94a3b8" }}>
+                                  {item.quantity ? `SL: ${item.quantity} thùng` : ""}{" "}
+                                  {item.area ? `• Diện tích: ${item.area}` : ""}
+                                </div>
+                              )}
+                            </td>
+
+                            <td
+                              style={{
+                                padding: "12px 14px",
+                                color: "#cbd5e1",
+                                maxWidth: "220px",
+                                fontSize: "12px",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                                title={item.notes || "Khách yêu cầu gọi lại báo giá chiết khấu"}
+                              >
+                                {item.notes || "Chưa có ghi chú trao đổi"}
+                              </div>
+                            </td>
+
+                            <td style={{ padding: "12px 14px", color: "#94a3b8", fontSize: "12px", whiteSpace: "nowrap" }}>
+                              {item.date}
+                            </td>
+
+                            <td style={{ padding: "12px 14px" }}>
+                              <select
+                                value={item.status || "pending"}
+                                onChange={(e) => {
+                                  updateInquiryStatus(item.id, e.target.value);
+                                  const statusMap = {
+                                    pending: "Chờ gọi lại",
+                                    contacted: "Đã tư vấn",
+                                    completed: "Đã chốt đơn",
+                                    cancelled: "Hủy yêu cầu",
+                                  };
+                                  showToast(`✓ Đã đổi trạng thái sang "${statusMap[e.target.value]}": ${item.name}`);
+                                }}
+                                style={{
+                                  background:
+                                    item.status === "pending"
+                                      ? "rgba(239, 68, 68, 0.18)"
+                                      : item.status === "contacted"
+                                      ? "rgba(245, 158, 11, 0.18)"
+                                      : item.status === "completed"
+                                      ? "rgba(16, 185, 129, 0.18)"
+                                      : "rgba(148, 163, 184, 0.18)",
+                                  color:
+                                    item.status === "pending"
+                                      ? "#f87171"
+                                      : item.status === "contacted"
+                                      ? "#fbbf24"
+                                      : item.status === "completed"
+                                      ? "#34d399"
+                                      : "#94a3b8",
+                                  border:
+                                    item.status === "pending"
+                                      ? "1px solid rgba(239, 68, 68, 0.35)"
+                                      : item.status === "contacted"
+                                      ? "1px solid rgba(245, 158, 11, 0.35)"
+                                      : item.status === "completed"
+                                      ? "1px solid rgba(16, 185, 129, 0.35)"
+                                      : "1px solid rgba(148, 163, 184, 0.35)",
+                                  padding: "4px 8px",
+                                  borderRadius: "6px",
+                                  fontSize: "11.5px",
+                                  fontWeight: 700,
+                                  cursor: "pointer",
+                                  outline: "none",
+                                }}
+                              >
+                                <option value="pending" style={{ background: "#061434", color: "#f87171" }}>Chờ gọi lại</option>
+                                <option value="contacted" style={{ background: "#061434", color: "#fbbf24" }}>Đã tư vấn</option>
+                                <option value="completed" style={{ background: "#061434", color: "#34d399" }}>Đã chốt đơn</option>
+                                <option value="cancelled" style={{ background: "#061434", color: "#94a3b8" }}>Hủy</option>
+                              </select>
+                            </td>
+
+                            <td style={{ padding: "12px 14px", textAlign: "right" }}>
+                              <div style={{ display: "inline-flex", gap: "6px" }}>
+                                <a
+                                  href={`tel:${(item.phone || "").replace(/[^0-9+]/g, "")}`}
+                                  style={{
+                                    background: "#16a34a",
+                                    color: "#ffffff",
+                                    padding: "5px 10px",
+                                    borderRadius: "6px",
+                                    fontSize: "12px",
+                                    fontWeight: 700,
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "4px",
+                                    textDecoration: "none",
+                                    transition: "background 0.15s ease",
+                                  }}
+                                  title={`Gọi điện trực tiếp cho ${item.name}`}
+                                >
+                                  <Phone size={13} />
+                                  <span>Gọi Khách</span>
+                                </a>
+
+                                <button
+                                  onClick={() => openInquiryModal(item)}
+                                  style={{
+                                    background: "rgba(59, 130, 246, 0.15)",
+                                    color: "#38bdf8",
+                                    border: "1px solid rgba(59, 130, 246, 0.3)",
+                                    padding: "5px 8px",
+                                    borderRadius: "6px",
+                                    fontSize: "12px",
+                                    fontWeight: 600,
+                                    cursor: "pointer",
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "4px",
+                                  }}
+                                  title="Xem chi tiết & ghi chú trao đổi"
+                                >
+                                  <FileText size={13} />
+                                  <span>Ghi Chú</span>
+                                </button>
+
+                                <button
+                                  onClick={() => {
+                                    if (window.confirm(`Xóa yêu cầu báo giá của ${item.name}?`)) {
+                                      deleteInquiry(item.id);
+                                      showToast("✓ Đã xóa yêu cầu báo giá!");
+                                    }
+                                  }}
+                                  style={{
+                                    background: "rgba(239, 68, 68, 0.15)",
+                                    color: "#f87171",
+                                    border: "none",
+                                    padding: "5px 8px",
+                                    borderRadius: "6px",
+                                    cursor: "pointer",
+                                  }}
+                                  title="Xóa yêu cầu"
+                                >
+                                  <Trash2 size={13} />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}
@@ -2950,7 +3391,7 @@ export default function Admin() {
                     Mật khẩu quản trị viên được băm 1 chiều bằng giải thuật Blowfish Salt. Không bao giờ lưu hay gửi mật khẩu dạng plain text.
                   </p>
                   <div style={{ fontSize: "11.5px", color: "#64748b", fontFamily: "monospace" }}>
-                    Tài khoản: admin | Mật khẩu: fujnano@123
+                    Tài khoản: admin | Mật khẩu: •••••••••••• (Bcrypt Blowfish 10 Salt Rounds)
                   </div>
                 </div>
 
@@ -4651,6 +5092,289 @@ export default function Admin() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {/* ===================================================================== */}
+      {/* MODAL 4: CHI TIẾT LEAD & GHI CHÚ TƯ VẤN KHÁCH HÀNG                    */}
+      {/* ===================================================================== */}
+      {inquiryModalOpen && selectedInquiry && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.8)",
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+            backdropFilter: "blur(6px)",
+          }}
+        >
+          <div
+            style={{
+              background: "#021438",
+              border: "1px solid rgba(255, 255, 255, 0.12)",
+              borderRadius: "14px",
+              width: "100%",
+              maxWidth: "560px",
+              overflow: "hidden",
+              boxShadow: "0 20px 50px rgba(0,0,0,0.6)",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {/* Modal Header */}
+            <div
+              style={{
+                padding: "18px 22px",
+                borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                background: "rgba(6, 20, 52, 0.6)",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <div
+                  style={{
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "8px",
+                    background: "rgba(56, 189, 248, 0.15)",
+                    border: "1px solid rgba(56, 189, 248, 0.3)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#38bdf8",
+                  }}
+                >
+                  <PhoneCall size={18} />
+                </div>
+                <div>
+                  <h3 style={{ fontSize: "16px", fontWeight: 800, margin: 0, color: "#ffffff" }}>
+                    Chi Tiết Yêu Cầu Báo Giá
+                  </h3>
+                  <div style={{ fontSize: "12px", color: "#94a3b8" }}>
+                    Tiếp nhận lúc: {selectedInquiry.date}
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setInquiryModalOpen(false)}
+                style={{
+                  background: "rgba(255, 255, 255, 0.08)",
+                  border: "none",
+                  color: "#94a3b8",
+                  borderRadius: "6px",
+                  width: "30px",
+                  height: "30px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                }}
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div style={{ padding: "22px", display: "flex", flexDirection: "column", gap: "16px" }}>
+              {/* Customer Info Card */}
+              <div
+                style={{
+                  background: "rgba(6, 20, 52, 0.7)",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  borderRadius: "10px",
+                  padding: "16px",
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "12px",
+                }}
+              >
+                <div>
+                  <div style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase", fontWeight: 700 }}>
+                    Họ Tên / Đơn Vị
+                  </div>
+                  <div style={{ fontSize: "14px", fontWeight: 700, color: "#ffffff", marginTop: "3px" }}>
+                    {selectedInquiry.name}
+                  </div>
+                </div>
+
+                <div>
+                  <div style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase", fontWeight: 700 }}>
+                    Số Điện Thoại
+                  </div>
+                  <div style={{ marginTop: "3px" }}>
+                    <a
+                      href={`tel:${(selectedInquiry.phone || "").replace(/[^0-9+]/g, "")}`}
+                      style={{
+                        fontSize: "14px",
+                        fontWeight: 800,
+                        color: "#22c55e",
+                        textDecoration: "none",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "6px",
+                      }}
+                      title="Bấm để gọi điện ngay"
+                    >
+                      <Phone size={13} />
+                      <span>{selectedInquiry.phone}</span>
+                    </a>
+                  </div>
+                </div>
+
+                <div style={{ gridColumn: "1 / -1" }}>
+                  <div style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase", fontWeight: 700 }}>
+                    Sản Phẩm Quan Tâm
+                  </div>
+                  <div style={{ fontSize: "13.5px", fontWeight: 600, color: "#38bdf8", marginTop: "3px" }}>
+                    {selectedInquiry.product || selectedInquiry.topic || "Tư vấn sơn công nghiệp"}
+                    {selectedInquiry.quantity ? ` (${selectedInquiry.quantity} thùng)` : ""}
+                    {selectedInquiry.area ? ` • Diện tích: ${selectedInquiry.area}` : ""}
+                  </div>
+                </div>
+
+                {selectedInquiry.email && (
+                  <div style={{ gridColumn: "1 / -1" }}>
+                    <div style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase", fontWeight: 700 }}>
+                      Email
+                    </div>
+                    <div style={{ fontSize: "13px", color: "#cbd5e1", marginTop: "2px" }}>
+                      {selectedInquiry.email}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Status Selector */}
+              <div>
+                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, color: "#cbd5e1", marginBottom: "6px" }}>
+                  Trạng Thái Xử Lý:
+                </label>
+                <select
+                  value={inquiryStatusSelect}
+                  onChange={(e) => setInquiryStatusSelect(e.target.value)}
+                  style={{
+                    width: "100%",
+                    background: "rgba(6, 20, 52, 0.9)",
+                    border: "1px solid rgba(255, 255, 255, 0.15)",
+                    borderRadius: "8px",
+                    padding: "10px 14px",
+                    color: "#ffffff",
+                    fontSize: "13px",
+                    fontWeight: 600,
+                    outline: "none",
+                  }}
+                >
+                  <option value="pending" style={{ background: "#061434" }}>🔴 Chờ gọi lại (Khách mới)</option>
+                  <option value="contacted" style={{ background: "#061434" }}>🟡 Đã liên hệ tư vấn / Gửi bảng giá</option>
+                  <option value="completed" style={{ background: "#061434" }}>🟢 Đã chốt đơn thành công</option>
+                  <option value="cancelled" style={{ background: "#061434" }}>⚪ Hủy yêu cầu / Sai số</option>
+                </select>
+              </div>
+
+              {/* Notes Textarea */}
+              <div>
+                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, color: "#cbd5e1", marginBottom: "6px" }}>
+                  Ghi Chú Trao Đổi Bán Hàng:
+                </label>
+                <textarea
+                  rows={4}
+                  value={inquiryNotesText}
+                  onChange={(e) => setInquiryNotesText(e.target.value)}
+                  placeholder="Ví dụ: Đã gọi lúc 9h30, tư vấn sơn sàn Epoxy 18L cho công trình 400m2. Khách hẹn gửi mẫu màu và báo giá chiết khấu thầu thợ qua Zalo..."
+                  style={{
+                    width: "100%",
+                    background: "rgba(6, 20, 52, 0.9)",
+                    border: "1px solid rgba(255, 255, 255, 0.15)",
+                    borderRadius: "8px",
+                    padding: "10px 14px",
+                    color: "#ffffff",
+                    fontSize: "13px",
+                    lineHeight: 1.5,
+                    resize: "vertical",
+                    outline: "none",
+                    boxSizing: "border-box",
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div
+              style={{
+                padding: "16px 22px",
+                borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+                background: "rgba(6, 20, 52, 0.6)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "12px",
+              }}
+            >
+              <a
+                href={`tel:${(selectedInquiry.phone || "").replace(/[^0-9+]/g, "")}`}
+                style={{
+                  background: "#16a34a",
+                  color: "#ffffff",
+                  padding: "9px 16px",
+                  borderRadius: "8px",
+                  fontSize: "13px",
+                  fontWeight: 700,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  textDecoration: "none",
+                }}
+              >
+                <Phone size={14} />
+                <span>Gọi Khách ({selectedInquiry.phone})</span>
+              </a>
+
+              <div style={{ display: "flex", gap: "10px" }}>
+                <button
+                  type="button"
+                  onClick={() => setInquiryModalOpen(false)}
+                  style={{
+                    background: "rgba(255, 255, 255, 0.08)",
+                    color: "#cbd5e1",
+                    border: "none",
+                    borderRadius: "8px",
+                    padding: "9px 16px",
+                    fontSize: "13px",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  Đóng
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSaveInquiryNotes}
+                  style={{
+                    background: "#2563eb",
+                    color: "#ffffff",
+                    border: "none",
+                    borderRadius: "8px",
+                    padding: "9px 18px",
+                    fontSize: "13px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  <Save size={14} />
+                  <span>Lưu Ghi Chú</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
