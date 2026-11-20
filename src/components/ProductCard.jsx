@@ -128,34 +128,34 @@ export default function ProductCard({ product, onOpenOrder }) {
         </div>
       </Link>
 
-      {/* Nút hành động duy nhất, tinh tế */}
+      {/* Nút hành động duy nhất, tinh tế trên nền xanh */}
       <div style={{ padding: "0 12px 14px", marginTop: "auto" }}>
         <Link
           to={`/san-pham/${product.slug}`}
           style={{
-            background: "rgba(56, 189, 248, 0.1)",
-            color: "#38bdf8",
-            border: "1px solid rgba(56, 189, 248, 0.25)",
+            background: "rgba(255, 255, 255, 0.06)",
+            color: "#ffffff",
+            border: "1px solid rgba(255, 255, 255, 0.15)",
             borderRadius: "6px",
             padding: "8px 12px",
             fontSize: "12.5px",
-            fontWeight: 700,
+            fontWeight: 600,
             textDecoration: "none",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             gap: "6px",
-            transition: "all 0.2s ease",
+            transition: "all 0.15s ease",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#dc2626";
-            e.currentTarget.style.borderColor = "#dc2626";
+            e.currentTarget.style.background = "#2563eb";
+            e.currentTarget.style.borderColor = "#3b82f6";
             e.currentTarget.style.color = "#ffffff";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = "rgba(56, 189, 248, 0.1)";
-            e.currentTarget.style.borderColor = "rgba(56, 189, 248, 0.25)";
-            e.currentTarget.style.color = "#38bdf8";
+            e.currentTarget.style.background = "rgba(255, 255, 255, 0.06)";
+            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.15)";
+            e.currentTarget.style.color = "#ffffff";
           }}
         >
           <span>Xem Chi Tiết &amp; Báo Giá</span>
