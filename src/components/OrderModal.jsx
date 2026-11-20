@@ -38,9 +38,9 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
         position: "fixed",
         inset: 0,
         zIndex: 9999,
-        background: "rgba(15, 23, 42, 0.65)",
-        backdropFilter: "blur(4px)",
-        WebkitBackdropFilter: "blur(4px)",
+        background: "rgba(0, 8, 25, 0.75)",
+        backdropFilter: "blur(6px)",
+        WebkitBackdropFilter: "blur(6px)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -50,16 +50,16 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
     >
       <div
         style={{
-          background: "#ffffff",
+          background: "linear-gradient(135deg, #081534 0%, #030c22 100%)",
           borderRadius: "14px",
           width: "100%",
           maxWidth: "500px",
           maxHeight: "92vh",
           overflowY: "auto",
-          boxShadow: "0 20px 50px rgba(0,0,0,0.18)",
+          boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
           position: "relative",
-          color: "#0f172a",
-          border: "1px solid #e2e8f0",
+          color: "#ffffff",
+          border: "1px solid rgba(255, 255, 255, 0.15)",
           fontFamily: "'DM Sans', sans-serif",
         }}
         onClick={(e) => e.stopPropagation()}
@@ -68,11 +68,11 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
         <div
           style={{
             padding: "18px 22px",
-            borderBottom: "1px solid #e2e8f0",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            background: "#0f172a",
+            background: "rgba(2, 10, 28, 0.8)",
             color: "#ffffff",
             borderRadius: "13px 13px 0 0",
           }}
@@ -106,13 +106,13 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
 
         {isSuccess ? (
           <div style={{ padding: "36px 24px", textAlign: "center" }}>
-            <CheckCircle2 size={52} color="#16a34a" style={{ margin: "0 auto 14px" }} />
-            <h4 style={{ fontSize: "18px", fontWeight: 700, color: "#0f172a", marginBottom: "8px" }}>
+            <CheckCircle2 size={52} color="#34d399" style={{ margin: "0 auto 14px" }} />
+            <h4 style={{ fontSize: "18px", fontWeight: 700, color: "#ffffff", marginBottom: "8px" }}>
               ĐÃ GỬI THÔNG TIN THÀNH CÔNG!
             </h4>
-            <p style={{ fontSize: "13.5px", color: "#64748b", lineHeight: 1.6, marginBottom: "22px" }}>
+            <p style={{ fontSize: "13.5px", color: "#cbd5e1", lineHeight: 1.6, marginBottom: "22px" }}>
               Cảm ơn quý khách <strong>{formData.name}</strong>. Kỹ sư tư vấn sẽ gọi vào số điện thoại{" "}
-              <strong style={{ color: "#dc2626" }}>{formData.phone}</strong> trong vòng 5-15 phút để xác nhận số lượng thùng, bảng mã màu và tiến độ giao hàng.
+              <strong style={{ color: "#ff4d4f" }}>{formData.phone}</strong> trong vòng 5-15 phút để xác nhận số lượng thùng, bảng mã màu và tiến độ giao hàng.
             </p>
             <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
               <a
@@ -136,9 +136,9 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
                 onClick={handleClose}
                 style={{
                   padding: "10px 18px",
-                  background: "#f1f5f9",
-                  color: "#334155",
-                  border: "1px solid #cbd5e1",
+                  background: "rgba(255, 255, 255, 0.1)",
+                  color: "#ffffff",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
                   borderRadius: "8px",
                   fontWeight: 600,
                   fontSize: "13.5px",
@@ -157,10 +157,10 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
                 display: "flex",
                 gap: "12px",
                 padding: "12px",
-                background: "#f8fafc",
+                background: "rgba(2, 10, 28, 0.6)",
                 borderRadius: "8px",
                 marginBottom: "18px",
-                border: "1px solid #e2e8f0",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
               }}
             >
               <img
@@ -171,7 +171,7 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
                   height: "64px",
                   objectFit: "cover",
                   borderRadius: "6px",
-                  border: "1px solid #e2e8f0",
+                  border: "1px solid rgba(255, 255, 255, 0.15)",
                   flexShrink: 0,
                 }}
               />
@@ -180,7 +180,7 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
                   style={{
                     fontSize: "13px",
                     fontWeight: 600,
-                    color: "#0f172a",
+                    color: "#ffffff",
                     margin: "0 0 3px",
                     lineHeight: 1.35,
                     display: "-webkit-box",
@@ -191,14 +191,14 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
                 >
                   {currentProduct.name}
                 </h4>
-                <div style={{ fontSize: "11.5px", color: "#64748b", marginBottom: "3px" }}>
-                  Quy cách: <strong>{selectedVolume}</strong> | Màu: <strong>{selectedColor}</strong>
+                <div style={{ fontSize: "11.5px", color: "#94a3b8", marginBottom: "3px" }}>
+                  Quy cách: <strong style={{ color: "#38bdf8" }}>{selectedVolume}</strong> | Màu: <strong style={{ color: "#38bdf8" }}>{selectedColor}</strong>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: "14.5px", fontWeight: 800, color: "#dc2626" }}>
+                  <span style={{ fontSize: "14.5px", fontWeight: 800, color: "#ff4d4f" }}>
                     ₫{totalPrice.toLocaleString("vi-VN")}
                   </span>
-                  <span style={{ fontSize: "11.5px", color: "#64748b" }}>
+                  <span style={{ fontSize: "11.5px", color: "#94a3b8" }}>
                     Số lượng: x{initialQuantity} thùng
                   </span>
                 </div>
@@ -208,7 +208,7 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
             {/* Form Fields */}
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
               <div>
-                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 600, color: "#334155", marginBottom: "5px" }}>
+                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 600, color: "#cbd5e1", marginBottom: "5px" }}>
                   Họ và tên quý khách *
                 </label>
                 <input
@@ -221,19 +221,19 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
                     width: "100%",
                     padding: "9px 12px",
                     borderRadius: "6px",
-                    background: "#ffffff",
-                    border: "1px solid #cbd5e1",
-                    color: "#0f172a",
+                    background: "rgba(2, 10, 28, 0.7)",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                    color: "#ffffff",
                     fontSize: "13.5px",
                     outline: "none",
                   }}
-                  onFocus={(e) => (e.currentTarget.style.borderColor = "#0f172a")}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = "#cbd5e1")}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = "#38bdf8")}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)")}
                 />
               </div>
 
               <div>
-                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 600, color: "#334155", marginBottom: "5px" }}>
+                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 600, color: "#cbd5e1", marginBottom: "5px" }}>
                   Số điện thoại nhận tư vấn &amp; báo giá *
                 </label>
                 <input
@@ -246,19 +246,19 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
                     width: "100%",
                     padding: "9px 12px",
                     borderRadius: "6px",
-                    background: "#ffffff",
-                    border: "1px solid #cbd5e1",
-                    color: "#0f172a",
+                    background: "rgba(2, 10, 28, 0.7)",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                    color: "#ffffff",
                     fontSize: "13.5px",
                     outline: "none",
                   }}
-                  onFocus={(e) => (e.currentTarget.style.borderColor = "#0f172a")}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = "#cbd5e1")}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = "#38bdf8")}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)")}
                 />
               </div>
 
               <div>
-                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 600, color: "#334155", marginBottom: "5px" }}>
+                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 600, color: "#cbd5e1", marginBottom: "5px" }}>
                   Địa chỉ giao hàng (Tỉnh / Thành phố / Tên Công Trình)
                 </label>
                 <input
@@ -270,19 +270,19 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
                     width: "100%",
                     padding: "9px 12px",
                     borderRadius: "6px",
-                    background: "#ffffff",
-                    border: "1px solid #cbd5e1",
-                    color: "#0f172a",
+                    background: "rgba(2, 10, 28, 0.7)",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                    color: "#ffffff",
                     fontSize: "13.5px",
                     outline: "none",
                   }}
-                  onFocus={(e) => (e.currentTarget.style.borderColor = "#0f172a")}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = "#cbd5e1")}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = "#38bdf8")}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)")}
                 />
               </div>
 
               <div>
-                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 600, color: "#334155", marginBottom: "5px" }}>
+                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 600, color: "#cbd5e1", marginBottom: "5px" }}>
                   Diện tích cần sơn hoặc ghi chú thêm
                 </label>
                 <textarea
@@ -294,15 +294,15 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
                     width: "100%",
                     padding: "9px 12px",
                     borderRadius: "6px",
-                    background: "#ffffff",
-                    border: "1px solid #cbd5e1",
-                    color: "#0f172a",
+                    background: "rgba(2, 10, 28, 0.7)",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                    color: "#ffffff",
                     fontSize: "13.5px",
                     outline: "none",
                     resize: "vertical",
                   }}
-                  onFocus={(e) => (e.currentTarget.style.borderColor = "#0f172a")}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = "#cbd5e1")}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = "#38bdf8")}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)")}
                 />
               </div>
 
@@ -312,22 +312,23 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
                   display: "flex",
                   gap: "12px",
                   fontSize: "11.5px",
-                  color: "#475569",
+                  color: "#cbd5e1",
                   padding: "8px 12px",
-                  background: "#f1f5f9",
+                  background: "rgba(255, 255, 255, 0.06)",
                   borderRadius: "6px",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                  <ShieldCheck size={13} color="#16a34a" />
+                  <ShieldCheck size={13} color="#34d399" />
                   <span>100% Chính hãng</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                  <Truck size={13} color="#2563eb" />
+                  <Truck size={13} color="#38bdf8" />
                   <span>Giao tận nơi</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                  <CheckCircle2 size={13} color="#16a34a" />
+                  <CheckCircle2 size={13} color="#34d399" />
                   <span>CO/CQ &amp; VAT</span>
                 </div>
               </div>
@@ -360,11 +361,11 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
               </button>
 
               <div style={{ textAlign: "center", marginTop: "2px" }}>
-                <span style={{ fontSize: "12px", color: "#64748b" }}>
+                <span style={{ fontSize: "12px", color: "#94a3b8" }}>
                   Hoặc gọi hotline trực tiếp:{" "}
                   <a
                     href="tel:0947707616"
-                    style={{ color: "#0f172a", fontWeight: 700, textDecoration: "underline" }}
+                    style={{ color: "#38bdf8", fontWeight: 700, textDecoration: "underline" }}
                   >
                     0947.707.616
                   </a>

@@ -12,8 +12,7 @@ import {
   Heart,
   ChevronRight,
   Check,
-  Building,
-  MapPin
+  Building
 } from "lucide-react";
 import { products } from "../data/products";
 import ProductCard from "../components/ProductCard";
@@ -65,7 +64,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
     .slice(0, 4);
 
   return (
-    <div style={{ minHeight: "100vh", padding: "100px 0 60px", background: "#f4f6fa" }}>
+    <div style={{ minHeight: "100vh", padding: "100px 0 60px", position: "relative", zIndex: 1 }}>
       <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 20px" }}>
         {/* 1. Breadcrumbs */}
         <div
@@ -74,30 +73,32 @@ export default function ProductDetail({ onOpenOrderModal }) {
             alignItems: "center",
             gap: "6px",
             fontSize: "13px",
-            color: "#64748b",
+            color: "#94a3b8",
             marginBottom: "16px",
             flexWrap: "wrap",
           }}
         >
-          <Link to="/" style={{ color: "#2563eb", textDecoration: "none" }}>
+          <Link to="/" style={{ color: "#38bdf8", textDecoration: "none" }}>
             Trang Chủ
           </Link>
           <ChevronRight size={13} />
-          <Link to={`/?q=${encodeURIComponent(product.categoryName)}`} style={{ color: "#2563eb", textDecoration: "none" }}>
+          <Link to={`/?q=${encodeURIComponent(product.categoryName)}`} style={{ color: "#38bdf8", textDecoration: "none" }}>
             {product.categoryName}
           </Link>
           <ChevronRight size={13} />
-          <span style={{ color: "#0f172a", fontWeight: 600 }}>{product.shortName}</span>
+          <span style={{ color: "#ffffff", fontWeight: 600 }}>{product.shortName}</span>
         </div>
 
         {/* 2. Main Product Info Box */}
         <div
           style={{
-            background: "#ffffff",
+            background: "rgba(8, 22, 54, 0.88)",
+            backdropFilter: "blur(14px)",
+            WebkitBackdropFilter: "blur(14px)",
             borderRadius: "14px",
             padding: "28px",
-            border: "1px solid #e2e8f0",
-            boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
+            border: "1px solid rgba(255, 255, 255, 0.12)",
+            boxShadow: "0 6px 24px rgba(0,0,0,0.35)",
             display: "grid",
             gridTemplateColumns: "440px 1fr",
             gap: "36px",
@@ -113,10 +114,10 @@ export default function ProductDetail({ onOpenOrderModal }) {
                 width: "100%",
                 paddingTop: "100%",
                 position: "relative",
-                background: "#f8fafc",
+                background: "#030c22",
                 borderRadius: "10px",
                 overflow: "hidden",
-                border: "1px solid #e2e8f0",
+                border: "1px solid rgba(255, 255, 255, 0.15)",
                 marginBottom: "12px",
               }}
             >
@@ -161,11 +162,11 @@ export default function ProductDetail({ onOpenOrderModal }) {
                     height: "72px",
                     borderRadius: "6px",
                     overflow: "hidden",
-                    border: selectedImageIndex === idx ? "2px solid #dc2626" : "1px solid #e2e8f0",
-                    background: "#f8fafc",
+                    border: selectedImageIndex === idx ? "2px solid #38bdf8" : "1px solid rgba(255, 255, 255, 0.15)",
+                    background: "#030c22",
                     cursor: "pointer",
                     flexShrink: 0,
-                    opacity: selectedImageIndex === idx ? 1 : 0.7,
+                    opacity: selectedImageIndex === idx ? 1 : 0.6,
                     transition: "all 0.15s ease",
                   }}
                 >
@@ -182,17 +183,17 @@ export default function ProductDetail({ onOpenOrderModal }) {
                 alignItems: "center",
                 marginTop: "14px",
                 paddingTop: "12px",
-                borderTop: "1px solid #f1f5f9",
+                borderTop: "1px solid rgba(255, 255, 255, 0.1)",
                 fontSize: "13px",
-                color: "#64748b",
+                color: "#94a3b8",
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <Share2 size={15} />
                 <span>Chia sẻ:</span>
-                <span style={{ color: "#2563eb", fontWeight: 600, cursor: "pointer" }}>Zalo</span>
+                <span style={{ color: "#38bdf8", fontWeight: 600, cursor: "pointer" }}>Zalo</span>
                 <span>•</span>
-                <span style={{ color: "#4267b2", fontWeight: 600, cursor: "pointer" }}>Facebook</span>
+                <span style={{ color: "#60a5fa", fontWeight: 600, cursor: "pointer" }}>Facebook</span>
               </div>
               <button
                 onClick={() => setIsLiked(!isLiked)}
@@ -203,11 +204,11 @@ export default function ProductDetail({ onOpenOrderModal }) {
                   display: "flex",
                   alignItems: "center",
                   gap: "6px",
-                  color: isLiked ? "#dc2626" : "#64748b",
+                  color: isLiked ? "#ff4d4f" : "#94a3b8",
                   fontSize: "13px",
                 }}
               >
-                <Heart size={16} fill={isLiked ? "#dc2626" : "none"} color={isLiked ? "#dc2626" : "#64748b"} />
+                <Heart size={16} fill={isLiked ? "#ff4d4f" : "none"} color={isLiked ? "#ff4d4f" : "#94a3b8"} />
                 <span>Đã thích ({isLiked ? "343" : "342"})</span>
               </button>
             </div>
@@ -216,7 +217,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
           {/* Right Column: Title, Ratings, Price, Variants & CTAs */}
           <div>
             {/* Title */}
-            <h1 style={{ fontSize: "20px", fontWeight: 700, color: "#0f172a", lineHeight: 1.4, margin: "0 0 10px" }}>
+            <h1 style={{ fontSize: "20px", fontWeight: 700, color: "#ffffff", lineHeight: 1.4, margin: "0 0 10px" }}>
               {product.name}
             </h1>
 
@@ -228,12 +229,12 @@ export default function ProductDetail({ onOpenOrderModal }) {
                 gap: "14px",
                 marginBottom: "16px",
                 fontSize: "13px",
-                color: "#64748b",
+                color: "#94a3b8",
                 flexWrap: "wrap",
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                <span style={{ color: "#d97706", fontWeight: 800, fontSize: "15px" }}>
+                <span style={{ color: "#f59e0b", fontWeight: 800, fontSize: "15px" }}>
                   {product.rating}
                 </span>
                 <div style={{ display: "flex", color: "#f59e0b" }}>
@@ -242,21 +243,21 @@ export default function ProductDetail({ onOpenOrderModal }) {
                   ))}
                 </div>
               </div>
-              <span style={{ opacity: 0.4 }}>|</span>
+              <span style={{ opacity: 0.3 }}>|</span>
               <div>
-                <strong style={{ color: "#0f172a" }}>{product.reviewsCount}</strong> Đánh Giá
+                <strong style={{ color: "#ffffff" }}>{product.reviewsCount}</strong> Đánh Giá
               </div>
-              <span style={{ opacity: 0.4 }}>|</span>
+              <span style={{ opacity: 0.3 }}>|</span>
               <div>
-                <strong style={{ color: "#0f172a" }}>{product.soldCount}</strong> Đã Bán
+                <strong style={{ color: "#ffffff" }}>{product.soldCount}</strong> Đã Bán
               </div>
             </div>
 
             {/* Price Banner */}
             <div
               style={{
-                background: "#fef2f2",
-                border: "1px solid #fee2e2",
+                background: "rgba(2, 10, 28, 0.65)",
+                border: "1px solid rgba(220, 38, 38, 0.35)",
                 padding: "16px 20px",
                 borderRadius: "8px",
                 marginBottom: "20px",
@@ -271,7 +272,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
                   ₫{originalPrice.toLocaleString("vi-VN")}
                 </span>
               )}
-              <span style={{ fontSize: "26px", fontWeight: 800, color: "#dc2626" }}>
+              <span style={{ fontSize: "26px", fontWeight: 800, color: "#ff4d4f" }}>
                 ₫{currentPrice.toLocaleString("vi-VN")}
               </span>
               {discountPercent > 0 && (
@@ -288,7 +289,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
                   -{discountPercent}%
                 </span>
               )}
-              <span style={{ fontSize: "12px", color: "#059669", fontWeight: 600, background: "#ecfdf5", padding: "2px 8px", borderRadius: "4px" }}>
+              <span style={{ fontSize: "12px", color: "#34d399", fontWeight: 600, background: "rgba(16, 185, 129, 0.15)", border: "1px solid rgba(16, 185, 129, 0.25)", padding: "2px 8px", borderRadius: "4px" }}>
                 Giá sỉ tận gốc nhà máy
               </span>
             </div>
@@ -296,15 +297,15 @@ export default function ProductDetail({ onOpenOrderModal }) {
             {/* Vouchers & Shipping */}
             <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "20px", fontSize: "13px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                <span style={{ width: "100px", color: "#64748b", flexShrink: 0 }}>Ưu Đãi:</span>
+                <span style={{ width: "100px", color: "#94a3b8", flexShrink: 0 }}>Ưu Đãi:</span>
                 <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
                   {(product.vouchers || ["Giảm ₫50k", "Freeship Xtra"]).map((v, i) => (
                     <span
                       key={i}
                       style={{
-                        background: "#fff1f2",
-                        color: "#e11d48",
-                        border: "1px solid #fecdd3",
+                        background: "rgba(225, 29, 72, 0.15)",
+                        color: "#fb7185",
+                        border: "1px solid rgba(225, 29, 72, 0.3)",
                         padding: "2px 8px",
                         borderRadius: "3px",
                         fontSize: "11.5px",
@@ -318,14 +319,14 @@ export default function ProductDetail({ onOpenOrderModal }) {
               </div>
 
               <div style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
-                <span style={{ width: "100px", color: "#64748b", flexShrink: 0, marginTop: "2px" }}>Vận Chuyển:</span>
+                <span style={{ width: "100px", color: "#94a3b8", flexShrink: 0, marginTop: "2px" }}>Vận Chuyển:</span>
                 <div style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#059669", fontWeight: 600 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#34d399", fontWeight: 600 }}>
                     <Truck size={16} />
                     <span>Miễn phí vận chuyển tận chân công trình (Đơn từ 2 thùng)</span>
                   </div>
-                  <div style={{ color: "#64748b", fontSize: "12px" }}>
-                    Gửi hàng từ: <strong>KCN Trà Nóc, TP. Cần Thơ</strong> &amp; Kho Hà Nội / TP.HCM
+                  <div style={{ color: "#94a3b8", fontSize: "12px" }}>
+                    Gửi hàng từ: <strong style={{ color: "#ffffff" }}>KCN Trà Nóc, TP. Cần Thơ</strong> &amp; Kho Hà Nội / TP.HCM
                   </div>
                 </div>
               </div>
@@ -333,7 +334,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
 
             {/* Variant 1: Dung Tích / Quy Cách */}
             <div style={{ display: "flex", alignItems: "flex-start", gap: "16px", marginBottom: "16px", fontSize: "13px" }}>
-              <span style={{ width: "100px", color: "#64748b", flexShrink: 0, marginTop: "6px" }}>
+              <span style={{ width: "100px", color: "#94a3b8", flexShrink: 0, marginTop: "6px" }}>
                 Quy Cách:
               </span>
               <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
@@ -346,9 +347,9 @@ export default function ProductDetail({ onOpenOrderModal }) {
                       style={{
                         padding: "7px 14px",
                         borderRadius: "6px",
-                        border: isSelected ? "2px solid #dc2626" : "1px solid #cbd5e1",
-                        background: isSelected ? "#fef2f2" : "#ffffff",
-                        color: isSelected ? "#dc2626" : "#1e293b",
+                        border: isSelected ? "2px solid #dc2626" : "1px solid rgba(255, 255, 255, 0.15)",
+                        background: isSelected ? "rgba(220, 38, 38, 0.15)" : "rgba(2, 10, 28, 0.6)",
+                        color: isSelected ? "#ff4d4f" : "#ffffff",
                         fontWeight: isSelected ? 700 : 500,
                         fontSize: "13px",
                         cursor: "pointer",
@@ -358,7 +359,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
                         transition: "all 0.15s ease",
                       }}
                     >
-                      {isSelected && <Check size={14} color="#dc2626" />}
+                      {isSelected && <Check size={14} color="#ff4d4f" />}
                       <span>{vol.name}</span>
                     </button>
                   );
@@ -368,7 +369,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
 
             {/* Variant 2: Màu Sắc */}
             <div style={{ display: "flex", alignItems: "flex-start", gap: "16px", marginBottom: "18px", fontSize: "13px" }}>
-              <span style={{ width: "100px", color: "#64748b", flexShrink: 0, marginTop: "6px" }}>
+              <span style={{ width: "100px", color: "#94a3b8", flexShrink: 0, marginTop: "6px" }}>
                 Mã Màu:
               </span>
               <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
@@ -381,9 +382,9 @@ export default function ProductDetail({ onOpenOrderModal }) {
                       style={{
                         padding: "6px 12px",
                         borderRadius: "5px",
-                        border: isSelected ? "2px solid #dc2626" : "1px solid #cbd5e1",
-                        background: isSelected ? "#fef2f2" : "#ffffff",
-                        color: isSelected ? "#dc2626" : "#1e293b",
+                        border: isSelected ? "2px solid #dc2626" : "1px solid rgba(255, 255, 255, 0.15)",
+                        background: isSelected ? "rgba(220, 38, 38, 0.15)" : "rgba(2, 10, 28, 0.6)",
+                        color: isSelected ? "#ff4d4f" : "#ffffff",
                         fontWeight: isSelected ? 700 : 500,
                         fontSize: "12px",
                         cursor: "pointer",
@@ -399,7 +400,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
                           height: "12px",
                           borderRadius: "50%",
                           background: col.code || "#ddd",
-                          border: "1px solid rgba(0,0,0,0.15)",
+                          border: "1px solid rgba(255,255,255,0.3)",
                         }}
                       />
                       <span>{col.name}</span>
@@ -411,12 +412,12 @@ export default function ProductDetail({ onOpenOrderModal }) {
 
             {/* Quantity Selector */}
             <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "24px", fontSize: "13px" }}>
-              <span style={{ width: "100px", color: "#64748b", flexShrink: 0 }}>Số Lượng:</span>
+              <span style={{ width: "100px", color: "#94a3b8", flexShrink: 0 }}>Số Lượng:</span>
               <div style={{ display: "flex", alignItems: "center" }}>
-                <div style={{ display: "flex", border: "1px solid #cbd5e1", borderRadius: "6px", overflow: "hidden" }}>
+                <div style={{ display: "flex", border: "1px solid rgba(255, 255, 255, 0.2)", borderRadius: "6px", overflow: "hidden" }}>
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    style={{ width: "32px", height: "32px", border: "none", background: "#f8fafc", cursor: "pointer", fontSize: "16px", fontWeight: 700 }}
+                    style={{ width: "32px", height: "32px", border: "none", background: "rgba(2, 10, 28, 0.7)", color: "#ffffff", cursor: "pointer", fontSize: "16px", fontWeight: 700 }}
                   >
                     -
                   </button>
@@ -424,16 +425,16 @@ export default function ProductDetail({ onOpenOrderModal }) {
                     type="number"
                     value={quantity}
                     onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                    style={{ width: "48px", height: "32px", border: "none", textAlign: "center", fontSize: "13px", fontWeight: 700, outline: "none" }}
+                    style={{ width: "48px", height: "32px", border: "none", background: "rgba(2, 10, 28, 0.5)", color: "#ffffff", textAlign: "center", fontSize: "13px", fontWeight: 700, outline: "none" }}
                   />
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    style={{ width: "32px", height: "32px", border: "none", background: "#f8fafc", cursor: "pointer", fontSize: "16px", fontWeight: 700 }}
+                    style={{ width: "32px", height: "32px", border: "none", background: "rgba(2, 10, 28, 0.7)", color: "#ffffff", cursor: "pointer", fontSize: "16px", fontWeight: 700 }}
                   >
                     +
                   </button>
                 </div>
-                <span style={{ marginLeft: "12px", color: "#64748b", fontSize: "12px" }}>
+                <span style={{ marginLeft: "12px", color: "#94a3b8", fontSize: "12px" }}>
                   {product.stock || 240} thùng sẵn kho
                 </span>
               </div>
@@ -482,9 +483,9 @@ export default function ProductDetail({ onOpenOrderModal }) {
               <a
                 href="tel:0947707616"
                 style={{
-                  background: "#0f172a",
+                  background: "#030c22",
                   color: "#ffffff",
-                  border: "none",
+                  border: "1px solid rgba(255, 255, 255, 0.25)",
                   borderRadius: "8px",
                   padding: "13px 16px",
                   cursor: "pointer",
@@ -494,10 +495,16 @@ export default function ProductDetail({ onOpenOrderModal }) {
                   justifyContent: "center",
                   gap: "2px",
                   textDecoration: "none",
-                  transition: "background 0.2s ease",
+                  transition: "all 0.2s ease",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = "#1e293b")}
-                onMouseLeave={(e) => (e.currentTarget.style.background = "#0f172a")}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "#0f172a";
+                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.4)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "#030c22";
+                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.25)";
+                }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "6px", fontWeight: 700, fontSize: "14px" }}>
                   <Phone size={16} color="#22c55e" />
@@ -512,28 +519,28 @@ export default function ProductDetail({ onOpenOrderModal }) {
             {/* Shop Commitments */}
             <div
               style={{
-                background: "#f8fafc",
-                border: "1px solid #e2e8f0",
+                background: "rgba(2, 10, 28, 0.6)",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
                 borderRadius: "8px",
                 padding: "12px 16px",
                 display: "flex",
                 justifyContent: "space-between",
                 fontSize: "12px",
-                color: "#475569",
+                color: "#cbd5e1",
                 flexWrap: "wrap",
                 gap: "8px",
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <ShieldCheck size={16} color="#16a34a" />
+                <ShieldCheck size={16} color="#34d399" />
                 <span>100% Chính Hãng (CO/CQ)</span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <RotateCcw size={16} color="#16a34a" />
+                <RotateCcw size={16} color="#34d399" />
                 <span>Đổi trả 7 ngày nếu lỗi</span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <Building size={16} color="#16a34a" />
+                <Building size={16} color="#34d399" />
                 <span>Xuất Hóa Đơn VAT</span>
               </div>
             </div>
@@ -543,11 +550,12 @@ export default function ProductDetail({ onOpenOrderModal }) {
         {/* 3. Shop Profile Strip */}
         <div
           style={{
-            background: "#ffffff",
+            background: "rgba(8, 22, 54, 0.88)",
+            backdropFilter: "blur(14px)",
             borderRadius: "12px",
             padding: "18px 24px",
-            border: "1px solid #e2e8f0",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.03)",
+            border: "1px solid rgba(255, 255, 255, 0.12)",
+            boxShadow: "0 4px 16px rgba(0,0,0,0.3)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -562,8 +570,9 @@ export default function ProductDetail({ onOpenOrderModal }) {
                 width: "52px",
                 height: "52px",
                 borderRadius: "50%",
-                background: "#0f172a",
+                background: "#030c22",
                 color: "#fff",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -575,14 +584,14 @@ export default function ProductDetail({ onOpenOrderModal }) {
             </div>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <h3 style={{ fontSize: "15px", fontWeight: 700, margin: 0, color: "#0f172a" }}>
+                <h3 style={{ fontSize: "15px", fontWeight: 700, margin: 0, color: "#ffffff" }}>
                   FUJINANO OFFICIAL STORE
                 </h3>
                 <span style={{ background: "#dc2626", color: "#fff", fontSize: "10px", fontWeight: 700, padding: "1px 5px", borderRadius: "3px" }}>
                   Chính Hãng
                 </span>
               </div>
-              <div style={{ fontSize: "12px", color: "#64748b", marginTop: "3px" }}>
+              <div style={{ fontSize: "12px", color: "#94a3b8", marginTop: "3px" }}>
                 Online 5 phút trước • Tổng kho Miền Tây &amp; Toàn Quốc
               </div>
             </div>
@@ -592,8 +601,9 @@ export default function ProductDetail({ onOpenOrderModal }) {
             <a
               href="tel:0947707616"
               style={{
-                background: "#0f172a",
+                background: "#030c22",
                 color: "#fff",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
                 textDecoration: "none",
                 padding: "8px 16px",
                 borderRadius: "6px",
@@ -611,10 +621,10 @@ export default function ProductDetail({ onOpenOrderModal }) {
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                background: "#f1f5f9",
-                color: "#334155",
+                background: "rgba(255, 255, 255, 0.08)",
+                color: "#ffffff",
                 textDecoration: "none",
-                border: "1px solid #cbd5e1",
+                border: "1px solid rgba(255, 255, 255, 0.15)",
                 padding: "8px 16px",
                 borderRadius: "6px",
                 fontSize: "12.5px",
@@ -624,7 +634,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
                 gap: "5px",
               }}
             >
-              <MessageCircle size={13} color="#0284c7" /> Chat Zalo
+              <MessageCircle size={13} color="#38bdf8" /> Chat Zalo
             </a>
           </div>
         </div>
@@ -632,11 +642,12 @@ export default function ProductDetail({ onOpenOrderModal }) {
         {/* 4. Specifications & Description */}
         <div
           style={{
-            background: "#ffffff",
+            background: "rgba(8, 22, 54, 0.88)",
+            backdropFilter: "blur(14px)",
             borderRadius: "14px",
             padding: "24px",
-            border: "1px solid #e2e8f0",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.03)",
+            border: "1px solid rgba(255, 255, 255, 0.12)",
+            boxShadow: "0 4px 16px rgba(0,0,0,0.3)",
             marginBottom: "20px",
           }}
         >
@@ -646,9 +657,9 @@ export default function ProductDetail({ onOpenOrderModal }) {
               style={{
                 fontSize: "14px",
                 fontWeight: 700,
-                color: "#0f172a",
+                color: "#ffffff",
                 textTransform: "uppercase",
-                background: "#f8fafc",
+                background: "rgba(2, 10, 28, 0.65)",
                 padding: "10px 14px",
                 margin: "0 0 16px",
                 borderRadius: "6px",
@@ -660,19 +671,19 @@ export default function ProductDetail({ onOpenOrderModal }) {
 
             <div style={{ display: "flex", flexDirection: "column", gap: "10px", padding: "0 12px" }}>
               <div style={{ display: "flex", fontSize: "13.5px", lineHeight: 1.6 }}>
-                <span style={{ width: "220px", color: "#64748b" }}>Danh Mục</span>
-                <span style={{ color: "#2563eb", fontWeight: 500 }}>FUJINANO &gt; Thùng Sơn &gt; {product.categoryName}</span>
+                <span style={{ width: "220px", color: "#94a3b8" }}>Danh Mục</span>
+                <span style={{ color: "#38bdf8", fontWeight: 500 }}>FUJINANO &gt; Thùng Sơn &gt; {product.categoryName}</span>
               </div>
               {product.specs &&
                 Object.entries(product.specs).map(([key, val]) => (
                   <div key={key} style={{ display: "flex", fontSize: "13.5px", lineHeight: 1.6 }}>
-                    <span style={{ width: "220px", color: "#64748b" }}>{key}</span>
-                    <span style={{ color: "#0f172a", fontWeight: 500 }}>{val}</span>
+                    <span style={{ width: "220px", color: "#94a3b8" }}>{key}</span>
+                    <span style={{ color: "#ffffff", fontWeight: 500 }}>{val}</span>
                   </div>
                 ))}
               <div style={{ display: "flex", fontSize: "13.5px", lineHeight: 1.6 }}>
-                <span style={{ width: "220px", color: "#64748b" }}>Gửi hàng từ</span>
-                <span style={{ color: "#0f172a" }}>KCN Trà Nóc, Bình Thủy, TP. Cần Thơ</span>
+                <span style={{ width: "220px", color: "#94a3b8" }}>Gửi hàng từ</span>
+                <span style={{ color: "#ffffff" }}>KCN Trà Nóc, Bình Thủy, TP. Cần Thơ</span>
               </div>
             </div>
           </div>
@@ -683,9 +694,9 @@ export default function ProductDetail({ onOpenOrderModal }) {
               style={{
                 fontSize: "14px",
                 fontWeight: 700,
-                color: "#0f172a",
+                color: "#ffffff",
                 textTransform: "uppercase",
-                background: "#f8fafc",
+                background: "rgba(2, 10, 28, 0.65)",
                 padding: "10px 14px",
                 margin: "0 0 16px",
                 borderRadius: "6px",
@@ -698,7 +709,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
             <div
               style={{
                 fontSize: "14px",
-                color: "#334155",
+                color: "#cbd5e1",
                 lineHeight: 1.8,
                 padding: "0 12px",
               }}
@@ -710,11 +721,12 @@ export default function ProductDetail({ onOpenOrderModal }) {
         {/* 5. Customer Reviews Section */}
         <div
           style={{
-            background: "#ffffff",
+            background: "rgba(8, 22, 54, 0.88)",
+            backdropFilter: "blur(14px)",
             borderRadius: "14px",
             padding: "24px",
-            border: "1px solid #e2e8f0",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.03)",
+            border: "1px solid rgba(255, 255, 255, 0.12)",
+            boxShadow: "0 4px 16px rgba(0,0,0,0.3)",
             marginBottom: "24px",
           }}
         >
@@ -722,7 +734,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
             style={{
               fontSize: "14px",
               fontWeight: 700,
-              color: "#0f172a",
+              color: "#ffffff",
               textTransform: "uppercase",
               margin: "0 0 16px",
             }}
@@ -732,8 +744,8 @@ export default function ProductDetail({ onOpenOrderModal }) {
 
           <div
             style={{
-              background: "#f8fafc",
-              border: "1px solid #e2e8f0",
+              background: "rgba(2, 10, 28, 0.65)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
               borderRadius: "8px",
               padding: "20px",
               display: "flex",
@@ -744,8 +756,8 @@ export default function ProductDetail({ onOpenOrderModal }) {
             }}
           >
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "30px", fontWeight: 800, color: "#d97706" }}>
-                {product.rating} <span style={{ fontSize: "16px", color: "#64748b" }}>/ 5</span>
+              <div style={{ fontSize: "30px", fontWeight: 800, color: "#f59e0b" }}>
+                {product.rating} <span style={{ fontSize: "16px", color: "#94a3b8" }}>/ 5</span>
               </div>
               <div style={{ display: "flex", justifyContent: "center", color: "#f59e0b", marginTop: "4px" }}>
                 {[...Array(5)].map((_, i) => (
@@ -767,9 +779,9 @@ export default function ProductDetail({ onOpenOrderModal }) {
                   style={{
                     padding: "6px 14px",
                     borderRadius: "6px",
-                    border: activeReviewFilter === btn.id ? "1px solid #dc2626" : "1px solid #cbd5e1",
-                    background: activeReviewFilter === btn.id ? "#fef2f2" : "#ffffff",
-                    color: activeReviewFilter === btn.id ? "#dc2626" : "#475569",
+                    border: activeReviewFilter === btn.id ? "1px solid #dc2626" : "1px solid rgba(255, 255, 255, 0.15)",
+                    background: activeReviewFilter === btn.id ? "rgba(220, 38, 38, 0.2)" : "rgba(255, 255, 255, 0.06)",
+                    color: activeReviewFilter === btn.id ? "#ff4d4f" : "#cbd5e1",
                     fontWeight: activeReviewFilter === btn.id ? 700 : 500,
                     fontSize: "12.5px",
                     cursor: "pointer",
@@ -790,16 +802,16 @@ export default function ProductDetail({ onOpenOrderModal }) {
                   display: "flex",
                   gap: "14px",
                   paddingBottom: "16px",
-                  borderBottom: "1px solid #f1f5f9",
+                  borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
                 }}
               >
                 <img
                   src={rev.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=60&h=60&fit=crop"}
                   alt={rev.user}
-                  style={{ width: "40px", height: "40px", borderRadius: "50%", objectFit: "cover", flexShrink: 0 }}
+                  style={{ width: "40px", height: "40px", borderRadius: "50%", objectFit: "cover", flexShrink: 0, border: "1px solid rgba(255, 255, 255, 0.2)" }}
                 />
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: "13.5px", fontWeight: 700, color: "#0f172a", marginBottom: "2px" }}>
+                  <div style={{ fontSize: "13.5px", fontWeight: 700, color: "#ffffff", marginBottom: "2px" }}>
                     {rev.user}
                   </div>
                   <div style={{ display: "flex", color: "#f59e0b", marginBottom: "3px" }}>
@@ -810,7 +822,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
                   <div style={{ fontSize: "11.5px", color: "#94a3b8", marginBottom: "6px" }}>
                     {rev.date} | Phân loại: {rev.variant || "Thùng 18 Lít"}
                   </div>
-                  <div style={{ fontSize: "13.5px", color: "#334155", lineHeight: 1.5, marginBottom: "8px" }}>
+                  <div style={{ fontSize: "13.5px", color: "#cbd5e1", lineHeight: 1.5, marginBottom: "8px" }}>
                     {rev.comment}
                   </div>
                   {rev.images && rev.images.length > 0 && (
@@ -820,7 +832,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
                           key={i}
                           src={imgUrl}
                           alt="review-img"
-                          style={{ width: "72px", height: "72px", borderRadius: "6px", objectFit: "cover", border: "1px solid #e2e8f0" }}
+                          style={{ width: "72px", height: "72px", borderRadius: "6px", objectFit: "cover", border: "1px solid rgba(255, 255, 255, 0.15)" }}
                         />
                       ))}
                     </div>
@@ -837,7 +849,7 @@ export default function ProductDetail({ onOpenOrderModal }) {
             style={{
               fontSize: "14px",
               fontWeight: 700,
-              color: "#0f172a",
+              color: "#ffffff",
               textTransform: "uppercase",
               marginBottom: "16px",
             }}

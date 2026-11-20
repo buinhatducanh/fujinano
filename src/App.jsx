@@ -36,16 +36,33 @@ export default function App() {
   };
 
   return (
-    <div style={{ fontFamily: "'DM Sans', sans-serif", overflowX: "hidden", minHeight: "100vh", background: "#f4f6fa" }}>
+    <div style={{ fontFamily: "'DM Sans', sans-serif", overflowX: "hidden", minHeight: "100vh" }}>
       <style>{`
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; font-size: 16px; }
-        body { background-color: #f4f6fa; color: #0f172a; }
+        body { background-color: #001648; color: #ffffff; }
         a { text-decoration: none; color: inherit; }
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #e2e8f0; }
-        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+        ::-webkit-scrollbar-track { background: #001035; }
+        ::-webkit-scrollbar-thumb { background: #1e3a8a; border-radius: 3px; }
         input, select, button { font-family: inherit; }
+
+        .global-bg {
+          position: fixed;
+          inset: 0;
+          z-index: -10;
+          background: radial-gradient(circle at 50% 0%, #0c2a72 0%, #001648 45%, #000c28 100%);
+          pointer-events: none;
+        }
+        .hex-pattern {
+          position: fixed;
+          inset: 0;
+          z-index: -9;
+          pointer-events: none;
+          opacity: 0.045;
+          background-image: url("data:image/svg+xml,%3Csvg width='60' height='103.923' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 103.923L0 86.603V51.962l30-17.32 30 17.32v34.641l-30 17.32zM30 0L0 17.32v34.642L30 69.282l30-17.32V17.32L30 0z' fill='none' stroke='%23ffffff' stroke-width='1.5'/%3E%3C/svg%3E");
+          background-size: 60px 103.923px;
+        }
 
         @media (max-width: 960px) {
           .grid-3 { grid-template-columns: repeat(2,1fr) !important; }
@@ -59,6 +76,10 @@ export default function App() {
           .grid-footer { grid-template-columns: 1fr !important; }
         }
       `}</style>
+
+      {/* Signature Blue Background & Hexagonal Grid */}
+      <div className="global-bg" />
+      <div className="hex-pattern" />
 
       {/* Header Navigation */}
       <Navbar onOpenOrderModal={handleOpenOrderModal} />

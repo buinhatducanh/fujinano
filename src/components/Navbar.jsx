@@ -124,9 +124,11 @@ export default function Navbar({ onOpenOrderModal }) {
           zIndex: 999,
           height: "72px",
           transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
-          background: "#ffffff",
-          borderBottom: "1px solid #e2e8f0",
-          boxShadow: scrolled ? "0 4px 16px rgba(0,0,0,0.06)" : "0 1px 3px rgba(0,0,0,0.03)",
+          background: "rgba(0, 18, 55, 0.95)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+          boxShadow: scrolled ? "0 4px 20px rgba(0,0,0,0.5)" : "none",
         }}
       >
         <div
@@ -153,7 +155,7 @@ export default function Navbar({ onOpenOrderModal }) {
               flexShrink: 0,
             }}
           >
-            <Logo size="sm" dark={true} />
+            <Logo size="sm" dark={false} />
           </Link>
 
           {/* Desktop Nav Items */}
@@ -179,7 +181,7 @@ export default function Navbar({ onOpenOrderModal }) {
                       fontFamily: "'DM Sans', sans-serif",
                       fontSize: "14px",
                       fontWeight: 600,
-                      color: servicesDropdownOpen ? "#dc2626" : "#1e293b",
+                      color: servicesDropdownOpen ? "#ff4d4f" : "#ffffff",
                       textDecoration: "none",
                       borderRadius: "6px",
                       transition: "color 0.2s",
@@ -208,11 +210,11 @@ export default function Navbar({ onOpenOrderModal }) {
                       <div
                         style={{
                           width: "360px",
-                          background: "#ffffff",
-                          border: "1px solid #e2e8f0",
+                          background: "#081534",
+                          border: "1px solid rgba(255, 255, 255, 0.15)",
                           borderRadius: "12px",
                           padding: "8px",
-                          boxShadow: "0 12px 30px rgba(0,0,0,0.1)",
+                          boxShadow: "0 16px 36px rgba(0,0,0,0.5)",
                         }}
                       >
                         {item.sub.map((subItem) => {
@@ -230,7 +232,7 @@ export default function Navbar({ onOpenOrderModal }) {
                                 borderRadius: "8px",
                                 transition: "background 0.15s ease",
                               }}
-                              onMouseEnter={(e) => (e.currentTarget.style.background = "#f8fafc")}
+                              onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.08)")}
                               onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                             >
                               <div
@@ -238,20 +240,20 @@ export default function Navbar({ onOpenOrderModal }) {
                                   width: "34px",
                                   height: "34px",
                                   borderRadius: "8px",
-                                  background: "#f1f5f9",
+                                  background: "rgba(255, 255, 255, 0.08)",
                                   display: "flex",
                                   alignItems: "center",
                                   justifyContent: "center",
                                   flexShrink: 0,
                                 }}
                               >
-                                <IconComp size={16} color="#0f172a" />
+                                <IconComp size={16} color="#38bdf8" />
                               </div>
                               <div>
-                                <div style={{ fontSize: "13.5px", fontWeight: 600, color: "#0f172a" }}>
+                                <div style={{ fontSize: "13.5px", fontWeight: 600, color: "#ffffff" }}>
                                   {subItem.title}
                                 </div>
-                                <div style={{ fontSize: "11px", color: "#64748b" }}>
+                                <div style={{ fontSize: "11px", color: "#94a3b8" }}>
                                   {subItem.desc}
                                 </div>
                               </div>
@@ -273,13 +275,13 @@ export default function Navbar({ onOpenOrderModal }) {
                     fontFamily: "'DM Sans', sans-serif",
                     fontSize: "14px",
                     fontWeight: 600,
-                    color: "#1e293b",
+                    color: "#ffffff",
                     textDecoration: "none",
                     borderRadius: "6px",
                     transition: "color 0.2s",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#dc2626")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#1e293b")}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#ff4d4f")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#ffffff")}
                 >
                   <span>{item.label}</span>
                 </a>
@@ -327,16 +329,16 @@ export default function Navbar({ onOpenOrderModal }) {
                 gap: "5px",
                 padding: "7px 14px",
                 borderRadius: "8px",
-                background: "#f1f5f9",
-                color: "#334155",
+                background: "rgba(255, 255, 255, 0.08)",
+                color: "#ffffff",
                 textDecoration: "none",
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "13px",
                 fontWeight: 600,
-                border: "1px solid #e2e8f0",
+                border: "1px solid rgba(255, 255, 255, 0.15)",
               }}
             >
-              <MessageCircle size={14} color="#0284c7" />
+              <MessageCircle size={14} color="#38bdf8" />
               Zalo
             </a>
 
@@ -348,9 +350,10 @@ export default function Navbar({ onOpenOrderModal }) {
                 alignItems: "center",
                 gap: "6px",
                 padding: "8px 16px",
-                background: "#0f172a",
+                background: "#030c22",
                 color: "#ffffff",
                 borderRadius: "8px",
+                border: "1px solid rgba(255, 255, 255, 0.25)",
                 textDecoration: "none",
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "13px",
@@ -358,8 +361,8 @@ export default function Navbar({ onOpenOrderModal }) {
                 whiteSpace: "nowrap",
                 transition: "background 0.2s",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "#1e293b")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "#0f172a")}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "#0f172a")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "#030c22")}
             >
               <Phone size={13} color="#22c55e" />
               <span>0947.707.616</span>
@@ -375,7 +378,7 @@ export default function Navbar({ onOpenOrderModal }) {
               background: "none",
               border: "none",
               cursor: "pointer",
-              color: "#0f172a",
+              color: "#ffffff",
               padding: "6px",
             }}
           >
@@ -391,9 +394,9 @@ export default function Navbar({ onOpenOrderModal }) {
               top: "100%",
               left: 0,
               right: 0,
-              background: "#ffffff",
-              borderBottom: "1px solid #e2e8f0",
-              boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+              background: "#081534",
+              borderBottom: "1px solid rgba(255, 255, 255, 0.15)",
+              boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
               padding: "16px 24px 28px",
               display: "flex",
               flexDirection: "column",
@@ -415,9 +418,9 @@ export default function Navbar({ onOpenOrderModal }) {
                     fontFamily: "'DM Sans', sans-serif",
                     fontSize: "15px",
                     fontWeight: 600,
-                    color: "#0f172a",
+                    color: "#ffffff",
                     textDecoration: "none",
-                    borderBottom: "1px solid #f1f5f9",
+                    borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
                   }}
                 >
                   {item.label}
@@ -433,7 +436,7 @@ export default function Navbar({ onOpenOrderModal }) {
                           display: "block",
                           padding: "8px 0",
                           fontSize: "13px",
-                          color: "#64748b",
+                          color: "#94a3b8",
                           textDecoration: "none",
                         }}
                       >
@@ -480,7 +483,8 @@ export default function Navbar({ onOpenOrderModal }) {
                   gap: "8px",
                   justifyContent: "center",
                   padding: "12px",
-                  background: "#0f172a",
+                  background: "#030c22",
+                  border: "1px solid rgba(255, 255, 255, 0.25)",
                   color: "#fff",
                   borderRadius: "8px",
                   textDecoration: "none",

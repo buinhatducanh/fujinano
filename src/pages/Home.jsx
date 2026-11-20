@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Search, Phone, FileText, CheckCircle2, ShieldCheck, Truck, RotateCcw, Headphones, Sparkles, Filter, X } from "lucide-react";
+import { Search, Phone, FileText, ShieldCheck, Truck, RotateCcw, Headphones, Filter, X } from "lucide-react";
 import { categories, products } from "../data/products";
 import ProductCard from "../components/ProductCard";
 
@@ -50,27 +50,29 @@ export default function Home({ onOpenOrderModal }) {
   });
 
   return (
-    <div style={{ minHeight: "100vh", padding: "100px 0 60px", background: "#f4f6fa" }}>
+    <div style={{ minHeight: "100vh", padding: "100px 0 60px", position: "relative", zIndex: 1 }}>
       <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 20px" }}>
         
         {/* 1. KHU VỰC TẬP TRUNG TÌM KIẾM SẢN PHẨM (PROMINENT SEARCH SECTION) */}
         <div
           style={{
-            background: "#ffffff",
+            background: "rgba(8, 22, 54, 0.88)",
+            backdropFilter: "blur(14px)",
+            WebkitBackdropFilter: "blur(14px)",
             borderRadius: "14px",
             padding: "24px",
-            boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
-            border: "1px solid #e2e8f0",
+            boxShadow: "0 6px 24px rgba(0,0,0,0.35)",
+            border: "1px solid rgba(255, 255, 255, 0.12)",
             marginBottom: "20px",
           }}
         >
           {/* Header Title & Slogan */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "10px" }}>
             <div>
-              <h1 style={{ fontSize: "20px", fontWeight: 800, color: "#0f172a", margin: 0, letterSpacing: "-0.3px" }}>
+              <h1 style={{ fontSize: "20px", fontWeight: 800, color: "#ffffff", margin: 0, letterSpacing: "-0.3px" }}>
                 TỔNG KHO PHÂN PHỐI THÙNG SƠN CHÍNH HÃNG FUJINANO
               </h1>
-              <p style={{ fontSize: "13px", color: "#64748b", margin: "4px 0 0" }}>
+              <p style={{ fontSize: "13px", color: "#94a3b8", margin: "4px 0 0" }}>
                 Sơn Epoxy sàn, PU chống thấm, sơn chống cháy, sơn thể thao - Giá sỉ tận nhà máy
               </p>
             </div>
@@ -81,7 +83,7 @@ export default function Home({ onOpenOrderModal }) {
                 onClick={() => onOpenOrderModal && onOpenOrderModal(null)}
                 style={{
                   background: "#dc2626",
-                  color: "#fff",
+                  color: "#ffffff",
                   border: "none",
                   borderRadius: "8px",
                   padding: "8px 14px",
@@ -103,8 +105,9 @@ export default function Home({ onOpenOrderModal }) {
               <a
                 href="tel:0947707616"
                 style={{
-                  background: "#0f172a",
+                  background: "#030c22",
                   color: "#ffffff",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
                   borderRadius: "8px",
                   padding: "8px 14px",
                   fontSize: "12.5px",
@@ -127,15 +130,15 @@ export default function Home({ onOpenOrderModal }) {
             style={{
               display: "flex",
               alignItems: "center",
-              background: "#f8fafc",
-              border: "1.5px solid #cbd5e1",
+              background: "rgba(2, 10, 28, 0.75)",
+              border: "1px solid rgba(255, 255, 255, 0.2)",
               borderRadius: "10px",
               padding: "4px 6px 4px 16px",
-              boxShadow: "0 1px 3px rgba(0,0,0,0.02)",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.2) inset",
               transition: "border-color 0.2s",
             }}
           >
-            <Search size={18} color="#64748b" style={{ flexShrink: 0, marginRight: "8px" }} />
+            <Search size={18} color="#94a3b8" style={{ flexShrink: 0, marginRight: "8px" }} />
             <input
               type="text"
               placeholder="Nhập tên thùng sơn cần tìm (Ví dụ: Epoxy tự phẳng, PU chống thấm 20kg, sơn chống cháy...)"
@@ -147,7 +150,7 @@ export default function Home({ onOpenOrderModal }) {
                 background: "transparent",
                 outline: "none",
                 fontSize: "14px",
-                color: "#0f172a",
+                color: "#ffffff",
                 padding: "8px 0",
               }}
             />
@@ -171,9 +174,9 @@ export default function Home({ onOpenOrderModal }) {
             <button
               type="submit"
               style={{
-                background: "#0f172a",
-                color: "#fff",
-                border: "none",
+                background: "#030c22",
+                color: "#ffffff",
+                border: "1px solid rgba(255, 255, 255, 0.25)",
                 borderRadius: "8px",
                 padding: "9px 20px",
                 fontSize: "13.5px",
@@ -191,15 +194,15 @@ export default function Home({ onOpenOrderModal }) {
 
           {/* Quick Keywords Pills */}
           <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "12px", flexWrap: "wrap" }}>
-            <span style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>Gợi ý tìm nhanh:</span>
+            <span style={{ fontSize: "12px", color: "#94a3b8", fontWeight: 600 }}>Gợi ý tìm nhanh:</span>
             {quickKeywords.map((kw) => (
               <button
                 key={kw}
                 onClick={() => handleKeywordClick(kw)}
                 style={{
-                  background: queryParam === kw ? "#e2e8f0" : "#f1f5f9",
-                  color: queryParam === kw ? "#0f172a" : "#475569",
-                  border: "1px solid #e2e8f0",
+                  background: queryParam === kw ? "rgba(255, 255, 255, 0.2)" : "rgba(255, 255, 255, 0.08)",
+                  color: queryParam === kw ? "#ffffff" : "#cbd5e1",
+                  border: "1px solid rgba(255, 255, 255, 0.12)",
                   borderRadius: "20px",
                   padding: "4px 12px",
                   fontSize: "12px",
@@ -208,13 +211,13 @@ export default function Home({ onOpenOrderModal }) {
                   transition: "all 0.15s ease",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "#e2e8f0";
-                  e.currentTarget.style.color = "#0f172a";
+                  e.currentTarget.style.background = "rgba(255, 255, 255, 0.2)";
+                  e.currentTarget.style.color = "#ffffff";
                 }}
                 onMouseLeave={(e) => {
                   if (queryParam !== kw) {
-                    e.currentTarget.style.background = "#f1f5f9";
-                    e.currentTarget.style.color = "#475569";
+                    e.currentTarget.style.background = "rgba(255, 255, 255, 0.08)";
+                    e.currentTarget.style.color = "#cbd5e1";
                   }
                 }}
               >
@@ -227,11 +230,11 @@ export default function Home({ onOpenOrderModal }) {
         {/* 2. BỘ LỌC DANH MỤC THÙNG SƠN (HORIZONTAL CATEGORY PILLS) */}
         <div
           style={{
-            background: "#ffffff",
+            background: "rgba(8, 22, 54, 0.88)",
+            backdropFilter: "blur(14px)",
             borderRadius: "12px",
             padding: "12px 16px",
-            boxShadow: "0 1px 4px rgba(0,0,0,0.03)",
-            border: "1px solid #e2e8f0",
+            border: "1px solid rgba(255, 255, 255, 0.12)",
             marginBottom: "16px",
             display: "flex",
             alignItems: "center",
@@ -240,7 +243,7 @@ export default function Home({ onOpenOrderModal }) {
             whiteSpace: "nowrap",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#64748b", fontSize: "12.5px", fontWeight: 700, paddingRight: "8px", borderRight: "1px solid #e2e8f0", flexShrink: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#94a3b8", fontSize: "12.5px", fontWeight: 700, paddingRight: "8px", borderRight: "1px solid rgba(255,255,255,0.1)", flexShrink: 0 }}>
             <Filter size={14} />
             <span>DANH MỤC:</span>
           </div>
@@ -248,9 +251,9 @@ export default function Home({ onOpenOrderModal }) {
           <button
             onClick={() => setActiveCategory("all")}
             style={{
-              background: activeCategory === "all" ? "#0f172a" : "#f8fafc",
-              color: activeCategory === "all" ? "#ffffff" : "#475569",
-              border: activeCategory === "all" ? "1px solid #0f172a" : "1px solid #e2e8f0",
+              background: activeCategory === "all" ? "#dc2626" : "rgba(2, 10, 28, 0.6)",
+              color: "#ffffff",
+              border: activeCategory === "all" ? "1px solid #dc2626" : "1px solid rgba(255, 255, 255, 0.15)",
               borderRadius: "8px",
               padding: "7px 14px",
               fontSize: "12.5px",
@@ -270,9 +273,9 @@ export default function Home({ onOpenOrderModal }) {
                 key={cat.id}
                 onClick={() => setActiveCategory(isSelected ? "all" : cat.id)}
                 style={{
-                  background: isSelected ? "#0f172a" : "#f8fafc",
-                  color: isSelected ? "#ffffff" : "#475569",
-                  border: isSelected ? "1px solid #0f172a" : "1px solid #e2e8f0",
+                  background: isSelected ? "#dc2626" : "rgba(2, 10, 28, 0.6)",
+                  color: "#ffffff",
+                  border: isSelected ? "1px solid #dc2626" : "1px solid rgba(255, 255, 255, 0.15)",
                   borderRadius: "8px",
                   padding: "7px 14px",
                   fontSize: "12.5px",
@@ -291,12 +294,12 @@ export default function Home({ onOpenOrderModal }) {
         {/* 3. THÔNG BÁO 2 CÁCH MUA HÀNG TIỆN LỢI */}
         <div
           style={{
-            background: "#eff6ff",
-            border: "1px solid #bfdbfe",
+            background: "rgba(14, 165, 233, 0.12)",
+            border: "1px solid rgba(14, 165, 233, 0.25)",
             borderRadius: "10px",
             padding: "10px 16px",
             fontSize: "12.5px",
-            color: "#1e40af",
+            color: "#e0f2fe",
             marginBottom: "20px",
             display: "flex",
             alignItems: "center",
@@ -306,34 +309,34 @@ export default function Home({ onOpenOrderModal }) {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-            <span style={{ fontWeight: 800 }}>⚡ 2 CÁCH MUA HÀNG TIỆN LỢI:</span>
+            <span style={{ fontWeight: 800, color: "#38bdf8" }}>⚡ 2 CÁCH MUA HÀNG TIỆN LỢI:</span>
             <span>(1) Bấm <strong>"Đặt Mua"</strong> để lại số điện thoại nhận báo giá chiết khấu, hoặc (2) Bấm <strong>"Gọi Shop"</strong> để gặp kỹ sư tư vấn ngay!</span>
           </div>
-          <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-            <span style={{ fontSize: "11.5px", color: "#2563eb", fontWeight: 600 }}>• Miễn phí vận chuyển từ 2 thùng</span>
-            <span style={{ fontSize: "11.5px", color: "#2563eb", fontWeight: 600 }}>• CO/CQ &amp; Hóa đơn VAT</span>
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            <span style={{ fontSize: "11.5px", color: "#38bdf8", fontWeight: 600 }}>• Miễn phí vận chuyển từ 2 thùng</span>
+            <span style={{ fontSize: "11.5px", color: "#38bdf8", fontWeight: 600 }}>• CO/CQ &amp; Hóa đơn VAT</span>
           </div>
         </div>
 
         {/* 4. LƯỚI SẢN PHẨM THÙNG SƠN (TRUNG TÂM TRANG) */}
         <div style={{ marginBottom: "30px" }}>
           {queryParam && (
-            <div style={{ marginBottom: "14px", fontSize: "13.5px", color: "#475569" }}>
-              Kết quả tìm kiếm cho: <strong style={{ color: "#0f172a" }}>"{queryParam}"</strong> ({filteredProducts.length} thùng sơn)
+            <div style={{ marginBottom: "14px", fontSize: "13.5px", color: "#94a3b8" }}>
+              Kết quả tìm kiếm cho: <strong style={{ color: "#ffffff" }}>"{queryParam}"</strong> ({filteredProducts.length} thùng sơn)
             </div>
           )}
 
           {filteredProducts.length === 0 ? (
             <div
               style={{
-                background: "#ffffff",
+                background: "rgba(8, 22, 54, 0.88)",
                 borderRadius: "12px",
                 padding: "60px 20px",
                 textAlign: "center",
-                border: "1px solid #e2e8f0",
+                border: "1px solid rgba(255, 255, 255, 0.12)",
               }}
             >
-              <p style={{ fontSize: "15px", color: "#64748b", marginBottom: "14px" }}>
+              <p style={{ fontSize: "15px", color: "#94a3b8", marginBottom: "14px" }}>
                 Không tìm thấy thùng sơn nào phù hợp với từ khóa "{queryParam}".
               </p>
               <button
@@ -343,7 +346,7 @@ export default function Home({ onOpenOrderModal }) {
                   setSearchInput("");
                 }}
                 style={{
-                  background: "#0f172a",
+                  background: "#dc2626",
                   color: "#fff",
                   border: "none",
                   padding: "9px 20px",
@@ -374,52 +377,52 @@ export default function Home({ onOpenOrderModal }) {
         {/* 5. DẢI CAM KẾT CHẤT LƯỢNG (NHẸ NHÀNG, TINH TẾ) */}
         <div
           style={{
-            background: "#ffffff",
+            background: "rgba(8, 22, 54, 0.88)",
             borderRadius: "12px",
             padding: "20px 24px",
-            border: "1px solid #e2e8f0",
+            border: "1px solid rgba(255, 255, 255, 0.12)",
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
             gap: "20px",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center", color: "#16a34a", flexShrink: 0 }}>
+            <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "rgba(16, 185, 129, 0.15)", display: "flex", alignItems: "center", justifyContent: "center", color: "#34d399", flexShrink: 0 }}>
               <ShieldCheck size={20} />
             </div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: "13px", color: "#0f172a" }}>100% Sơn Chính Hãng</div>
-              <div style={{ fontSize: "11.5px", color: "#64748b" }}>Đầy đủ chứng chỉ CO/CQ, xuất hóa đơn VAT</div>
+              <div style={{ fontWeight: 700, fontSize: "13px", color: "#ffffff" }}>100% Sơn Chính Hãng</div>
+              <div style={{ fontSize: "11.5px", color: "#94a3b8" }}>Đầy đủ chứng chỉ CO/CQ, xuất hóa đơn VAT</div>
             </div>
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "#eff6ff", display: "flex", alignItems: "center", justifyContent: "center", color: "#2563eb", flexShrink: 0 }}>
+            <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "rgba(14, 165, 233, 0.15)", display: "flex", alignItems: "center", justifyContent: "center", color: "#38bdf8", flexShrink: 0 }}>
               <Truck size={20} />
             </div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: "13px", color: "#0f172a" }}>Giao Tận Chân Công Trình</div>
-              <div style={{ fontSize: "11.5px", color: "#64748b" }}>Đội xe giao nhanh Cần Thơ, TP.HCM &amp; gửi chành xe</div>
+              <div style={{ fontWeight: 700, fontSize: "13px", color: "#ffffff" }}>Giao Tận Chân Công Trình</div>
+              <div style={{ fontSize: "11.5px", color: "#94a3b8" }}>Đội xe giao nhanh Cần Thơ, TP.HCM &amp; gửi chành xe</div>
             </div>
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "#fefce8", display: "flex", alignItems: "center", justifyContent: "center", color: "#ca8a04", flexShrink: 0 }}>
+            <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "rgba(245, 158, 11, 0.15)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fbbf24", flexShrink: 0 }}>
               <RotateCcw size={20} />
             </div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: "13px", color: "#0f172a" }}>Đổi Trả Trong 7 Ngày</div>
-              <div style={{ fontSize: "11.5px", color: "#64748b" }}>Đổi trả nếu phát sinh lỗi bao bì hoặc sai màu</div>
+              <div style={{ fontWeight: 700, fontSize: "13px", color: "#ffffff" }}>Đổi Trả Trong 7 Ngày</div>
+              <div style={{ fontSize: "11.5px", color: "#94a3b8" }}>Đổi trả nếu phát sinh lỗi bao bì hoặc sai màu</div>
             </div>
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "#fef2f2", display: "flex", alignItems: "center", justifyContent: "center", color: "#dc2626", flexShrink: 0 }}>
+            <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "rgba(239, 68, 68, 0.15)", display: "flex", alignItems: "center", justifyContent: "center", color: "#f87171", flexShrink: 0 }}>
               <Headphones size={20} />
             </div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: "13px", color: "#0f172a" }}>Kỹ Sư Tư Vấn 24/7</div>
-              <div style={{ fontSize: "11.5px", color: "#64748b" }}>Hỗ trợ tính định mức $m^2$ &amp; khảo sát miễn phí</div>
+              <div style={{ fontWeight: 700, fontSize: "13px", color: "#ffffff" }}>Kỹ Sư Tư Vấn 24/7</div>
+              <div style={{ fontSize: "11.5px", color: "#94a3b8" }}>Hỗ trợ tính định mức $m^2$ &amp; khảo sát miễn phí</div>
             </div>
           </div>
         </div>
@@ -451,7 +454,7 @@ export default function Home({ onOpenOrderModal }) {
             alignItems: "center",
             gap: "7px",
             cursor: "pointer",
-            boxShadow: "0 4px 14px rgba(220, 38, 38, 0.3)",
+            boxShadow: "0 4px 14px rgba(0, 0, 0, 0.4)",
             transition: "transform 0.15s ease",
           }}
           onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.04)")}
@@ -464,9 +467,9 @@ export default function Home({ onOpenOrderModal }) {
         <a
           href="tel:0947707616"
           style={{
-            background: "#0f172a",
+            background: "#030c22",
             color: "#ffffff",
-            border: "1px solid #334155",
+            border: "1px solid rgba(255, 255, 255, 0.25)",
             borderRadius: "30px",
             padding: "11px 18px",
             fontWeight: 700,
@@ -475,7 +478,7 @@ export default function Home({ onOpenOrderModal }) {
             alignItems: "center",
             gap: "7px",
             textDecoration: "none",
-            boxShadow: "0 4px 14px rgba(15, 23, 42, 0.3)",
+            boxShadow: "0 4px 14px rgba(0, 0, 0, 0.4)",
             transition: "transform 0.15s ease",
           }}
           onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.04)")}
