@@ -37,14 +37,22 @@ export default function ProductDetail({ onOpenOrderModal }) {
   const [activeTab, setActiveTab] = useState("specs");
   const [isLiked, setIsLiked] = useState(false);
 
+  // Tính giá hiện tại theo quy cách dung tích được chọn (khai báo trước useEffect)
+  const currentVolumeObj = product?.volumes?.find((v) => v.name === selectedVolume);
+  const currentPrice = currentVolumeObj ? currentVolumeObj.price : (product?.price || 0);
+  const originalPrice = currentVolumeObj ? currentVolumeObj.originalPrice : (product?.originalPrice || 0);
+  const discountPercent = originalPrice
+    ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100)
+    : (product?.discount || 0);
+
   // Cuộn lên đầu trang và reset lựa chọn khi đổi sản phẩm
   useEffect(() => {
     window.scrollTo(0, 0);
     setSelectedImageIndex(0);
-    if (product.volumes && product.volumes.length > 0) {
+    if (product?.volumes && product.volumes.length > 0) {
       setSelectedVolume(product.volumes[0].name);
     }
-    if (product.colors && product.colors.length > 0) {
+    if (product?.colors && product.colors.length > 0) {
       setSelectedColor(product.colors[0].name);
     }
     setQuantity(1);
@@ -190,14 +198,6 @@ export default function ProductDetail({ onOpenOrderModal }) {
       if (bScript) bScript.remove();
     };
   }, [product, currentPrice, currentVolumeObj, siteSettings]);
-
-  // Tính giá hiện tại theo quy cách dung tích được chọn
-  const currentVolumeObj = product.volumes?.find((v) => v.name === selectedVolume);
-  const currentPrice = currentVolumeObj ? currentVolumeObj.price : product.price;
-  const originalPrice = currentVolumeObj ? currentVolumeObj.originalPrice : product.originalPrice;
-  const discountPercent = originalPrice
-    ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100)
-    : product.discount || 0;
 
   // Xử lý mở modal đặt hàng / báo giá
   const handleOpenOrder = () => {
