@@ -85,6 +85,20 @@ async function migrate() {
   `;
   console.log("✓ Table 'articles' created / verified");
 
+  // 5. Table audit_logs (Nhật ký bảo mật & truy vết quản trị)
+  await sql`
+    CREATE TABLE IF NOT EXISTS audit_logs (
+      id VARCHAR(64) PRIMARY KEY,
+      action VARCHAR(100) NOT NULL,
+      actor VARCHAR(100) NOT NULL,
+      ip_address VARCHAR(100),
+      user_agent TEXT,
+      details JSONB,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    );
+  `;
+  console.log("✓ Table 'audit_logs' created / verified");
+
   // Seed sample inquiry if empty
   const existingInquiries = await sql`SELECT count(*) FROM inquiries`;
   if (parseInt(existingInquiries[0].count) === 0) {

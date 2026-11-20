@@ -10,6 +10,7 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
     phone: "",
     address: "",
     note: "",
+    website_trap: "", // Honeypot field for bot spam detection
   });
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -34,6 +35,7 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
         quantity: initialQuantity,
         topic: `Đặt mua: ${selectedVolume} - Màu: ${selectedColor}`,
         notes: `Địa chỉ: ${formData.address || "Chưa có"}. Ghi chú: ${formData.note || "Không có"}. Tổng tiền ước tính: ${totalPrice.toLocaleString("vi-VN")} ₫`,
+        website_trap: formData.website_trap || undefined,
       });
     }
     setIsSuccess(true);
@@ -221,6 +223,17 @@ export default function OrderModal({ isOpen, onClose, product, initialVariant, i
 
             {/* Form Fields */}
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {/* Security Honeypot Anti-Spam Field */}
+              <input
+                type="text"
+                name="website_trap"
+                value={formData.website_trap}
+                onChange={(e) => setFormData({ ...formData, website_trap: e.target.value })}
+                tabIndex={-1}
+                autoComplete="off"
+                style={{ display: "none", position: "absolute", left: "-9999px", opacity: 0 }}
+                aria-hidden="true"
+              />
               <div>
                 <label style={{ display: "block", fontSize: "12.5px", fontWeight: 600, color: "#cbd5e1", marginBottom: "5px" }}>
                   Họ và tên quý khách *

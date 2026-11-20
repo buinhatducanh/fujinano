@@ -167,10 +167,31 @@ export function AppProvider({ children }) {
     }
   });
 
-  // 6. Trạng Thái Kết Nối Neon Cloud (Postgres, S3, AI Gateway)
+  // 6. Trạng Thái Kết Nối Neon Cloud & Token Bảo Mật
   const [neonStatus, setNeonStatus] = useState(null);
+  const [adminToken, setAdminToken] = useState(() => {
+    return (
+      localStorage.getItem("fujinano_admin_token") ||
+      sessionStorage.getItem("fujinano_admin_token") ||
+      ""
+    );
+  });
 
-  // Sync from Neon Postgres on load
+  const fetchInquiriesFromDb = (token = adminToken) => {
+    if (!token) return;
+    fetch("/api/neon/inquiries", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success && res.data) {
+          setInquiries(res.data);
+        }
+      })
+      .catch((err) => console.warn("Failed to load inquiries from Neon Postgres:", err));
+  };
+
+  // Sync from Neon on load
   useEffect(() => {
     fetch("/api/neon/status")
       .then((res) => res.json())
@@ -181,25 +202,10 @@ export function AppProvider({ children }) {
       })
       .catch(() => {});
 
-    fetch("/api/neon/inquiries")
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.success && res.data && res.data.length > 0) {
-          setInquiries((prev) => {
-            const remoteMap = new Map(res.data.map((item) => [item.id, item]));
-            // Merge with local inquiries
-            const merged = [...res.data];
-            prev.forEach((item) => {
-              if (!remoteMap.has(item.id)) {
-                merged.push(item);
-              }
-            });
-            return merged;
-          });
-        }
-      })
-      .catch(() => {});
-  }, []);
+    if (adminToken) {
+      fetchInquiriesFromDb(adminToken);
+    }
+  }, [adminToken]);
 
   // Sync to localStorage
   useEffect(() => {
@@ -295,10 +301,13 @@ export function AppProvider({ children }) {
       )
     );
 
-    // Sync status change to Neon Postgres
+    // Sync status change to Neon Postgres (with Admin Auth)
     fetch("/api/neon/inquiries", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: adminToken ? `Bearer ${adminToken}` : "",
+      },
       body: JSON.stringify({ id, status, notes }),
     }).catch((err) => console.warn("Failed to sync status to Neon Postgres:", err));
   };
@@ -331,6 +340,9 @@ export function AppProvider({ children }) {
         policies,
         inquiries,
         neonStatus,
+        adminToken,
+        setAdminToken,
+        fetchInquiriesFromDb,
         siteSettings,
         policies,
         inquiries,

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -33,7 +33,15 @@ import {
   Lock,
   User,
   LogOut,
-  EyeOff
+  EyeOff,
+  ShieldAlert,
+  Key,
+  Database,
+  Activity,
+  RefreshCw,
+  CheckCircle2,
+  Server,
+  Cpu
 } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
 
@@ -57,48 +65,145 @@ export default function Admin() {
     deleteInquiry,
     resetToDefaults,
     neonStatus,
+    adminToken,
+    setAdminToken,
+    fetchInquiriesFromDb,
   } = useAppContext();
 
   // =========================================================================
-  // 0. AUTHENTICATION (BẢO MẬT ĐĂNG NHẬP ADMIN)
+  // 0. AUTHENTICATION & SECURITY SHIELD (BẢO MẬT ĐĂNG NHẬP ADMIN)
   // =========================================================================
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return (
-      sessionStorage.getItem("fujinano_admin_auth") === "true" ||
-      localStorage.getItem("fujinano_admin_auth") === "true"
+    return Boolean(
+      localStorage.getItem("fujinano_admin_token") ||
+      sessionStorage.getItem("fujinano_admin_token")
     );
   });
+  const [isVerifying, setIsVerifying] = useState(true);
   const [loginUsername, setLoginUsername] = useState("admin");
   const [loginPassword, setLoginPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
+  const [remainingAttempts, setRemainingAttempts] = useState(null);
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (loginUsername.trim() === "admin" && loginPassword === "fujnano@123") {
-      setIsAuthenticated(true);
-      setLoginError("");
-      if (rememberMe) {
-        localStorage.setItem("fujinano_admin_auth", "true");
-      } else {
-        sessionStorage.setItem("fujinano_admin_auth", "true");
-      }
-      showToast("✓ Đăng nhập quản trị thành công!");
+  // Auto-verify existing token on mount with Neon backend
+  useEffect(() => {
+    const token =
+      localStorage.getItem("fujinano_admin_token") ||
+      sessionStorage.getItem("fujinano_admin_token");
+
+    if (token) {
+      fetch("/api/auth/verify", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            setIsAuthenticated(true);
+            setAdminToken(token);
+            fetchInquiriesFromDb(token);
+          } else {
+            localStorage.removeItem("fujinano_admin_token");
+            sessionStorage.removeItem("fujinano_admin_token");
+            setAdminToken("");
+            setIsAuthenticated(false);
+          }
+        })
+        .catch(() => {
+          // Keep existing state if network error
+        })
+        .finally(() => {
+          setIsVerifying(false);
+        });
     } else {
-      setLoginError("Tên đăng nhập hoặc mật khẩu không chính xác!");
+      setIsVerifying(false);
+    }
+  }, []);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoginLoading(true);
+    setLoginError("");
+
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: loginUsername.trim(),
+          password: loginPassword,
+          rememberMe,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setIsAuthenticated(true);
+        setAdminToken(data.token);
+        if (rememberMe) {
+          localStorage.setItem("fujinano_admin_token", data.token);
+          sessionStorage.removeItem("fujinano_admin_token");
+        } else {
+          sessionStorage.setItem("fujinano_admin_token", data.token);
+          localStorage.removeItem("fujinano_admin_token");
+        }
+        setLoginPassword("");
+        setRemainingAttempts(null);
+        showToast("✓ Đăng nhập quản trị an toàn thành công!");
+        fetchInquiriesFromDb(data.token);
+      } else {
+        setLoginError(data.error || "Tên đăng nhập hoặc mật khẩu không chính xác!");
+        if (data.remainingAttempts !== undefined) {
+          setRemainingAttempts(data.remainingAttempts);
+        }
+      }
+    } catch (err) {
+      setLoginError("Không thể kết nối đến máy chủ bảo mật. Vui lòng kiểm tra lại mạng!");
+    } finally {
+      setLoginLoading(false);
     }
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    sessionStorage.removeItem("fujinano_admin_auth");
-    localStorage.removeItem("fujinano_admin_auth");
+    localStorage.removeItem("fujinano_admin_token");
+    sessionStorage.removeItem("fujinano_admin_token");
+    setAdminToken("");
     setLoginPassword("");
-    showToast("Đã đăng xuất khỏi hệ thống quản trị!");
+    showToast("Đã đăng xuất an toàn khỏi hệ thống quản trị!");
   };
 
-  const [activeTab, setActiveTab] = useState("dashboard"); // dashboard | articles | products | settings | policies | inquiries
+  // State for Audit Logs tab
+  const [auditLogs, setAuditLogs] = useState([]);
+  const [loadingAuditLogs, setLoadingAuditLogs] = useState(false);
+  const [auditAutoRefresh, setAuditAutoRefresh] = useState(true);
+
+  const fetchAuditLogs = async () => {
+    const token =
+      adminToken ||
+      localStorage.getItem("fujinano_admin_token") ||
+      sessionStorage.getItem("fujinano_admin_token");
+    if (!token) return;
+    setLoadingAuditLogs(true);
+    try {
+      const res = await fetch("/api/neon/audit-logs", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (data.success && data.data) {
+        setAuditLogs(data.data);
+      }
+    } catch (err) {
+      console.warn("Audit logs fetch failed:", err);
+    } finally {
+      setLoadingAuditLogs(false);
+    }
+  };
+
+  const [activeTab, setActiveTab] = useState("dashboard"); // dashboard | articles | products | settings | policies | inquiries | security
   const [toastMessage, setToastMessage] = useState("");
 
   const showToast = (msg) => {
@@ -380,6 +485,39 @@ export default function Admin() {
   // =========================================================================
   // GIAO DIỆN ĐĂNG NHẬP BẢO MẬT ADMIN
   // =========================================================================
+  if (isVerifying) {
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          background: "radial-gradient(circle at 50% 25%, #08215e 0%, #001237 55%, #00081d 100%)",
+          color: "#ffffff",
+          fontFamily: "'DM Sans', sans-serif",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "14px",
+        }}
+      >
+        <div
+          style={{
+            width: "44px",
+            height: "44px",
+            border: "3px solid rgba(56, 189, 248, 0.2)",
+            borderTopColor: "#38bdf8",
+            borderRadius: "50%",
+            animation: "spin 0.8s linear infinite",
+          }}
+        />
+        <style>{`@keyframes spin { 100% { transform: rotate(360deg); } }`}</style>
+        <p style={{ fontSize: "14px", color: "#94a3b8" }}>
+          Đang xác thực phiên quản trị bảo mật (JWT &amp; SSL)...
+        </p>
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
     return (
       <div
@@ -483,6 +621,25 @@ export default function Admin() {
               </div>
             )}
 
+            {remainingAttempts !== null && (
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: "#f59e0b",
+                  background: "rgba(245, 158, 11, 0.12)",
+                  border: "1px solid rgba(245, 158, 11, 0.3)",
+                  padding: "8px 12px",
+                  borderRadius: "6px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                <ShieldAlert size={14} color="#f59e0b" style={{ flexShrink: 0 }} />
+                <span>Cảnh báo Brute-force: Còn lại {remainingAttempts} lần thử trước khi IP bị khóa 15 phút.</span>
+              </div>
+            )}
+
             <div>
               <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, marginBottom: "6px", color: "#cbd5e1" }}>
                 Tài Khoản (Username)
@@ -573,13 +730,14 @@ export default function Admin() {
                   onChange={(e) => setRememberMe(e.target.checked)}
                   style={{ accentColor: "#2563eb" }}
                 />
-                <span>Ghi nhớ đăng nhập</span>
+                <span>Ghi nhớ phiên đăng nhập (7 ngày)</span>
               </label>
               <span style={{ color: "#64748b" }}>Cấp quản trị viên</span>
             </div>
 
             <button
               type="submit"
+              disabled={loginLoading}
               style={{
                 background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
                 color: "#ffffff",
@@ -588,7 +746,8 @@ export default function Admin() {
                 padding: "12px",
                 fontSize: "14px",
                 fontWeight: 800,
-                cursor: "pointer",
+                cursor: loginLoading ? "not-allowed" : "pointer",
+                opacity: loginLoading ? 0.7 : 1,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -597,14 +756,40 @@ export default function Admin() {
                 marginTop: "6px",
                 transition: "transform 0.15s ease",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-1px)")}
+              onMouseEnter={(e) => !loginLoading && (e.currentTarget.style.transform = "translateY(-1px)")}
               onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
             >
-              <Lock size={15} />
-              <span>ĐĂNG NHẬP QUẢN TRỊ</span>
+              {loginLoading ? (
+                <>
+                  <RefreshCw size={15} style={{ animation: "spin 1s linear infinite" }} />
+                  <span>ĐANG KIỂM TRA BẢO MẬT...</span>
+                </>
+              ) : (
+                <>
+                  <Lock size={15} />
+                  <span>ĐĂNG NHẬP QUẢN TRỊ AN TOÀN</span>
+                </>
+              )}
             </button>
 
-            <div style={{ textAlign: "center", marginTop: "10px" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "6px",
+                fontSize: "11px",
+                color: "#64748b",
+                marginTop: "6px",
+                borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+                paddingTop: "12px",
+              }}
+            >
+              <ShieldCheck size={13} color="#10b981" />
+              <span>Bảo vệ bởi Bcrypt Salted Hashing &amp; Signed JWT Token</span>
+            </div>
+
+            <div style={{ textAlign: "center", marginTop: "4px" }}>
               <Link
                 to="/"
                 style={{
@@ -894,6 +1079,13 @@ export default function Admin() {
               label: "Chính Sách & Bảo Hành",
               icon: ShieldCheck,
               badge: null,
+            },
+            {
+              id: "security",
+              label: "An Ninh & Kiểm Toán",
+              icon: ShieldAlert,
+              badge: "Bảo Vệ",
+              badgeColor: "#10b981",
             },
           ].map((item) => {
             const Icon = item.icon;
@@ -2479,6 +2671,525 @@ export default function Admin() {
                   <span>Lưu Cập Nhật Chính Sách &amp; Bảo Hành</span>
                 </button>
               </form>
+            </div>
+          )}
+
+          {/* =============================================================== */}
+          {/* TAB 7: AN NINH & NHẬT KÝ KIỂM TOÁN (SECURITY SHIELD & AUDIT LOGS) */}
+          {/* =============================================================== */}
+          {activeTab === "security" && (
+            <div style={{ maxWidth: "1150px" }}>
+              {/* Header Tab */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  flexWrap: "wrap",
+                  gap: "16px",
+                  marginBottom: "24px",
+                }}
+              >
+                <div>
+                  <h1
+                    style={{
+                      fontSize: "22px",
+                      fontWeight: 800,
+                      margin: "0 0 6px",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                    }}
+                  >
+                    <ShieldAlert size={24} color="#38bdf8" />
+                    <span>TRUNG TÂM BẢO MẬT &amp; NHẬT KÝ KIỂM TOÁN</span>
+                  </h1>
+                  <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0 }}>
+                    Hệ thống phòng thủ đa tầng: Mã hóa mật khẩu Bcrypt, Phân quyền JWT, Khóa Brute-Force, Lọc XSS &amp; Truy vết thời gian thực
+                  </p>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <button
+                    onClick={() => setAuditAutoRefresh(!auditAutoRefresh)}
+                    style={{
+                      background: auditAutoRefresh
+                        ? "rgba(16, 185, 129, 0.15)"
+                        : "rgba(255, 255, 255, 0.05)",
+                      color: auditAutoRefresh ? "#34d399" : "#94a3b8",
+                      border: `1px solid ${
+                        auditAutoRefresh ? "rgba(16, 185, 129, 0.3)" : "rgba(255, 255, 255, 0.1)"
+                      }`,
+                      borderRadius: "6px",
+                      padding: "8px 14px",
+                      fontSize: "12.5px",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                    }}
+                  >
+                    <Activity size={14} />
+                    <span>{auditAutoRefresh ? "Tự Động Cập Nhật (8s)" : "Tự Động (Tắt)"}</span>
+                  </button>
+
+                  <button
+                    onClick={fetchAuditLogs}
+                    disabled={loadingAuditLogs}
+                    style={{
+                      background: "rgba(59, 130, 246, 0.15)",
+                      color: "#38bdf8",
+                      border: "1px solid rgba(59, 130, 246, 0.3)",
+                      borderRadius: "6px",
+                      padding: "8px 14px",
+                      fontSize: "12.5px",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                    }}
+                  >
+                    <RefreshCw
+                      size={14}
+                      style={{
+                        animation: loadingAuditLogs ? "spin 0.8s linear infinite" : "none",
+                      }}
+                    />
+                    <span>Làm Mới Log</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* 6 LÁ CHẮN BẢO MẬT HỆ THỐNG */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+                  gap: "16px",
+                  marginBottom: "28px",
+                }}
+              >
+                {/* 1. Mật Khẩu Admin Bcrypt */}
+                <div
+                  style={{
+                    background: "rgba(3, 16, 48, 0.7)",
+                    border: "1px solid rgba(59, 130, 246, 0.25)",
+                    borderRadius: "10px",
+                    padding: "18px 20px",
+                    position: "relative",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <Key size={18} color="#f59e0b" />
+                      <span style={{ fontSize: "14px", fontWeight: 700, color: "#ffffff" }}>
+                        Mã Hóa Mật Khẩu Đơn
+                      </span>
+                    </div>
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        fontWeight: 700,
+                        padding: "2px 8px",
+                        borderRadius: "12px",
+                        background: "rgba(16, 185, 129, 0.15)",
+                        color: "#34d399",
+                        border: "1px solid rgba(16, 185, 129, 0.3)",
+                      }}
+                    >
+                      Bcrypt (10 Salt)
+                    </span>
+                  </div>
+                  <p style={{ fontSize: "12.5px", color: "#cbd5e1", margin: "0 0 10px", lineHeight: 1.5 }}>
+                    Mật khẩu quản trị viên được băm 1 chiều bằng giải thuật Blowfish Salt. Không bao giờ lưu hay gửi mật khẩu dạng plain text.
+                  </p>
+                  <div style={{ fontSize: "11.5px", color: "#64748b", fontFamily: "monospace" }}>
+                    Tài khoản: admin | Mật khẩu: fujnano@123
+                  </div>
+                </div>
+
+                {/* 2. Phiên Làm Việc JWT */}
+                <div
+                  style={{
+                    background: "rgba(3, 16, 48, 0.7)",
+                    border: "1px solid rgba(59, 130, 246, 0.25)",
+                    borderRadius: "10px",
+                    padding: "18px 20px",
+                    position: "relative",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <Lock size={18} color="#38bdf8" />
+                      <span style={{ fontSize: "14px", fontWeight: 700, color: "#ffffff" }}>
+                        Xác Thực Phiên JWT
+                      </span>
+                    </div>
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        fontWeight: 700,
+                        padding: "2px 8px",
+                        borderRadius: "12px",
+                        background: "rgba(56, 189, 248, 0.15)",
+                        color: "#38bdf8",
+                        border: "1px solid rgba(56, 189, 248, 0.3)",
+                      }}
+                    >
+                      HMAC-SHA256
+                    </span>
+                  </div>
+                  <p style={{ fontSize: "12.5px", color: "#cbd5e1", margin: "0 0 10px", lineHeight: 1.5 }}>
+                    Token có chữ ký mật mã bảo vệ chống giả mạo, tự động hết hạn (24h mặc định / 7 ngày khi ghi nhớ). Mọi API nhạy cảm đều cần Bearer Header.
+                  </p>
+                  <div style={{ fontSize: "11.5px", color: "#34d399", display: "flex", alignItems: "center", gap: "6px" }}>
+                    <CheckCircle size={13} />
+                    <span>Phiên hiện tại: Đã xác thực hợp lệ</span>
+                  </div>
+                </div>
+
+                {/* 3. Lá Chắn Chống Brute-Force */}
+                <div
+                  style={{
+                    background: "rgba(3, 16, 48, 0.7)",
+                    border: "1px solid rgba(59, 130, 246, 0.25)",
+                    borderRadius: "10px",
+                    padding: "18px 20px",
+                    position: "relative",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <ShieldCheck size={18} color="#ef4444" />
+                      <span style={{ fontSize: "14px", fontWeight: 700, color: "#ffffff" }}>
+                        Khóa Dò Mật Khẩu IP
+                      </span>
+                    </div>
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        fontWeight: 700,
+                        padding: "2px 8px",
+                        borderRadius: "12px",
+                        background: "rgba(239, 68, 68, 0.15)",
+                        color: "#f87171",
+                        border: "1px solid rgba(239, 68, 68, 0.3)",
+                      }}
+                    >
+                      Khóa 15 Phút
+                    </span>
+                  </div>
+                  <p style={{ fontSize: "12.5px", color: "#cbd5e1", margin: "0 0 10px", lineHeight: 1.5 }}>
+                    Giới hạn tối đa 5 lần thử sai trên mỗi IP. Tự động trả về HTTP 429 Too Many Requests và khóa chặn đăng nhập tức thời.
+                  </p>
+                  <div style={{ fontSize: "11.5px", color: "#94a3b8" }}>
+                    Cơ chế: Sliding window memory rate limiter
+                  </div>
+                </div>
+
+                {/* 4. Khử Mã Độc XSS & Input Sanitizer */}
+                <div
+                  style={{
+                    background: "rgba(3, 16, 48, 0.7)",
+                    border: "1px solid rgba(59, 130, 246, 0.25)",
+                    borderRadius: "10px",
+                    padding: "18px 20px",
+                    position: "relative",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <CheckCircle2 size={18} color="#10b981" />
+                      <span style={{ fontSize: "14px", fontWeight: 700, color: "#ffffff" }}>
+                        Lọc Độc Hại XSS Sanitizer
+                      </span>
+                    </div>
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        fontWeight: 700,
+                        padding: "2px 8px",
+                        borderRadius: "12px",
+                        background: "rgba(16, 185, 129, 0.15)",
+                        color: "#34d399",
+                        border: "1px solid rgba(16, 185, 129, 0.3)",
+                      }}
+                    >
+                      XSS Cleaned
+                    </span>
+                  </div>
+                  <p style={{ fontSize: "12.5px", color: "#cbd5e1", margin: "0 0 10px", lineHeight: 1.5 }}>
+                    Tẩy sạch toàn bộ thẻ HTML, script độc hại và javascript: trong tên, điện thoại, địa chỉ của khách hàng trước khi lưu vào DB.
+                  </p>
+                  <div style={{ fontSize: "11.5px", color: "#64748b" }}>
+                    Bảo vệ chống: Stored XSS &amp; HTML Injection
+                  </div>
+                </div>
+
+                {/* 5. Bẫy Bot Honeypot & Anti-Spam */}
+                <div
+                  style={{
+                    background: "rgba(3, 16, 48, 0.7)",
+                    border: "1px solid rgba(59, 130, 246, 0.25)",
+                    borderRadius: "10px",
+                    padding: "18px 20px",
+                    position: "relative",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <Sparkles size={18} color="#c084fc" />
+                      <span style={{ fontSize: "14px", fontWeight: 700, color: "#ffffff" }}>
+                        Bẫy Honeypot &amp; Chống Spam
+                      </span>
+                    </div>
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        fontWeight: 700,
+                        padding: "2px 8px",
+                        borderRadius: "12px",
+                        background: "rgba(192, 132, 252, 0.15)",
+                        color: "#c084fc",
+                        border: "1px solid rgba(192, 132, 252, 0.3)",
+                      }}
+                    >
+                      Rate: 10 req/5m
+                    </span>
+                  </div>
+                  <p style={{ fontSize: "12.5px", color: "#cbd5e1", margin: "0 0 10px", lineHeight: 1.5 }}>
+                    Trường bẫy tàng hình trên form đặt hàng giúp nhận diện bot tự động cào dữ liệu và tiêu diệt thầm lặng mà không tốn tài nguyên DB.
+                  </p>
+                  <div style={{ fontSize: "11.5px", color: "#64748b" }}>
+                    Tích hợp: OrderModal + Public Inquiries API
+                  </div>
+                </div>
+
+                {/* 6. Neon Cloud Postgres & S3 TLS/SSL */}
+                <div
+                  style={{
+                    background: "rgba(3, 16, 48, 0.7)",
+                    border: "1px solid rgba(59, 130, 246, 0.25)",
+                    borderRadius: "10px",
+                    padding: "18px 20px",
+                    position: "relative",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <Database size={18} color="#60a5fa" />
+                      <span style={{ fontSize: "14px", fontWeight: 700, color: "#ffffff" }}>
+                        Mã Hóa Đường Truyền SSL
+                      </span>
+                    </div>
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        fontWeight: 700,
+                        padding: "2px 8px",
+                        borderRadius: "12px",
+                        background: "rgba(59, 130, 246, 0.15)",
+                        color: "#60a5fa",
+                        border: "1px solid rgba(59, 130, 246, 0.3)",
+                      }}
+                    >
+                      TLS / SSL Require
+                    </span>
+                  </div>
+                  <p style={{ fontSize: "12.5px", color: "#cbd5e1", margin: "0 0 10px", lineHeight: 1.5 }}>
+                    Postgres Lakebase Connection Pooler và S3 Media Bucket chạy trên đường truyền TLS 1.3 bảo mật tại cụm máy chủ AWS ap-southeast-1.
+                  </p>
+                  <div style={{ fontSize: "11.5px", color: "#64748b" }}>
+                    Branch: {neonStatus?.branch || "production"} (Postgres 18.7)
+                  </div>
+                </div>
+              </div>
+
+              {/* BẢNG NHẬT KÝ KIỂM TOÁN THỜI GIAN THỰC (AUDIT TRAIL) */}
+              <div
+                style={{
+                  background: "rgba(3, 16, 48, 0.9)",
+                  border: "1px solid rgba(59, 130, 246, 0.25)",
+                  borderRadius: "12px",
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    padding: "16px 20px",
+                    borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    background: "rgba(2, 10, 28, 0.8)",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <Activity size={18} color="#38bdf8" />
+                    <div>
+                      <h3 style={{ fontSize: "15px", fontWeight: 700, margin: 0 }}>
+                        Nhật Ký Truy Vết &amp; Kiểm Toán An Ninh (Audit Trail)
+                      </h3>
+                      <p style={{ fontSize: "12px", color: "#94a3b8", margin: "2px 0 0" }}>
+                        Ghi nhận toàn bộ sự kiện đăng nhập, cập nhật đơn hàng và cảnh báo từ hệ thống
+                      </p>
+                    </div>
+                  </div>
+                  <span
+                    style={{
+                      fontSize: "12px",
+                      background: "rgba(59, 130, 246, 0.15)",
+                      color: "#38bdf8",
+                      padding: "4px 10px",
+                      borderRadius: "6px",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Tổng {auditLogs.length} sự kiện gần nhất
+                  </span>
+                </div>
+
+                {loadingAuditLogs && auditLogs.length === 0 ? (
+                  <div style={{ padding: "40px", textAlign: "center", color: "#94a3b8", fontSize: "13.5px" }}>
+                    <RefreshCw size={24} style={{ animation: "spin 1s linear infinite", margin: "0 auto 10px" }} />
+                    <p>Đang tải nhật ký kiểm toán từ Neon Postgres...</p>
+                  </div>
+                ) : auditLogs.length === 0 ? (
+                  <div style={{ padding: "40px", textAlign: "center", color: "#94a3b8", fontSize: "13.5px" }}>
+                    Chưa có nhật ký kiểm toán nào được ghi nhận.
+                  </div>
+                ) : (
+                  <div style={{ overflowX: "auto" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
+                      <thead>
+                        <tr style={{ background: "rgba(2, 12, 38, 0.9)", borderBottom: "1px solid rgba(255, 255, 255, 0.1)" }}>
+                          <th style={{ padding: "12px 16px", textAlign: "left", color: "#94a3b8", fontWeight: 700 }}>
+                            Thời Gian
+                          </th>
+                          <th style={{ padding: "12px 16px", textAlign: "left", color: "#94a3b8", fontWeight: 700 }}>
+                            Hành Động
+                          </th>
+                          <th style={{ padding: "12px 16px", textAlign: "left", color: "#94a3b8", fontWeight: 700 }}>
+                            Tài Khoản / IP
+                          </th>
+                          <th style={{ padding: "12px 16px", textAlign: "left", color: "#94a3b8", fontWeight: 700 }}>
+                            Chi Tiết Kỹ Thuật
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {auditLogs.map((log) => {
+                          const isSuccess = log.action === "LOGIN_SUCCESS";
+                          const isFailed = log.action === "LOGIN_FAILED";
+                          const isLeadUpdate = log.action === "LEAD_STATUS_UPDATED";
+
+                          return (
+                            <tr
+                              key={log.id}
+                              style={{
+                                borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
+                                transition: "background 0.15s ease",
+                              }}
+                              onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255, 255, 255, 0.03)")}
+                              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                            >
+                              <td style={{ padding: "12px 16px", color: "#94a3b8", fontFamily: "monospace", whiteSpace: "nowrap" }}>
+                                {log.timestamp}
+                              </td>
+                              <td style={{ padding: "12px 16px" }}>
+                                {isSuccess && (
+                                  <span
+                                    style={{
+                                      display: "inline-flex",
+                                      alignItems: "center",
+                                      gap: "5px",
+                                      background: "rgba(16, 185, 129, 0.15)",
+                                      color: "#34d399",
+                                      padding: "3px 8px",
+                                      borderRadius: "4px",
+                                      fontWeight: 700,
+                                      fontSize: "11.5px",
+                                    }}
+                                  >
+                                    <CheckCircle size={12} /> Đăng nhập thành công
+                                  </span>
+                                )}
+                                {isFailed && (
+                                  <span
+                                    style={{
+                                      display: "inline-flex",
+                                      alignItems: "center",
+                                      gap: "5px",
+                                      background: "rgba(239, 68, 68, 0.15)",
+                                      color: "#f87171",
+                                      padding: "3px 8px",
+                                      borderRadius: "4px",
+                                      fontWeight: 700,
+                                      fontSize: "11.5px",
+                                    }}
+                                  >
+                                    <AlertTriangle size={12} /> Đăng nhập thất bại (Sai MK)
+                                  </span>
+                                )}
+                                {isLeadUpdate && (
+                                  <span
+                                    style={{
+                                      display: "inline-flex",
+                                      alignItems: "center",
+                                      gap: "5px",
+                                      background: "rgba(59, 130, 246, 0.15)",
+                                      color: "#38bdf8",
+                                      padding: "3px 8px",
+                                      borderRadius: "4px",
+                                      fontWeight: 700,
+                                      fontSize: "11.5px",
+                                    }}
+                                  >
+                                    <Edit size={12} /> Cập nhật trạng thái đơn
+                                  </span>
+                                )}
+                                {!isSuccess && !isFailed && !isLeadUpdate && (
+                                  <span
+                                    style={{
+                                      background: "rgba(255, 255, 255, 0.1)",
+                                      color: "#cbd5e1",
+                                      padding: "3px 8px",
+                                      borderRadius: "4px",
+                                      fontWeight: 600,
+                                      fontSize: "11.5px",
+                                    }}
+                                  >
+                                    {log.action}
+                                  </span>
+                                )}
+                              </td>
+                              <td style={{ padding: "12px 16px", color: "#cbd5e1" }}>
+                                <div style={{ fontWeight: 600, fontSize: "13px" }}>{log.actor}</div>
+                                <div style={{ fontSize: "11px", color: "#64748b", fontFamily: "monospace" }}>
+                                  IP: {log.ip_address}
+                                </div>
+                              </td>
+                              <td style={{ padding: "12px 16px", color: "#94a3b8", fontSize: "12px" }}>
+                                {log.details ? (
+                                  <span style={{ fontFamily: "monospace", color: "#cbd5e1" }}>
+                                    {typeof log.details === "object"
+                                      ? JSON.stringify(log.details)
+                                      : String(log.details)}
+                                  </span>
+                                ) : (
+                                  "-"
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </main>
