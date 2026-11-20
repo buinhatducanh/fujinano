@@ -138,77 +138,90 @@ export default function Home({ onOpenOrderModal }) {
             </form>
           </div>
 
-          {/* Cột Phải: Thùng sơn nổi bật */}
+          {/* Cột Phải: 3 Cam kết uy tín nhà máy (Thay thế box sản phẩm trùng lặp) */}
           <div
             style={{
-              background: "rgba(2, 10, 28, 0.6)",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
+              background: "rgba(2, 10, 28, 0.65)",
+              border: "1px solid rgba(255, 255, 255, 0.12)",
               borderRadius: "12px",
-              padding: "16px",
+              padding: "18px 20px",
               display: "flex",
-              gap: "16px",
-              alignItems: "center",
+              flexDirection: "column",
+              gap: "12px",
             }}
           >
-            <div
-              style={{
-                width: "110px",
-                height: "110px",
-                background: "#ffffff",
-                borderRadius: "8px",
-                padding: "6px",
-                flexShrink: 0,
-              }}
-            >
-              <img
-                src={featuredProduct.images?.[0]}
-                alt={featuredProduct.name}
-                style={{ width: "100%", height: "100%", objectFit: "contain" }}
-              />
-            </div>
-            <div>
-              <h4 style={{ fontSize: "14.5px", fontWeight: 700, color: "#ffffff", margin: "0 0 6px", lineHeight: 1.35 }}>
-                {featuredProduct.shortName}
-              </h4>
-              <div style={{ display: "flex", alignItems: "baseline", gap: "8px", marginBottom: "10px" }}>
-                <span style={{ fontSize: "17px", fontWeight: 800, color: "#f87171" }}>
-                  ₫{featuredProduct.price.toLocaleString("vi-VN")}
-                </span>
-                <span style={{ fontSize: "11.5px", color: "#94a3b8", textDecoration: "line-through" }}>
-                  ₫{featuredProduct.originalPrice.toLocaleString("vi-VN")}
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <div
+                style={{
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "8px",
+                  background: "rgba(56, 189, 248, 0.15)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                <ShieldCheck size={18} color="#38bdf8" />
+              </div>
+              <div>
+                <strong style={{ fontSize: "13.5px", color: "#ffffff", display: "block" }}>
+                  100% Công Nghệ Nhật Bản
+                </strong>
+                <span style={{ fontSize: "11.5px", color: "#94a3b8" }}>
+                  Màng sơn bền chắc, chịu tải nén và kháng hóa chất
                 </span>
               </div>
-              <div style={{ display: "flex", gap: "8px" }}>
-                <Link
-                  to={`/san-pham/${featuredProduct.slug}`}
-                  style={{
-                    background: "rgba(255, 255, 255, 0.1)",
-                    color: "#ffffff",
-                    border: "1px solid rgba(255, 255, 255, 0.2)",
-                    borderRadius: "6px",
-                    padding: "6px 12px",
-                    fontSize: "12px",
-                    fontWeight: 600,
-                    textDecoration: "none",
-                  }}
-                >
-                  Chi Tiết
-                </Link>
-                <button
-                  onClick={() => onOpenOrderModal && onOpenOrderModal(featuredProduct)}
-                  style={{
-                    background: "#dc2626",
-                    color: "#ffffff",
-                    border: "none",
-                    borderRadius: "6px",
-                    padding: "6px 14px",
-                    fontSize: "12px",
-                    fontWeight: 700,
-                    cursor: "pointer",
-                  }}
-                >
-                  Đặt Mua
-                </button>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <div
+                style={{
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "8px",
+                  background: "rgba(16, 185, 129, 0.15)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                <Truck size={18} color="#34d399" />
+              </div>
+              <div>
+                <strong style={{ fontSize: "13.5px", color: "#ffffff", display: "block" }}>
+                  Giao Hàng Tận Chân Công Trình
+                </strong>
+                <span style={{ fontSize: "11.5px", color: "#94a3b8" }}>
+                  Hỏa tốc 2H tại Cần Thơ, hỗ trợ chành xe toàn quốc
+                </span>
+              </div>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <div
+                style={{
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "8px",
+                  background: "rgba(245, 158, 11, 0.15)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                <RotateCcw size={18} color="#f59e0b" />
+              </div>
+              <div>
+                <strong style={{ fontSize: "13.5px", color: "#ffffff", display: "block" }}>
+                  Giá Sỉ Xuất Xưởng &amp; CO/CQ Đầy Đủ
+                </strong>
+                <span style={{ fontSize: "11.5px", color: "#94a3b8" }}>
+                  Bảo hành 5 năm màng sơn, xuất hóa đơn VAT trong ngày
+                </span>
               </div>
             </div>
           </div>
@@ -524,67 +537,6 @@ export default function Home({ onOpenOrderModal }) {
             <span style={{ fontWeight: 600, fontSize: "13px", color: "#ffffff" }}>Kỹ Sư Tư Vấn 24/7</span>
           </div>
         </div>
-      </div>
-
-      {/* 6. NÚT NỔI LIÊN HỆ DƯỚI GÓC PHẢI */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: "24px",
-          right: "24px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-          zIndex: 999,
-        }}
-      >
-        <button
-          onClick={() => onOpenOrderModal && onOpenOrderModal(null)}
-          style={{
-            background: "#dc2626",
-            color: "#ffffff",
-            border: "none",
-            borderRadius: "30px",
-            padding: "10px 18px",
-            fontWeight: 700,
-            fontSize: "13px",
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            cursor: "pointer",
-            boxShadow: "0 4px 14px rgba(0, 0, 0, 0.4)",
-            transition: "transform 0.15s ease",
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.04)")}
-          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-        >
-          <FileText size={15} />
-          <span>Báo Giá Nhanh</span>
-        </button>
-
-        <a
-          href={`tel:${siteSettings?.hotlineRaw || "0947707616"}`}
-          style={{
-            background: "#030c22",
-            color: "#ffffff",
-            border: "1px solid rgba(255, 255, 255, 0.25)",
-            borderRadius: "30px",
-            padding: "10px 18px",
-            fontWeight: 700,
-            fontSize: "13px",
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            textDecoration: "none",
-            boxShadow: "0 4px 14px rgba(0, 0, 0, 0.4)",
-            transition: "transform 0.15s ease",
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.04)")}
-          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-        >
-          <Phone size={15} color="#22c55e" />
-          <span>{siteSettings?.hotline || "0947.707.616"}</span>
-        </a>
       </div>
     </div>
   );

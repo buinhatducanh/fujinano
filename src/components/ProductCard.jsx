@@ -128,80 +128,38 @@ export default function ProductCard({ product, onOpenOrder }) {
         </div>
       </Link>
 
-      {/* 2 CÁCH BÁN HÀNG TRỰC TIẾP TRÊN CARD (MANDATORY REQUIREMENT) */}
-      <div
-        style={{
-          padding: "0 10px 10px",
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "6px",
-          marginTop: "auto",
-        }}
-      >
-        {/* Cách 1: Để lại thông tin / Đặt Mua */}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            onOpenOrder(product);
-          }}
+      {/* Nút hành động duy nhất, tinh tế */}
+      <div style={{ padding: "0 12px 14px", marginTop: "auto" }}>
+        <Link
+          to={`/san-pham/${product.slug}`}
           style={{
-            background: "#dc2626",
-            color: "#ffffff",
-            border: "none",
+            background: "rgba(56, 189, 248, 0.1)",
+            color: "#38bdf8",
+            border: "1px solid rgba(56, 189, 248, 0.25)",
             borderRadius: "6px",
-            padding: "8px 4px",
-            fontSize: "11.5px",
+            padding: "8px 12px",
+            fontSize: "12.5px",
             fontWeight: 700,
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "4px",
-            transition: "background 0.2s ease",
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = "#b91c1c")}
-          onMouseLeave={(e) => (e.currentTarget.style.background = "#dc2626")}
-          title="Để lại thông tin nhận tư vấn và đặt mua"
-        >
-          <FileText size={13} />
-          <span>Đặt Mua</span>
-        </button>
-
-        {/* Cách 2: Gọi trực tiếp shop */}
-        <a
-          href="tel:0947707616"
-          onClick={(e) => e.stopPropagation()}
-          style={{
-            background: "#030c22",
-            color: "#ffffff",
-            border: "1px solid rgba(255, 255, 255, 0.2)",
-            borderRadius: "6px",
-            padding: "8px 4px",
-            fontSize: "11.5px",
-            fontWeight: 700,
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "4px",
             textDecoration: "none",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "6px",
             transition: "all 0.2s ease",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#0f172a";
-            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.4)";
+            e.currentTarget.style.background = "#dc2626";
+            e.currentTarget.style.borderColor = "#dc2626";
+            e.currentTarget.style.color = "#ffffff";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = "#030c22";
-            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
+            e.currentTarget.style.background = "rgba(56, 189, 248, 0.1)";
+            e.currentTarget.style.borderColor = "rgba(56, 189, 248, 0.25)";
+            e.currentTarget.style.color = "#38bdf8";
           }}
-          title="Gọi trực tiếp hotline shop"
         >
-          <Phone size={13} color="#22c55e" />
-          <span>Gọi Shop</span>
-        </a>
+          <span>Xem Chi Tiết &amp; Báo Giá</span>
+        </Link>
       </div>
     </div>
   );
